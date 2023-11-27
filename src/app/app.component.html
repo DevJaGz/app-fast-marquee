@@ -1,0 +1,76 @@
+<div class="grid place-items-center h-screen bg-zinc-900 text-slate-200">
+  <ngx-fast-marquee
+    direction="left"
+    [speed]="speed"
+    [autoFill]="true"
+    [useSystemReducedMotion]="true"
+    [pauseOnClick]="true"
+  >
+    <div *ngFor="let item of items" class="px-2">
+      {{ item.name }}
+    </div>
+  </ngx-fast-marquee>
+
+  <ngx-fast-marquee
+    direction="right"
+    [speed]="'fast'"
+    [autoFill]="true"
+    [useSystemReducedMotion]="true"
+    [maskPercentage]="40"
+    [play]="play"
+  >
+    <span class="bg-white m-2 grid place-items-center p-2">
+      <img
+        src="assets/images/microsoft-logo.png"
+        alt="microsoft-logo"
+        class="h-24 object-contain"
+      />
+    </span>
+    <span class="bg-white m-2 grid place-items-center p-2">
+      <img
+        src="assets/images/tesla-logo.png"
+        alt="tesla-logo"
+        class="h-24 object-contain"
+      />
+    </span>
+    <span class="bg-white m-2 grid place-items-center p-2">
+      <img
+        src="assets/images/github-logo.png"
+        alt="github-logo"
+        class="h-24 object-contain"
+      />
+    </span>
+  </ngx-fast-marquee>
+
+  <ngx-fast-marquee
+    direction="up"
+    [speed]="'fast'"
+    [autoFill]="true"
+    [useSystemReducedMotion]="true"
+    [maskStartPercentage]="40"
+    [maskEndPercentage]="0"
+    [pauseOnHover]="true"
+  >
+    <span class="bg-white m-2 grid place-items-center p-2">
+      <img
+        src="assets/images/microsoft-logo.png"
+        alt="microsoft-logo"
+        class="h-24 object-contain"
+      />
+    </span>
+    <span class="bg-white m-2 grid place-items-center p-2">
+      <img
+        src="assets/images/tesla-logo.png"
+        alt="tesla-logo"
+        class="h-24 object-contain"
+      />
+    </span>
+    <span class="bg-white m-2 grid place-items-center p-2">
+      <img
+        src="assets/images/github-logo.png"
+        alt="github-logo"
+        class="h-24 object-contain"
+      />
+    </span>
+  </ngx-fast-marquee>
+</div>

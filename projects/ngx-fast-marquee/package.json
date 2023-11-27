@@ -1,0 +1,32 @@
+{
+  "name": "ngx-fast-marquee",
+  "version": "0.1.7",
+  "author": {
+    "name": "Julian Andres Gomez Gomez",
+    "email": "jgomezpersonal7@gmail.com",
+    "url": "https://www.linkedin.com/in/julian-andres-gomez-gomez-6a3348279/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DevJaGz/app-fast-marquee.git"
+  },
+  "description": "This is a customazebale marquee component for angular based on react-fast-marquee",
+  "keywords": [
+    "angular",
+    "marquee",
+    "marquee lib",
+    "marquee component",
+    "ngx-fast-marquee",
+    "ngx-fast-marquee lib",
+    "ngx fast marquee"
+  ],
+  "peerDependencies": {
+    "@angular/common": "^17.0.2",
+    "@angular/core": "^17.0.2"
+  },
+  "dependencies": {
+    "tslib": "^2.6.2"
+  },
+  "license": "MIT",
+  "sideEffects": false
+}
