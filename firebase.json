@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/app-fast-marquee",
+    "public": "dist/app-fast-marquee/browser",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {

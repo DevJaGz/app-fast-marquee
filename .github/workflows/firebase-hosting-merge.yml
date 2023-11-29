@@ -8,7 +8,10 @@ name: Deploy to Firebase Hosting on merge
       - master
 jobs:
   build_and_deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        node-version: [18]    
     steps:
       - name: Checkout code      
         uses: actions/checkout@v3
@@ -18,13 +21,17 @@ jobs:
         with:
           version: 8       
     
-      - name: Setup Node.js
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-            cache: 'pnpm'             
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'                 
   
-      - name: Build app
-        run: pnpm install && pnpm run build:app
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build App
+        run: pnpm run build:app
    
       - name: Deploy to Firebase Hosting       
         uses: FirebaseExtended/action-hosting-deploy@v0
