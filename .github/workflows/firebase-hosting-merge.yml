@@ -24,7 +24,7 @@ jobs:
             cache: 'pnpm'             
   
       - name: Build app
-        run: npm ci && npm run build:app
+        run: pnpm ci && pnpm run build:app
    
       - name: Deploy to Firebase Hosting       
         uses: FirebaseExtended/action-hosting-deploy@v0
