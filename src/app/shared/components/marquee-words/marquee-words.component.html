@@ -9,6 +9,7 @@
     class="h-full"
     direction="up"
     [maskPercentage]="20"
+    [pauseOnHover]="true"
   >
     @for (word of words(); track $index) {
       <div class="marquee-word" [class.text-orange-500]="$index === 0">
