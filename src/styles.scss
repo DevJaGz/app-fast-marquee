@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 @import "fonts.scss";
+@import "animations.scss";
 @import "loader.scss";
+@import "marquees.scss";
 
 html,
 body {
@@ -15,9 +17,4 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-.marquee-word {
-  font-style: italic;
-  font-weight: bold;
 }

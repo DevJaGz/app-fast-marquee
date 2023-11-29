@@ -1,0 +1,24 @@
+.emoji-star-animation {
+  animation: twinkle 5s infinite;
+  display: inline-block;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    filter: drop-shadow(
+      0 0 5px gold
+    ); /* Adjust the shadow color and size as needed */
+  }
+  50% {
+    filter: drop-shadow(
+      0 0 10px gold
+    ); /* Adjust the shadow color and size as needed */
+  }
+
+  75% {
+    filter: drop-shadow(
+      0 0 7px gold
+    ); /* Adjust the shadow color and size as needed */
+  }
+}
