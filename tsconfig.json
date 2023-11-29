@@ -28,7 +28,8 @@
       "@ngx-fast-marquee/*": [
         "projects/ngx-fast-marquee/*",
         "dist/ngx-fast-marquee/*"
-      ]
+      ],
+      "@features": ["src/app/features"]
     }
   },
   "angularCompilerOptions": {
