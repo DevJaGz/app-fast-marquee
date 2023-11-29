@@ -7,18 +7,12 @@
   0%,
   100% {
     filter: drop-shadow(
-      0 0 5px gold
+      0 0 4px gold
     ); /* Adjust the shadow color and size as needed */
   }
   50% {
     filter: drop-shadow(
-      0 0 10px gold
-    ); /* Adjust the shadow color and size as needed */
-  }
-
-  75% {
-    filter: drop-shadow(
-      0 0 7px gold
+      0 0 8px gold
     ); /* Adjust the shadow color and size as needed */
   }
 }
