@@ -1,0 +1,26 @@
+.outline-animated-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  position: relative;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 1em 2em;
+  color: theme("colors.slate.200");
+  cursor: pointer;
+  outline: none;
+  border-radius: 100px;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(theme("colors.zinc.800"), theme("colors.zinc.800"))
+      padding-box,
+    radial-gradient(
+        farthest-corner at var(--_outline-animated-btn-x, 50%)
+          var(--_outline-animated-btn-y, 50%),
+        #00c9a7,
+        #845ec2
+      )
+      border-box;
+}
