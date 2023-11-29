@@ -34,7 +34,7 @@ export class MarqueeWordsComponent implements OnInit {
   /**
    *  Interval in milliseconds to change the words.
    */
-  private readonly _WORDS_INTERVAL = 10000;
+  private readonly _WORDS_INTERVAL = 15_000;
 
   /**
    *  Last pool key used to get random words.
