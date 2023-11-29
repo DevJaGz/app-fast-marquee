@@ -1,0 +1,19 @@
+<div
+  class="h-full relative"
+  [ngClass]="{
+    'animate-rotate-y animate-once': hasNewWords()
+  }"
+>
+  <ngx-fast-marquee
+    [speed]="20"
+    class="h-full"
+    direction="up"
+    [maskPercentage]="20"
+  >
+    @for (word of words(); track $index) {
+      <div class="marquee-word" [class.text-orange-500]="$index === 0">
+        {{ word }}
+      </div>
+    }
+  </ngx-fast-marquee>
+</div>

@@ -5,10 +5,19 @@
 @import "fonts.scss";
 @import "loader.scss";
 
+html,
+body {
+  height: 100%;
+}
 body {
   font-family: "ubuntu-mono", sans-serif;
   font-size: 16px;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.marquee-word {
+  font-style: italic;
+  font-weight: bold;
 }
