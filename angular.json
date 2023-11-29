@@ -9,7 +9,8 @@
         "@schematics/angular:component": {
           "style": "scss",
           "skipTests": true,
-          "inlineStyle": true
+          "inlineStyle": true,
+          "changeDetection": "OnPush"
         },
         "@schematics/angular:class": {
           "skipTests": true
