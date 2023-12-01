@@ -1,9 +1,9 @@
-<div class="h-full">
+<div class="w-full py-4 relative">
   <ngx-fast-marquee
     [speed]="40"
-    class="h-full"
-    direction="down"
-    [maskPercentage]="70"
+    direction="left"
+    class="rotate-45"
+    [maskPercentage]="40"
     [pauseOnClick]="true"
   >
     @for (brandImage of brandImages(); track $index) {
