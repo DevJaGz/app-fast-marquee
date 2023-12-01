@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MarqueeWordsComponent } from 'src/app/shared/components/marquee-words/marquee-words.component';
 import { RepoAdvertisingComponent } from 'src/app/shared/components/repo-advertising/repo-advertising.component';
 import { MarqueeBrandImagesComponent } from 'src/app/shared/components/marquee-brand-images/marquee-brand-images.component';
+import { MarqueeCardsComponent } from 'src/app/shared/components/marquee-cards/marquee-cards.component';
 
 @Component({
   selector: 'app-home-feature',
@@ -12,6 +13,7 @@ import { MarqueeBrandImagesComponent } from 'src/app/shared/components/marquee-b
     MarqueeWordsComponent,
     MarqueeBrandImagesComponent,
     RepoAdvertisingComponent,
+    MarqueeCardsComponent,
   ],
   templateUrl: './home-feature.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
