@@ -8,7 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { NgxFastMarqueeModule } from '@ngx-fast-marquee';
 import { BrandCardComponent } from './components/brand-card/brand-card.component';
-import { BrandImages } from '@core';
+import { BRAND_IMAGES } from '@core';
 import { FileNamePipe } from '../../pipes';
 
 @Component({
@@ -26,7 +26,7 @@ import { FileNamePipe } from '../../pipes';
 })
 export class MarqueeBrandImagesComponent {
   fileNamePipe = inject(FileNamePipe);
-  brandImages: WritableSignal<string[]> = signal(BrandImages);
+  brandImages: WritableSignal<string[]> = signal(BRAND_IMAGES);
   brandImageNames = this.brandImages().map((brandImage) =>
     this.fileNamePipe.transform(brandImage),
   );

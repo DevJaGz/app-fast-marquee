@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxFastMarqueeModule } from '@ngx-fast-marquee';
-import { WordsPool } from '@core';
+import { WORDS_POOL } from '@core';
 
 @Component({
   selector: 'app-marquee-words',
@@ -44,7 +44,7 @@ export class MarqueeWordsComponent implements OnInit {
   /**
    * Pool of words to select from.
    */
-  private _wordsPool: Record<string, string[]> = WordsPool;
+  private _wordsPool: Record<string, string[]> = WORDS_POOL;
 
   /**
    *  Keys of the words pool.

@@ -1,4 +1,4 @@
-export const SleekWords: string[] = [
+export const SLEEK_WORDS: string[] = [
   'Elegante', // Spanish
   'Elegancki', // Polish
   'Schnörkellos', // German
@@ -11,7 +11,7 @@ export const SleekWords: string[] = [
   '고상한', // Korean
 ];
 
-export const EfficientWords: string[] = [
+export const EFFICIENT_WORDS: string[] = [
   'Effizient', // German
   'Eficiente', // Spanish
   'Efficace', // French
@@ -24,7 +24,7 @@ export const EfficientWords: string[] = [
   'فعال', // Arabic
 ];
 
-export const SimpleWords: string[] = [
+export const SIMPLE_WORDS: string[] = [
   'Просто', // Russian
   '简单', // Chinese (Simplified)
   'आसान', // Hindi
@@ -37,8 +37,8 @@ export const SimpleWords: string[] = [
   'მარტივი', // Georgian
 ];
 
-export const WordsPool: Record<string, string[]> = {
-  sleekWords: SleekWords,
-  efficientWords: EfficientWords,
-  simpleWords: SimpleWords,
+export const WORDS_POOL: Record<string, string[]> = {
+  sleekWords: SLEEK_WORDS,
+  efficientWords: EFFICIENT_WORDS,
+  simpleWords: SIMPLE_WORDS,
 };

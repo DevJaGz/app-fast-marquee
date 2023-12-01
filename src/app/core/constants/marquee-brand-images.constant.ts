@@ -1,4 +1,4 @@
-export const BrandImages: string[] = [
+export const BRAND_IMAGES: string[] = [
   'assets/images/webp/google.webp',
   'assets/images/webp/imexhs.webp',
   'assets/images/webp/microsoft.webp',
