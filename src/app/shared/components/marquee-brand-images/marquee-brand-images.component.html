@@ -1,0 +1,16 @@
+<div class="h-full">
+  <ngx-fast-marquee
+    [speed]="40"
+    class="h-full"
+    direction="down"
+    [maskPercentage]="70"
+    [pauseOnClick]="true"
+  >
+    @for (brandImage of brandImages(); track $index) {
+      <app-brand-card
+        [brandImage]="brandImage"
+        [brandName]="brandImageNames[$index]"
+      />
+    }
+  </ngx-fast-marquee>
+</div>
