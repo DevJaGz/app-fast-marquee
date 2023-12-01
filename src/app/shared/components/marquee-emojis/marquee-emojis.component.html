@@ -1,8 +1,8 @@
-<div class="flex justify-between gap-32">
+<div class="flex justify-between gap-32 py-1">
   <ngx-fast-marquee
     [maskPercentage]="20"
     direction="left"
-    [speed]="400"
+    [speed]="300"
     class="animate-fade-right animate-duration-700 animate-delay-1000"
   >
     @for (emoji of emojis(); track $index) {
@@ -12,7 +12,7 @@
   <ngx-fast-marquee
     [maskPercentage]="20"
     direction="right"
-    [speed]="400"
+    [speed]="300"
     class="animate-fade-left animate-duration-700 animate-delay-1000"
   >
     @for (emoji of emojis(); track $index) {
