@@ -5,6 +5,7 @@ import { RepoAdvertisingComponent } from 'src/app/shared/components/repo-adverti
 import { MarqueeBrandImagesComponent } from 'src/app/shared/components/marquee-brand-images/marquee-brand-images.component';
 import { MarqueeCardsComponent } from 'src/app/shared/components/marquee-cards/marquee-cards.component';
 import { MarqueeEmojisComponent } from 'src/app/shared/components/marquee-emojis/marquee-emojis.component';
+import { MarqueeLineRotationComponent } from 'src/app/shared/components/marquee-line-rotation/marquee-line-rotation.component';
 
 @Component({
   selector: 'app-home-feature',
@@ -16,6 +17,7 @@ import { MarqueeEmojisComponent } from 'src/app/shared/components/marquee-emojis
     RepoAdvertisingComponent,
     MarqueeCardsComponent,
     MarqueeEmojisComponent,
+    MarqueeLineRotationComponent,
   ],
   templateUrl: './home-feature.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
