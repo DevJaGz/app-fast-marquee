@@ -3,7 +3,7 @@
     [maskPercentage]="20"
     direction="left"
     [speed]="300"
-    class="animate-fade-right animate-duration-700 animate-delay-1000"
+    class="animate-fade-left animate-duration-700 animate-delay-1000 --vanish-left-animation"
   >
     @for (emoji of emojis(); track $index) {
       <span class="text-xl px-4">{{ emoji }}</span>
@@ -13,7 +13,7 @@
     [maskPercentage]="20"
     direction="right"
     [speed]="300"
-    class="animate-fade-left animate-duration-700 animate-delay-1000"
+    class="animate-fade-right animate-duration-700 animate-delay-1000 --vanish-right-animation"
   >
     @for (emoji of emojis(); track $index) {
       <span class="text-xl px-4">{{ emoji }}</span>
