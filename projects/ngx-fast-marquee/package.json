@@ -22,8 +22,8 @@
     "ngx fast marquee"
   ],
   "peerDependencies": {
-    "@angular/common": "^17.0.0",
-    "@angular/core": "^17.0.0"
+    "@angular/common": "^17.0.5",
+    "@angular/core": "^17.0.5"
   },
   "dependencies": {
     "tslib": "^2.6.2"
