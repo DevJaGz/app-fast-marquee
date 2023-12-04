@@ -1,21 +1,17 @@
-<div class="h-[30vh]"></div>
-<div
-  class="absolute bottom-0 right-0 w-[40vw] h-[30vh] bg-neutral-700"
-  style="clip-path: polygon(80% 0, 100% 0%, 100% 100%, 0% 100%)"
->
-  <div
-    class="absolute inset-0 bg-zinc-900 overflow-hidden"
-    style="
-      clip-path: polygon(
-        calc(80% + 4px) 10px,
-        calc(100% - 10px) 10px,
-        calc(100% - 10px) calc(100% - 10px),
-        32px calc(100% - 10px)
-      );
-    "
+<div class="grid place-items-center h-full animate-fade-down animate-delay-300">
+  <ngx-fast-marquee [speed]="250" direction="right" class="w-full">
+    <div class="px-4 text-3xl font-serif text-purple-500">Ngx</div>
+    <div class="px-4 text-xl font-bold">Fast</div>
+    <div class="px-4 text-4xl font-mono">Marquee</div>
+    <div class="px-4 text-lg font-bold">Ngx</div>
+    <div class="px-4 2xl font-bold text-green-500">Fast</div>
+    <div class="px-4 4xl italic">Marquee</div>
+  </ngx-fast-marquee>
+  <!-- <div
+    class="min-w-[180x] min-h-[180x] w-[30vw] h-[30vw] sm:h-auto sm:w-[20vw] bg-black border-2 border-zinc-800 rounded overflow-hidden flex flex-col justify-center gap-2 fixed right-12 bottom-0 -rotate-45 -translate-y-1/2"
   >
-    <ngx-fast-marquee class="absolute left-0 right-0 bottom-0" [speed]="200">
-      <div class="px-4">Item</div>
+    <ngx-fast-marquee [speed]="50">
+      <div class="px-4 border border-green-400 text-2xl">Item</div>
       <div class="px-4">Item</div>
       <div class="px-4">Item</div>
       <div class="px-4">Item</div>
@@ -31,5 +27,56 @@
       <div class="px-4">Item</div>
       <div class="px-4">Item</div>
     </ngx-fast-marquee>
-  </div>
+    <ngx-fast-marquee [speed]="50" direction="right">
+      <div class="px-4 border border-green-400 text-2xl">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+    </ngx-fast-marquee>
+    <ngx-fast-marquee [speed]="50">
+      <div class="px-4 border border-green-400 text-2xl">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+    </ngx-fast-marquee>
+    <ngx-fast-marquee [speed]="50" direction="right">
+      <div class="px-4 border border-green-400 text-2xl">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+      <div class="px-4">Item</div>
+    </ngx-fast-marquee>
+  </div> -->
 </div>

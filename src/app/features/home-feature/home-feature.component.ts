@@ -6,6 +6,7 @@ import { MarqueeBrandImagesComponent } from 'src/app/shared/components/marquee-b
 import { MarqueeCardsComponent } from 'src/app/shared/components/marquee-cards/marquee-cards.component';
 import { MarqueeEmojisComponent } from 'src/app/shared/components/marquee-emojis/marquee-emojis.component';
 import { MarqueeLineRotationComponent } from 'src/app/shared/components/marquee-line-rotation/marquee-line-rotation.component';
+import { MarqueeVariableSpeedComponent } from 'src/app/shared/components/marquee-variable-speed/marquee-variable-speed.component';
 
 @Component({
   selector: 'app-home-feature',
@@ -18,6 +19,7 @@ import { MarqueeLineRotationComponent } from 'src/app/shared/components/marquee-
     MarqueeCardsComponent,
     MarqueeEmojisComponent,
     MarqueeLineRotationComponent,
+    MarqueeVariableSpeedComponent,
   ],
   templateUrl: './home-feature.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
