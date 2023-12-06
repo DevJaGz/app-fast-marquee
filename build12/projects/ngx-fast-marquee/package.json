@@ -1,0 +1,33 @@
+{
+  "name": "ngx-fast-marquee",
+  "version": "0.2.0",
+  "author": {
+    "name": "Julian Andres Gomez Gomez",
+    "email": "jgomezpersonal7@gmail.com",
+    "url": "https://www.linkedin.com/in/julian-andres-gomez-gomez-6a3348279/"
+  },
+  "homepage": "https://ngx-fast-marquee.web.app/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DevJaGz/app-fast-marquee.git"
+  },
+  "description": "Lightweight Angular Component that can bring to life your Angular applications through fast and user-friendly marquee animations.",
+  "keywords": [
+    "angular",
+    "marquee",
+    "marquee lib",
+    "marquee component",
+    "ngx-fast-marquee",
+    "ngx-fast-marquee lib",
+    "ngx fast marquee"
+  ],
+  "license": "MIT",
+  "sideEffects": false,
+  "peerDependencies": {
+    "@angular/common": "^12.0.5",
+    "@angular/core": "^12.0.5"
+  },
+  "dependencies": {
+    "tslib": "^2.1.0"
+  }
+}
