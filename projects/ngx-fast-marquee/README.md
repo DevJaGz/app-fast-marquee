@@ -5,21 +5,16 @@
 
 ## Description
 
-Welcome to the 🌟 Ngx Marquee Library 🌟! This library provides an easy-to-use and customizable marquee component for your Angular applications.
+Want to bring your website to life with dynamic, eye-catching marquees?
 
-<small style="font-size:12px">
-Inspired by <a href="https://www.react-fast-marquee.com/" target="_blank">React-Fast-Marquee</a> <img src="https://www.react-fast-marquee.com//favicon.ico" alt="React.js Icon" width="16" height="16" style="transform: translateY(4px)">  
-</small>
+Look no further! The ✨ **Ngx Fast Marquee** ✨ is a lightweight component that can bring to life your Angular applications through fast and user-friendly marquee animations. 
+
+See the Demo section below for a live example!
 
 ## 🖥️ Demo
-
-  <a href="https://stackblitz.com/edit/stackblitz-starters-m8pkwe?file=src%2Fmain.ts" target="_blank">
-    <img alt="Edit on StackBlitz" src="https://img.shields.io/badge/stackblitz-edit-blue?style=for-the-badge&logo=stackblitz">
-  </a>
-
-  <a href="https://ngx-fast-marquee.web.app/" target="_blank">
-      <img alt="Web Page" src="https://img.shields.io/badge/web%20page-visit-blue?style=for-the-badge&logo=google-chrome">
-  </a>
+See  **Ngx Fast Marquee** in action!
+- 📱 <a href="https://ngx-fast-marquee.web.app/" target="_blank">Web Demo</a>
+- 🎮 <a href="https://stackblitz.com/edit/stackblitz-starters-m8pkwe?file=src%2Fmain.ts" target="_blank">StackBlitz</a>
 
 ## 🛠️ Installation
 
@@ -49,7 +44,11 @@ yarn add ngx-fast-marquee
 bun add ngx-fast-marquee
 ```
 
-Note: For Angular versions lower than v17 can be installed using the `--legacy-peer-deps` flag to avoid peer dependency errors.
+### Angular Compatibility
+
+| Angular Version | Library Version                   |
+| --------------- | ------------------------- |
+| `>=12`           | `0.2.0`  |
 
 ## 🚀 Getting Started
 
@@ -80,25 +79,29 @@ Use the `ngx-fast-marquee` component in your templates:
 
 ## 📚 Documentation
 
-In progress...🚧
-
 Marquee Inputs:
 
-- `speed` - The speed of the marquee in pixels per second. Also can be qualitative, `fast`, `medium`, `slow`. **Default:** `medium`.
-- `direction` - The direction of the marquee (`left`, `right`, `up`, `down`).**Default:** `left`.
-- `autoFill` - `true` for auto filling the space. **Default:** `true`.
-- `useSystemReducedMotion` - `true` for avoid animate the marquee when the system has reduced motion. **Default:** `false`.
-- `maskStartPercentage` - Start percentage of the mask. Suitable Range: 0 - 100, where 100 is the middle of the marquee. **Default:** `0`.
-- `maskEndPercentage` - End percentage of the mask. Suitable Range: 0 - 100, where 100 is the middle of the marquee. **Default:** `0`.
-- `maskPercentage` - Percentage of the mask. Suitable Range: 0 - 100, where 100 is the middle of the marquee (start to center and end to the center). **Default:** `0`.
-- `play` - `true` for playing the marquee animation, otherwise the animation is paused. **Default:** `true`.
-- `pauseOnClick` - `true` for pausing the marquee when the cursor is held down on the marquee. **Default:** `false`.
-- `pauseOnHover` - `true` for Pausing the marquee when the mouse is over it. **Default:** `false`.
+| Name                   | Type    | Default | Description
+| ---------------------- | ------- | ------- | -----------
+| `speed`                | number  | `medium`    | The speed of the marquee in pixels per second. Also can be qualitative, `fast`, `medium`, `slow`.
+| `direction`            | string  | `left`  | The direction of the marquee (`left`, `right`, `up`, `down`).
+| `autoFill`             | boolean | `true`  | `true` for auto filling the space.
+| `useSystemReducedMotion` | boolean | `false` | `true` for avoid animate the marquee when the system has reduced motion.
+| `maskStartPercentage`  | number  | `0`     | Start percentage of the mask. Suitable Range: 0 - 100, where 100 is the middle of the marquee.
+| `maskEndPercentage`    | number  | `0`     | End percentage of the mask. Suitable Range: 0 - 100, where 100 is the middle of the marquee.
+| `maskPercentage`       | number  | `0`     | Percentage of the mask. Suitable Range: 0 - 100, where 100 is the middle of the marquee (start to center and end to the center).
+| `play`                 | boolean | `true`  | `true` for playing the marquee animation, otherwise the animation is paused.
+| `pauseOnClick`         | boolean | `false` | `true` for pausing the marquee when the cursor is held down on the marquee.
+| `pauseOnHover`         | boolean | `false` | `true` for Pausing the marquee when the mouse is over it.
+
 
 Marquee Outputs:
 
-- `mounted` - Event emitted when the marquee is in the view. Emitted only once.
-- `updated` - Event emitted each time the marquee is updated.
+| Name                   | Description
+| ---------------------- | -----------
+| `mounted`              | Event emitted when the marquee is in the view. Emitted only once.
+| `updated`              | Event emitted each time the marquee is updated.
+
 
 ## 📄 License
 
