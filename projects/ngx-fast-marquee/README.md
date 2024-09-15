@@ -48,6 +48,7 @@ bun add ngx-fast-marquee
 
 | Angular Version | Library Version                   |
 | --------------- | ------------------------- |
+| `>=17`           | `0.2.2`  |
 | `>=12`           | `0.2.0`  |
 
 ## 🚀 Getting Started
