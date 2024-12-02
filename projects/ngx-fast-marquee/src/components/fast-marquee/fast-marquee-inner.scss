@@ -1,0 +1,15 @@
+@mixin inner-animation() {
+  animation-name: move;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-duration: var(--_animation-duration);
+  animation-direction: var(--_animation-direction);
+  animation-iteration-count: var(--_animation-iteration-count);
+  animation-play-state: var(--_animation-play-state);
+}
+
+@keyframes move {
+  to {
+    transform: var(--_translation);
+  }
+}

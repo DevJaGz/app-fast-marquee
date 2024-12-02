@@ -7,6 +7,7 @@ import { MarqueeCardsComponent } from 'src/app/shared/components/marquee-cards/m
 import { MarqueeEmojisComponent } from 'src/app/shared/components/marquee-emojis/marquee-emojis.component';
 import { MarqueeLineRotationComponent } from 'src/app/shared/components/marquee-line-rotation/marquee-line-rotation.component';
 import { MarqueeVariableSpeedComponent } from 'src/app/shared/components/marquee-variable-speed/marquee-variable-speed.component';
+import { NgxFastMarqueeModule } from '@ngx-fast-marquee';
 
 @Component({
   selector: 'app-home-feature',
@@ -20,6 +21,7 @@ import { MarqueeVariableSpeedComponent } from 'src/app/shared/components/marquee
     MarqueeEmojisComponent,
     MarqueeLineRotationComponent,
     MarqueeVariableSpeedComponent,
+    NgxFastMarqueeModule,
   ],
   templateUrl: './home-feature.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

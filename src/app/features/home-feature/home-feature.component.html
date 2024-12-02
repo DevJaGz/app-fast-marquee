@@ -1,21 +1,15 @@
-<div class="grid place-items-center h-full relative overflow-x-hidden">
-  <app-marquee-emojis
-    class="absolute w-full sm:w-auto left-1/2 -translate-x-1/2 right-0 top-[49%] -translate-y-1/2"
-  />
-  <app-marquee-brand-images
-    class="absolute top-0 left-0 right-0 animate-fade"
-  />
-  <app-marquee-cards
-    class="absolute top-[30%] -translate-y-1/2 left-0 right-0 animate-fade"
-  />
-  <!-- <app-marquee-line-rotation
-    class="absolute bottom-0 left-0 right-0 h-[30vh]"
-  /> -->
-  <app-marquee-variable-speed
-    class="absolute bottom-0 left-0 sm:left-1/4 right-0 sm:right-1/4 h-[30vh]"
-  />
-  <app-marquee-words
-    class="absolute top-0 left-4 bottom-0 animate-fade-right"
-  />
-  <app-repo-advertising />
+<div
+  class="grid grid-cols-2 h-full [&>*]:outline [&>*]:outline-2 [&>*]:outline-purple-400">
+  <div class="grid place-items-center h-full relative overflow-x-hidden">
+    <fast-marquee>
+      <div>Hello</div>
+      <div>Hello1</div>
+    </fast-marquee>
+  </div>
+  <div class="grid place-items-center h-full relative overflow-y-hidden">
+    <fast-marquee direction="up">
+      <div>Hello</div>
+      <div>Hello1</div>
+    </fast-marquee>
+  </div>
 </div>
