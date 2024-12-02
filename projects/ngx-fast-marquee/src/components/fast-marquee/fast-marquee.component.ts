@@ -6,8 +6,10 @@ import {
   ElementRef,
   inject,
   input,
+  PLATFORM_ID,
   ViewEncapsulation,
 } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
 import { Direction, Speed } from '../../types';
 
 @Component({
@@ -33,11 +35,17 @@ export class FastMarqueeComponent implements AfterViewInit {
   #marqueeRef = inject(ElementRef<HTMLElement>);
 
   /**
+   * Platform ID of the current application.
+   */
+  platformId = inject(PLATFORM_ID);
+
+  /**
    * Inner Element of the marquee that contains the items.
    */
   #marqueeInnerElement = computed<HTMLElement>(() => {
     return this.#marqueeRef.nativeElement.children[0];
   });
+
   /**
    * Direction of the marquee.
    * Posible values: `left`, `right`, `up`, `down`.
@@ -45,13 +53,13 @@ export class FastMarqueeComponent implements AfterViewInit {
    */
 
   direction = input<Direction>('right');
+
   /**
    * Speed of the marquee.
    * Can be qualitative as 'slow', 'medium' or 'fast' or quantitative as a number in pixels per second.
    * The quantitative speed is calculated based on the number of the marquee items.
    * @default 'medium'
    */
-
   speed = input<Speed>('medium');
 
   /**
@@ -76,18 +84,17 @@ export class FastMarqueeComponent implements AfterViewInit {
   });
 
   ngAfterViewInit(): void {
-    this.#handleDuplication();
-  }
-
-  #handleDuplication(): void {
-    if (this.autoFill()) {
-      this.#duplicateItems();
+    if (isPlatformServer(this.platformId)) {
       return;
     }
-    this.#duplicateByBlockItems();
+    if (this.autoFill()) {
+      this.#autoFillDuplication();
+      return;
+    }
+    this.#noAutoFillDuplication();
   }
 
-  #duplicateByBlockItems(): void {
+  #noAutoFillDuplication(): void {
     const innerElement = this.#marqueeInnerElement();
     const div = document.createElement('div');
     while (innerElement.firstChild) {
@@ -99,7 +106,7 @@ export class FastMarqueeComponent implements AfterViewInit {
     innerElement.appendChild(clone);
   }
 
-  #duplicateItems(): void {
+  #autoFillDuplication(): void {
     const innerElement = this.#marqueeInnerElement();
     const items = innerElement.children;
     const numberOfItems = items.length;
