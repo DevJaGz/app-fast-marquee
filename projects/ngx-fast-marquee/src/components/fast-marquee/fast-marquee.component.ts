@@ -1,16 +1,15 @@
 import {
-  AfterViewInit,
+  AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
   inject,
   input,
-  PLATFORM_ID,
   ViewEncapsulation,
 } from '@angular/core';
-import { isPlatformServer } from '@angular/common';
 import { Direction, Speed } from '../../types';
+import { NgxFastMarqueeHelper } from '../helpers';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -28,30 +27,12 @@ import { Direction, Speed } from '../../types';
     '[attr.data-autofill]': 'autoFill()',
   },
 })
-export class FastMarqueeComponent implements AfterViewInit {
-  /**
-   * Reference to the marquee element.
-   */
-  #marqueeRef = inject(ElementRef<HTMLElement>);
-
-  /**
-   * Platform ID of the current application.
-   */
-  platformId = inject(PLATFORM_ID);
-
-  /**
-   * Inner Element of the marquee that contains the items.
-   */
-  #marqueeInnerElement = computed<HTMLElement>(() => {
-    return this.#marqueeRef.nativeElement.children[0];
-  });
-
+export class FastMarqueeComponent implements AfterContentInit {
   /**
    * Direction of the marquee.
    * Posible values: `left`, `right`, `up`, `down`.
    * @default 'left'
    */
-
   direction = input<Direction>('right');
 
   /**
@@ -74,7 +55,7 @@ export class FastMarqueeComponent implements AfterViewInit {
    * If true, the marquee will be filled with duplicated items.
    * @default true
    */
-  autoFill = input<boolean>(false);
+  autoFill = input<boolean>(true);
 
   /**
    * True if the marquee can animate, false otherwise.
@@ -83,39 +64,36 @@ export class FastMarqueeComponent implements AfterViewInit {
     return !this.useSystemReducedMotion();
   });
 
-  ngAfterViewInit(): void {
-    if (isPlatformServer(this.platformId)) {
+  /**
+   * Reference to the marquee element.
+   */
+  #marqueeRef = inject(ElementRef<HTMLElement>);
+
+  #marqueeElement = computed<HTMLElement>(() => {
+    return this.#marqueeRef.nativeElement;
+  });
+
+  /**
+   * Inner Element of the marquee that contains the items.
+   */
+  #marqueeInnerElement = computed<HTMLElement>(() => {
+    return this.#marqueeRef.nativeElement.children[0];
+  });
+
+  /**
+   * Helper to request operations and statuses
+   */
+  #helper = inject(NgxFastMarqueeHelper);
+
+  ngAfterContentInit(): void {
+    console.log('--direction:', this.direction);
+    if (this.#helper.isPlatformServer) {
       return;
     }
-    if (this.autoFill()) {
-      this.#autoFillDuplication();
-      return;
-    }
-    this.#noAutoFillDuplication();
-  }
-
-  #noAutoFillDuplication(): void {
-    const innerElement = this.#marqueeInnerElement();
-    const div = document.createElement('div');
-    while (innerElement.firstChild) {
-      div.appendChild(innerElement.firstChild);
-    }
-    innerElement.appendChild(div);
-    const clone = div.cloneNode(true) as HTMLElement;
-    clone.setAttribute('aria-hidden', 'true');
-    innerElement.appendChild(clone);
-  }
-
-  #autoFillDuplication(): void {
-    const innerElement = this.#marqueeInnerElement();
-    const items = innerElement.children;
-    const numberOfItems = items.length;
-    const fragment = document.createDocumentFragment();
-    for (let i = 0; i < numberOfItems; i++) {
-      const item = items[i];
-      const clone = item.cloneNode(true) as HTMLElement;
-      fragment.appendChild(clone);
-    }
-    innerElement.appendChild(fragment);
+    this.#helper.duplicateItems(
+      this.#marqueeElement(),
+      this.#marqueeInnerElement(),
+      this.autoFill(),
+    );
   }
 }

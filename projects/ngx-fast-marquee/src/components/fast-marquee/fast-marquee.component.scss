@@ -51,6 +51,7 @@
     --_inner-height: auto;
     width: 100%;
     height: auto;
+    overflow-x: hidden;
   }
 
   &[data-direction='up'],
@@ -63,6 +64,7 @@
     --_inner-height: 100%;
     width: auto;
     height: 100%;
+    overflow-y: hidden;
   }
 
   &[data-direction='right'],
