@@ -1,16 +1,12 @@
 import {
-  AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
-  ElementRef,
-  inject,
   input,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { Direction, Speed } from '../../types';
-import { NgxFastMarqueeHelper } from '../helpers';
 import { NgxFastMarqueeInnerComponent } from '../ngx-fast-marquee-inner/ngx-fast-marquee-inner.component';
 
 @Component({
@@ -31,7 +27,7 @@ import { NgxFastMarqueeInnerComponent } from '../ngx-fast-marquee-inner/ngx-fast
     '[attr.data-content-overflowing]': 'isContentOverflowing()',
   },
 })
-export class FastMarqueeComponent implements AfterContentInit {
+export class FastMarqueeComponent {
   /**
    * Direction of the marquee.
    * Posible values: `left`, `right`, `up`, `down`.
@@ -78,50 +74,4 @@ export class FastMarqueeComponent implements AfterContentInit {
    * True if the content of the marquee is overflowing, false otherwise.
    */
   readonly isContentOverflowing = signal<boolean>(false);
-
-  /**
-   * Reference to the marquee element.
-   */
-  #marqueeRef = inject(ElementRef<HTMLElement>);
-
-  #marqueeElement = computed<HTMLElement>(() => {
-    return this.#marqueeRef.nativeElement;
-  });
-
-  /**
-   * Inner Element of the marquee that contains the items.
-   */
-  #marqueeInnerElement = computed<HTMLElement>(() => {
-    return this.#marqueeRef.nativeElement.children[0];
-  });
-
-  /**
-   * Helper to request operations and statuses
-   */
-  #helper = inject(NgxFastMarqueeHelper);
-
-  ngAfterContentInit(): void {
-    if (this.#helper.isPlatformServer) {
-      return;
-    }
-  }
-
-  #verifyContentOverflowing() {
-    const isContentOverflowing = this.#helper.isContentOverflowing({
-      direction: this.direction(),
-      innerElement: this.#marqueeInnerElement(),
-      marqueeElement: this.#marqueeElement(),
-    });
-    this.isContentOverflowing.set(isContentOverflowing);
-    console.log('--direction:', this.direction(), isContentOverflowing);
-  }
-
-  #updateDuplications(): void {
-    this.#helper.duplicateItems({
-      innerElement: this.#marqueeInnerElement(),
-      marqueeElement: this.#marqueeElement(),
-      isAutoFill: this.autoFill(),
-      isOverflowing: this.isContentOverflowing(),
-    });
-  }
 }
