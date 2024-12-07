@@ -6,16 +6,18 @@ import {
   ElementRef,
   inject,
   input,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { Direction, Speed } from '../../types';
 import { NgxFastMarqueeHelper } from '../helpers';
+import { NgxFastMarqueeInnerComponent } from '../ngx-fast-marquee-inner/ngx-fast-marquee-inner.component';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'fast-marquee',
   standalone: true,
-  imports: [],
+  imports: [NgxFastMarqueeInnerComponent],
   templateUrl: './fast-marquee.component.html',
   styleUrl: './fast-marquee.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -25,6 +27,8 @@ import { NgxFastMarqueeHelper } from '../helpers';
     '[attr.data-animate]': 'animate()',
     '[attr.data-direction]': 'direction()',
     '[attr.data-autofill]': 'autoFill()',
+    '[attr.data-pause-on-hover]': 'pauseOnHover()',
+    '[attr.data-content-overflowing]': 'isContentOverflowing()',
   },
 })
 export class FastMarqueeComponent implements AfterContentInit {
@@ -55,7 +59,13 @@ export class FastMarqueeComponent implements AfterContentInit {
    * If true, the marquee will be filled with duplicated items.
    * @default true
    */
-  autoFill = input<boolean>(true);
+  autoFill = input<boolean>(false);
+
+  /**
+   * Whether to pause the marquee when the mouse is over the marquee.
+   * @default false
+   */
+  pauseOnHover = input<boolean>(false);
 
   /**
    * True if the marquee can animate, false otherwise.
@@ -63,6 +73,11 @@ export class FastMarqueeComponent implements AfterContentInit {
   readonly animate = computed(() => {
     return !this.useSystemReducedMotion();
   });
+
+  /**
+   * True if the content of the marquee is overflowing, false otherwise.
+   */
+  readonly isContentOverflowing = signal<boolean>(false);
 
   /**
    * Reference to the marquee element.
@@ -86,14 +101,27 @@ export class FastMarqueeComponent implements AfterContentInit {
   #helper = inject(NgxFastMarqueeHelper);
 
   ngAfterContentInit(): void {
-    console.log('--direction:', this.direction);
     if (this.#helper.isPlatformServer) {
       return;
     }
-    this.#helper.duplicateItems(
-      this.#marqueeElement(),
-      this.#marqueeInnerElement(),
-      this.autoFill(),
-    );
+  }
+
+  #verifyContentOverflowing() {
+    const isContentOverflowing = this.#helper.isContentOverflowing({
+      direction: this.direction(),
+      innerElement: this.#marqueeInnerElement(),
+      marqueeElement: this.#marqueeElement(),
+    });
+    this.isContentOverflowing.set(isContentOverflowing);
+    console.log('--direction:', this.direction(), isContentOverflowing);
+  }
+
+  #updateDuplications(): void {
+    this.#helper.duplicateItems({
+      innerElement: this.#marqueeInnerElement(),
+      marqueeElement: this.#marqueeElement(),
+      isAutoFill: this.autoFill(),
+      isOverflowing: this.isContentOverflowing(),
+    });
   }
 }

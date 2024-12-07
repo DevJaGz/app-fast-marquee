@@ -1,0 +1,27 @@
+.ngx-fast-marquee-inner {
+  --nfm-inner-animation-duration: 10s;
+  --nfm-inner-animation-iteration-count: infinite;
+  --nfm-inner-animation-play-state: paused;
+
+  animation-name: ngxFastMarqueeAnimation;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-duration: var(--nfm-inner-animation-duration);
+  animation-direction: var(--nfm-inner-animation-direction);
+  animation-iteration-count: var(--nfm-inner-animation-iteration-count);
+  animation-play-state: var(--nfm-inner-animation-play-state);
+  display: grid;
+
+  @keyframes ngxFastMarqueeAnimation {
+    to {
+      transform: var(--nfm-inner-translation);
+    }
+  }
+
+  &__content,
+  &__content-hidden {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+}

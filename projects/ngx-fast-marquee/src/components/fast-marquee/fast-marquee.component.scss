@@ -2,100 +2,68 @@
 
 .ngx-fast-marquee {
   display: block;
-  --_move-percentage: -100%;
-  --_animation-duration: 10s;
-  --_animation-iteration-count: infinite;
-  --_animation-play-state: running;
-  --_animation-direction: normal;
+  --nfm-inner-size: 200%;
 
-  &[data-autofill='true'] {
-    --_move-percentage: -50%;
-  }
-
-  &:not([data-autofill='true']) {
-    &[data-direction='left'],
-    &[data-direction='right'] {
-      .ngx-fast-marquee__inner {
-        & > * {
-          display: flex;
-          flex-wrap: nowrap;
-          flex-basis: 100%;
-          flex-shrink: 0;
-          flex-grow: 0;
-        }
-      }
-    }
-    &[data-direction='up'],
-    &[data-direction='down'] {
-      .ngx-fast-marquee__inner {
-        & > * {
-          display: flex;
-          flex-direction: column;
-          flex-wrap: nowrap;
-          height: 100%;
-          flex-basis: 100%;
-          flex-shrink: 0;
-          flex-grow: 0;
-        }
-      }
+  &[data-animate='true'] {
+    .ngx-fast-marquee-inner {
+      --nfm-inner-animation-play-state: running;
     }
   }
 
-  &[data-direction='left'],
-  &[data-direction='right'] {
-    --_mask-direction: 90deg;
-    --_inner-min-width: 100%;
-    --_inner-min-height: auto;
-    --_inner-flex-direction: row;
-    --_inner-width: max-content;
-    --_inner-height: auto;
+  &[data-autofill='true'],
+  &[data-content-overflowing='true'] {
+    .ngx-fast-marquee-inner {
+      --nfm-inner-size: max-content;
+    }
+  }
+
+  &[data-direction='right'],
+  &[data-direction='left'] {
     width: 100%;
     height: auto;
     overflow-x: hidden;
+
+    .ngx-fast-marquee-inner {
+      --nfm-inner-translation: translateX(-50%);
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: auto;
+      width: var(--nfm-inner-size);
+      height: auto;
+
+      &__content,
+      &__content-hidden {
+        flex-direction: row;
+      }
+    }
   }
 
   &[data-direction='up'],
   &[data-direction='down'] {
-    --_mask-direction: 180deg;
-    --_inner-min-width: auto;
-    --_inner-min-height: 100%;
-    --_inner-flex-direction: column;
-    --_inner-width: auto;
-    --_inner-height: 100%;
     width: auto;
     height: 100%;
     overflow-y: hidden;
+
+    .ngx-fast-marquee-inner {
+      --nfm-inner-translation: translateY(-50%);
+      grid-template-columns: auto;
+      grid-template-rows: repeat(2, 1fr);
+      width: auto;
+      height: var(--nfm-inner-size);
+
+      &__content,
+      &__content-hidden {
+        flex-direction: column;
+      }
+    }
   }
 
   &[data-direction='right'],
   &[data-direction='down'] {
-    --_animation-direction: reverse;
+    --nfm-inner-animation-direction: reverse;
   }
 
   &[data-direction='left'],
   &[data-direction='up'] {
-    --_animation-direction: normal;
-  }
-
-  &[data-animate='true'] {
-    &[data-direction='left'],
-    &[data-direction='right'] {
-      --_translation: translateX(var(--_move-percentage));
-    }
-    &[data-direction='up'],
-    &[data-direction='down'] {
-      --_translation: translateY(var(--_move-percentage));
-    }
-  }
-
-  &__inner {
-    display: flex;
-    min-width: var(--_inner-min-width);
-    min-height: var(--_inner-min-height);
-    flex-direction: var(--_inner-flex-direction);
-    width: var(--_inner-width);
-    height: var(--_inner-height);
-    flex-wrap: nowrap;
-    @include inner-animation();
+    --nfm-inner-animation-direction: normal;
   }
 }

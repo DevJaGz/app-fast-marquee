@@ -2,50 +2,23 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class NgxFastMarqueeDuplicationHelper {
-  /**
-   * Duplicates the provided items to the marquee only once, wrapping both the
-   * original and the duplicated items in separate `<div>` elements. A aria-hidden
-   * attribute will be set to the duplicated items to hide it from screen readers.
-   *
-   * @example
-   * The following example demonstrates how the duplication feature works:
-   *
-   * **Input:**
-   * ```html
-   * <div id="element">
-   *    <div>Hello</div>
-   *    <div>World!</div>
-   * </div>
-   * <script>
-   *   const element = document.getElementById('element');
-   *   ngxFastMarqueeDuplicationHelper.duplicationFillingSpace(element);
-   * </script>
-   * ```
-   * **Output after duplication:**
-   * ```html
-   * <div id="element">
-   *    <div>
-   *      <div>Hello</div>
-   *      <div>World!</div>
-   *    </div>
-   *    <div aria-hidden="true">
-   *      <div>Hello</div>
-   *      <div>World!</div>
-   *    </div>
-   * </div>
-   * ```
-   *
-   * @param itemsContainer - The element that has the items to be duplicated.
-   */
-  duplicateWithoutAutoFill(itemsContainer: HTMLElement): void {
-    const div = document.createElement('div');
-    while (itemsContainer.firstChild) {
-      div.appendChild(itemsContainer.firstChild);
+  duplicateWithoutFillingSpace(innerElement: HTMLElement): void {
+    if (!innerElement.children.length) {
+      return;
     }
-    itemsContainer.appendChild(div);
-    const clone = div.cloneNode(true) as HTMLElement;
-    clone.setAttribute('aria-hidden', 'true');
-    itemsContainer.appendChild(clone);
+    const [contentElement, hiddenElement] = innerElement.children;
+    if (hiddenElement.children.length) {
+      // Already duplicated.
+      return;
+    }
+    const numberOfItems = contentElement.children.length;
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < numberOfItems; i++) {
+      const item = contentElement.children[i];
+      const copy = item.cloneNode(true);
+      fragment.appendChild(copy);
+    }
+    hiddenElement.appendChild(fragment);
   }
 
   /**
@@ -53,7 +26,7 @@ export class NgxFastMarqueeDuplicationHelper {
    * @param marquee - The host element that represents the marquee.
    * @param itemsContainer - The element that has the items to be duplicated.
    */
-  duplicateUsingAutoFill(
+  duplicateFillingSpace(
     marquee: HTMLElement,
     itemsContainer: HTMLElement,
   ): void {
