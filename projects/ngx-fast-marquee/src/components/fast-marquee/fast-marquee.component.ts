@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Direction, Speed } from '../../types';
 import { NgxFastMarqueeInnerComponent } from '../ngx-fast-marquee-inner/ngx-fast-marquee-inner.component';
-import { NgxFastMarqueeHelper } from '../helpers';
+import { NgxFastMarqueeHelper, ResizeObserverHelper } from '../helpers';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -92,14 +92,14 @@ export class FastMarqueeComponent implements OnDestroy {
   });
 
   /**
-   * Resize Observer reference.
-   */
-  #resizeObserver!: ResizeObserver;
-
-  /**
    * Helper to request operations and statuses
    */
   #helper = inject(NgxFastMarqueeHelper);
+
+  /**
+   * Helper to observe resize changes
+   */
+  #resizeObserverHelper = inject(ResizeObserverHelper);
 
   /**
    * Observe the parent element resizing and invoke the callback when it happens.
@@ -107,22 +107,13 @@ export class FastMarqueeComponent implements OnDestroy {
    * @param callback - Callback to invoke when the parent element is resized
    */
   observeResizing(callback: () => void): void {
-    if (this.#resizeObserver) {
-      // Just in case is invoked many times, but it should not happen
-      return;
-    }
-
-    const observer = new ResizeObserver((entries) => {
-      entries.forEach(() => callback());
-    });
-    this.#resizeObserver = observer;
-    observer.observe(this.marqueeElement());
+    this.#resizeObserverHelper.observe(this.marqueeElement(), callback);
   }
 
   ngOnDestroy(): void {
     if (this.#helper.isPlatformServer) {
       return;
     }
-    this.#resizeObserver.unobserve(this.marqueeElement());
+    this.#resizeObserverHelper.unobserve(this.marqueeElement());
   }
 }
