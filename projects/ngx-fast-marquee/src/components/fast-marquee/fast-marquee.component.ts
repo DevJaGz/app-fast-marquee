@@ -73,6 +73,13 @@ export class FastMarqueeComponent implements OnDestroy {
   });
 
   /**
+   * True if the direction is block, false otherwise.
+   */
+  readonly isBlockDirection = computed(() => {
+    return this.direction() === 'up' || this.direction() === 'down';
+  });
+
+  /**
    * Reference to the Ngx Fast Marquee host element.
    */
   marqueeRef = inject(ElementRef<HTMLElement>);

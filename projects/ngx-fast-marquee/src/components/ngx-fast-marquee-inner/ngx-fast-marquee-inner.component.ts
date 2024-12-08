@@ -5,6 +5,7 @@ import {
   computed,
   ElementRef,
   inject,
+  OnDestroy,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
@@ -26,7 +27,9 @@ import { FastMarqueeComponent } from '../fast-marquee/fast-marquee.component';
     '[attr.data-content-overflowing]': 'isContentOverflowing()',
   },
 })
-export class NgxFastMarqueeInnerComponent implements AfterContentInit {
+export class NgxFastMarqueeInnerComponent
+  implements AfterContentInit, OnDestroy
+{
   /**
    * True if the content of the marquee is overflowing, false otherwise.
    */
@@ -34,7 +37,6 @@ export class NgxFastMarqueeInnerComponent implements AfterContentInit {
 
   /**
    * True if the duplication of the content is ready, false otherwise.
-   * TODO: Change to isContentDuplicationReady
    */
   isDuplicationReady = signal<boolean>(false);
 
@@ -51,9 +53,14 @@ export class NgxFastMarqueeInnerComponent implements AfterContentInit {
   });
 
   /**
+   * Mutation Observer to observe the hidden element.
+   */
+  #hiddenElementObserver!: MutationObserver;
+
+  /**
    *  Ngx Fast Marquee Component (Parent host component)
    */
-  ngxFastMarqueeComponent = inject(FastMarqueeComponent);
+  #ngxFastMarqueeComponent = inject(FastMarqueeComponent);
 
   /**
    * Helper to request operations and statuses
@@ -64,9 +71,46 @@ export class NgxFastMarqueeInnerComponent implements AfterContentInit {
     if (this.#helper.isPlatformServer) {
       return;
     }
-    this.ngxFastMarqueeComponent.observeResizing(
+    this.#observeHiddenElement();
+    this.#ngxFastMarqueeComponent.observeResizing(
       this.onMarqueeResized.bind(this),
     );
+  }
+
+  ngOnDestroy(): void {
+    if (this.#helper.isPlatformServer) {
+      return;
+    }
+    this.#hiddenElementObserver.disconnect();
+  }
+
+  @withDebounceTime(200)
+  onMarqueeResized(): void {
+    this.#update();
+  }
+
+  #observeHiddenElement(): void {
+    const innerElement = this.#marqueeInnerElement();
+    const [, hiddenElement] = innerElement.children;
+    const hiddenElementMutationObserver = new MutationObserver(
+      this.#onHiddenElementMutation.bind(this),
+    );
+    this.#hiddenElementObserver = hiddenElementMutationObserver;
+    hiddenElementMutationObserver.observe(hiddenElement, { childList: true });
+  }
+
+  #onHiddenElementMutation(mutations: MutationRecord[]): void {
+    for (const mutation of mutations) {
+      if (mutation.type === 'childList') {
+        this.#setDuplicationReady();
+      }
+    }
+  }
+
+  #setDuplicationReady(): void {
+    const innerElement = this.#marqueeInnerElement();
+    const [, hiddenElement] = innerElement.children;
+    this.isDuplicationReady.set(hiddenElement.children.length > 0);
   }
 
   #update(): void {
@@ -77,25 +121,14 @@ export class NgxFastMarqueeInnerComponent implements AfterContentInit {
   }
 
   #notifyContentOverflowing(): void {
-    const innerElement = this.#marqueeInnerElement();
-    const [contentElement] = innerElement.children;
-    const marqueeElement = innerElement.parentElement as HTMLElement;
-    const direction = marqueeElement.getAttribute('data-direction');
-    const isBlockDirection = direction === 'up' || direction === 'down';
-    let contentSize = contentElement.clientWidth;
-    let marqueeSize = marqueeElement.clientWidth;
-    if (isBlockDirection) {
-      contentSize = contentElement.clientHeight;
-      marqueeSize = marqueeElement.clientHeight;
-    }
+    const { marqueeSize, contentSize } = this.#getSizes();
     const isContentOverflowing = contentSize > marqueeSize;
     this.isContentOverflowing.set(isContentOverflowing);
   }
 
   #duplicateItems(): void {
     const innerElement = this.#marqueeInnerElement();
-    const marqueeElement = innerElement.parentElement as HTMLElement;
-    const isAutoFill = marqueeElement.getAttribute('data-autofill') === 'true';
+    const isAutoFill = this.#ngxFastMarqueeComponent.autoFill();
     if (isAutoFill) {
       this.#duplicateFillingSpace(innerElement);
       return;
@@ -119,7 +152,7 @@ export class NgxFastMarqueeInnerComponent implements AfterContentInit {
     }
 
     const duplications = 2 * Math.ceil(marqueeSize / contentSize) - 1;
-    // Create a clone of the original content
+
     const originalContentList = Array.from(contentElement.children);
 
     // Removes child nodes of the hidden element
@@ -134,7 +167,6 @@ export class NgxFastMarqueeInnerComponent implements AfterContentInit {
         }
       }
       hiddenElement.appendChild(fragmentDuplicatedContent.cloneNode(true));
-      this.isDuplicationReady.set(true);
     });
   }
 
@@ -152,11 +184,31 @@ export class NgxFastMarqueeInnerComponent implements AfterContentInit {
       fragment.appendChild(copy);
     }
     hiddenElement.appendChild(fragment);
-    this.isDuplicationReady.set(true);
   }
 
-  @withDebounceTime(200)
-  onMarqueeResized(): void {
-    this.#update();
+  /**
+   * Retrieves the marquee and content sizes.
+   * The sizes can be the width or height depending on the direction of the marquee.
+   * @returns Object with the marquee and content sizes.
+   */
+  #getSizes(): {
+    marqueeSize: number;
+    contentSize: number;
+  } {
+    const innerElement = this.#marqueeInnerElement();
+    const [contentElement] = innerElement.children;
+    const marqueeElement = this.#ngxFastMarqueeComponent.marqueeElement();
+    let contentSize = contentElement.clientWidth;
+    let marqueeSize = marqueeElement.clientWidth;
+
+    if (this.#ngxFastMarqueeComponent.isBlockDirection()) {
+      contentSize = contentElement.clientHeight;
+      marqueeSize = marqueeElement.clientHeight;
+    }
+
+    return {
+      marqueeSize,
+      contentSize,
+    };
   }
 }
