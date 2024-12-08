@@ -139,10 +139,8 @@ export class NgxFastMarqueeInnerComponent
    * Update the inner element animation configuration.
    */
   #update(): void {
-    requestAnimationFrame(() => {
-      this.#duplicateContent();
-      this.#setContentOverflowingAttribute();
-    });
+    this.#duplicateContent();
+    this.#setContentOverflowingAttribute();
   }
 
   /**
@@ -159,15 +157,12 @@ export class NgxFastMarqueeInnerComponent
    * Duplicates the content of the inner element.
    */
   #duplicateContent(): void {
-    this.#removeDuplicatedContent();
-    requestAnimationFrame(() => {
-      const isAutoFill = this.#ngxFastMarqueeComponent.autoFill();
-      if (isAutoFill) {
-        this.#duplicateFillingSpace();
-        return;
-      }
-      this.#duplicateWithoutFillingSpace();
-    });
+    const isAutoFill = this.#ngxFastMarqueeComponent.autoFill();
+    if (isAutoFill) {
+      this.#duplicateFillingSpace();
+      return;
+    }
+    this.#duplicateWithoutFillingSpace();
   }
 
   /**
@@ -185,6 +180,7 @@ export class NgxFastMarqueeInnerComponent
   #duplicateFillingSpace(): void {
     const { marqueeSize, contentSize } = this.#getSizes();
     const duplications = 2 * Math.ceil(marqueeSize / contentSize) - 1;
+    this.#removeDuplicatedContent();
     this.#createDuplicationsInHiddenElement({
       fillingSpace: true,
       duplications,
@@ -195,6 +191,7 @@ export class NgxFastMarqueeInnerComponent
    * Duplicates the content without filling the space.
    */
   #duplicateWithoutFillingSpace(): void {
+    this.#removeDuplicatedContent();
     this.#createDuplicationsInHiddenElement({
       fillingSpace: false,
     });
@@ -223,8 +220,9 @@ export class NgxFastMarqueeInnerComponent
         );
       }
     }
-
-    hiddenElement.appendChild(fragmentDuplicatedContent);
+    requestAnimationFrame(() => {
+      hiddenElement.appendChild(fragmentDuplicatedContent);
+    });
   }
 
   /**
@@ -236,7 +234,8 @@ export class NgxFastMarqueeInnerComponent
     const innerElement = this.#marqueeInnerElement();
     const fragmentDuplicatedContent =
       documentFragment || document.createDocumentFragment();
-    const originalContentList = Array.from(innerElement.children);
+    const [contentElement] = innerElement.children;
+    const originalContentList = Array.from(contentElement.children);
     for (const originalContentItem of originalContentList) {
       const clone = originalContentItem.cloneNode(true);
       fragmentDuplicatedContent.appendChild(clone);
