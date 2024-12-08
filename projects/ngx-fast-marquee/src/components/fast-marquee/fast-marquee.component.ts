@@ -3,7 +3,6 @@ import {
   Component,
   computed,
   input,
-  signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { Direction, Speed } from '../../types';
@@ -24,7 +23,6 @@ import { NgxFastMarqueeInnerComponent } from '../ngx-fast-marquee-inner/ngx-fast
     '[attr.data-direction]': 'direction()',
     '[attr.data-autofill]': 'autoFill()',
     '[attr.data-pause-on-hover]': 'pauseOnHover()',
-    '[attr.data-content-overflowing]': 'isContentOverflowing()',
   },
 })
 export class FastMarqueeComponent {
@@ -69,9 +67,4 @@ export class FastMarqueeComponent {
   readonly animate = computed(() => {
     return !this.useSystemReducedMotion();
   });
-
-  /**
-   * True if the content of the marquee is overflowing, false otherwise.
-   */
-  readonly isContentOverflowing = signal<boolean>(false);
 }

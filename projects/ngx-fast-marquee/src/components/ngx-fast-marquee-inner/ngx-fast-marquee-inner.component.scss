@@ -36,4 +36,10 @@
       }
     }
   }
+
+  &[data-content-overflowing='true'] {
+    .ngx-fast-marquee-inner {
+      --nfm-inner-size: max-content;
+    }
+  }
 }

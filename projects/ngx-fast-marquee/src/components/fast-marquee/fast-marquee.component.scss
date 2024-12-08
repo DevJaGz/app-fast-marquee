@@ -10,8 +10,7 @@
     }
   }
 
-  &[data-autofill='true'],
-  &[data-content-overflowing='true'] {
+  &[data-autofill='true'] {
     .ngx-fast-marquee-inner {
       --nfm-inner-size: max-content;
     }
