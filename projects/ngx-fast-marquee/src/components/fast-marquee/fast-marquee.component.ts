@@ -27,6 +27,7 @@ import { NgxFastMarqueeHelper, ResizeObserverHelper } from '../helpers';
     '[attr.data-direction]': 'direction()',
     '[attr.data-autofill]': 'autoFill()',
     '[attr.data-pause-on-hover]': 'pauseOnHover()',
+    '[attr.data-pause-on-click]': 'pauseOnClick()',
   },
 })
 export class FastMarqueeComponent implements OnDestroy {
@@ -64,6 +65,12 @@ export class FastMarqueeComponent implements OnDestroy {
    * @default false
    */
   pauseOnHover = input<boolean>(false);
+
+  /**
+   * Whether to pause the marquee when the mouse is clicked over the marquee.
+   * @default false
+   */
+  pauseOnClick = input<boolean>(false);
 
   /**
    * True if the marquee can animate, false otherwise.
