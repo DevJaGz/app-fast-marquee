@@ -62,10 +62,6 @@ export class NgxFastMarqueeInnerComponent implements AfterContentInit {
 
   #update(): void {
     requestAnimationFrame(() => {
-      const innerElement = this.#marqueeInnerElement();
-      const parentElement = innerElement.parentElement as HTMLElement;
-      const direction = parentElement.getAttribute('data-direction');
-      console.log('--resize-direction', direction);
       this.#duplicateItems();
       this.#notifyContentOverflowing();
     });
@@ -117,18 +113,19 @@ export class NgxFastMarqueeInnerComponent implements AfterContentInit {
     // Create a clone of the original content
     const originalContentList = Array.from(contentElement.children);
 
-    // Clear the hidden element
+    // Removes child nodes of the hidden element
     hiddenElement.innerHTML = '';
-
-    // Create a single fragment containing all duplications
-    const fragmentDuplicatedContent = document.createDocumentFragment();
-    for (let i = 0; i < duplications; i++) {
-      for (const originalContentItem of originalContentList) {
-        const clone = originalContentItem.cloneNode(true);
-        fragmentDuplicatedContent.appendChild(clone);
+    requestAnimationFrame(() => {
+      // Create a single fragment containing all duplications
+      const fragmentDuplicatedContent = document.createDocumentFragment();
+      for (let i = 0; i < duplications; i++) {
+        for (const originalContentItem of originalContentList) {
+          const clone = originalContentItem.cloneNode(true);
+          fragmentDuplicatedContent.appendChild(clone);
+        }
       }
-    }
-    hiddenElement.appendChild(fragmentDuplicatedContent.cloneNode(true));
+      hiddenElement.appendChild(fragmentDuplicatedContent.cloneNode(true));
+    });
   }
 
   #duplicateWithoutFillingSpace(innerElement: HTMLElement): void {
