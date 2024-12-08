@@ -48,4 +48,31 @@ export class NgxFastMarqueeHelper {
   isContentOverflowing = this.#layoutHelper.isContentOverflowing.bind(
     this.#layoutHelper,
   );
+
+  /**
+   * Duplicate the content without filling the space.
+   * @see {@link NgxFastMarqueeDuplicationHelper.duplicateWithoutFillingSpace}
+   */
+  duplicateWithoutFillingSpace =
+    this.#duplicationHelper.duplicateWithoutFillingSpace.bind(
+      this.#duplicationHelper,
+    );
+
+  /**
+   * Duplicate the content filling the space.
+   * @see {@link NgxFastMarqueeDuplicationHelper.duplicateFillingSpace}
+   */
+  duplicateFillingSpace(params: {
+    contentElement: Element;
+    marqueeElement: Element;
+    hiddenElement: Element;
+    isBlockDirection: boolean;
+  }): void {
+    const { marqueeSize, contentSize } = this.getSizes(params);
+    this.#duplicationHelper.duplicateFillingSpace({
+      ...params,
+      marqueeSize,
+      contentSize,
+    });
+  }
 }

@@ -2,39 +2,80 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class NgxFastMarqueeDuplicationHelper {
-  duplicateWithoutFillingSpace(innerElement: HTMLElement): void {
-    if (!innerElement.children.length) {
-      return;
-    }
-    const [contentElement, hiddenElement] = innerElement.children;
-    if (hiddenElement.children.length) {
-      // Already duplicated.
-      return;
-    }
-    const numberOfItems = contentElement.children.length;
-    const fragment = document.createDocumentFragment();
-    for (let i = 0; i < numberOfItems; i++) {
-      const item = contentElement.children[i];
-      const copy = item.cloneNode(true);
-      fragment.appendChild(copy);
-    }
-    hiddenElement.appendChild(fragment);
+  removeDuplicatedContent(hiddenElement: Element): void {
+    hiddenElement.innerHTML = '';
   }
 
-  /**
-   *
-   * @param marquee - The host element that represents the marquee.
-   * @param itemsContainer - The element that has the items to be duplicated.
-   */
-  duplicateFillingSpace(
-    marquee: HTMLElement,
-    itemsContainer: HTMLElement,
-  ): void {
-    const marqueRect = marquee.getBoundingClientRect();
-    const itemsContainerRect = itemsContainer.getBoundingClientRect();
-    console.log(`[marqueRect] w:${marqueRect.width}, h:${marqueRect.height}`);
-    console.log(
-      `[itemsContainer] w:${itemsContainerRect.width}, h:${itemsContainerRect.height}`,
-    );
+  duplicateFillingSpace(params: {
+    marqueeSize: number;
+    contentSize: number;
+    hiddenElement: Element;
+    contentElement: Element;
+  }): void {
+    const marqueeSize = params.marqueeSize;
+    const contentSize = params.contentSize;
+    const hiddenElement = params.hiddenElement;
+    const duplications = 2 * Math.ceil(marqueeSize / contentSize) - 1;
+
+    this.removeDuplicatedContent(hiddenElement);
+    this.createDuplicationsInHiddenElement({
+      ...params,
+      fillingSpace: true,
+      duplications,
+    });
+  }
+
+  duplicateWithoutFillingSpace(params: {
+    hiddenElement: Element;
+    contentElement: Element;
+  }): void {
+    this.removeDuplicatedContent(params.hiddenElement);
+    this.createDuplicationsInHiddenElement({
+      ...params,
+      fillingSpace: false,
+    });
+  }
+
+  createDuplicationsInHiddenElement(params: {
+    hiddenElement: Element;
+    contentElement: Element;
+    fillingSpace: boolean;
+    duplications?: number;
+  }): void {
+    const hiddenElement = params.hiddenElement;
+    const contentElement = params.contentElement;
+    let fragmentDuplicatedContent = this.cloneContent({
+      contentElement,
+    });
+
+    if (params.fillingSpace) {
+      fragmentDuplicatedContent = document.createDocumentFragment();
+      for (let i = 0; i < (params.duplications || 0); i++) {
+        fragmentDuplicatedContent = this.cloneContent({
+          contentElement,
+          documentFragment: fragmentDuplicatedContent,
+        });
+      }
+    }
+    requestAnimationFrame(() => {
+      hiddenElement.appendChild(fragmentDuplicatedContent);
+    });
+  }
+
+  cloneContent(params: {
+    contentElement: Element;
+    documentFragment?: DocumentFragment;
+  }): DocumentFragment {
+    const documentFragment = params.documentFragment;
+    const fragmentDuplicatedContent =
+      documentFragment || document.createDocumentFragment();
+
+    const originalContentList = Array.from(params.contentElement.children);
+    for (const originalContentItem of originalContentList) {
+      const clone = originalContentItem.cloneNode(true);
+      fragmentDuplicatedContent.appendChild(clone);
+    }
+
+    return fragmentDuplicatedContent;
   }
 }
