@@ -204,7 +204,7 @@ export class NgxFastMarqueeInnerComponent
    * Creates the duplications in the hidden element.
    * @param params - Parameters to create the duplications.
    * @param params.fillingSpace - Whether to fill the space with duplications.
-   * @param params.duplications - Number of duplications to create.(Required if fillingSpace is * true)
+   * @param params.duplications - Number of duplications to create (Required if fillingSpace is true).
    */
   #createDuplicationsInHiddenElement(params: {
     fillingSpace: boolean;
