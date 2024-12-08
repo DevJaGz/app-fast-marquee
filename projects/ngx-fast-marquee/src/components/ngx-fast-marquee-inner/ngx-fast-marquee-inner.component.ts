@@ -53,6 +53,20 @@ export class NgxFastMarqueeInnerComponent
   });
 
   /**
+   * Reference to the content element.
+   */
+  #contentElement = computed<Element>(() => {
+    return this.#marqueeInnerElement().children[0];
+  });
+
+  /**
+   * Reference to the hidden element. (Where the content is duplicated)
+   */
+  #hiddenElement = computed<Element>(() => {
+    return this.#marqueeInnerElement().children[1];
+  });
+
+  /**
    *  Ngx Fast Marquee Component (Parent host component)
    */
   #ngxFastMarqueeComponent = inject(FastMarqueeComponent);
@@ -81,8 +95,7 @@ export class NgxFastMarqueeInnerComponent
     if (this.#helper.isPlatformServer) {
       return;
     }
-    const innerElement = this.#marqueeInnerElement();
-    const [, hiddenElement] = innerElement.children;
+    const hiddenElement = this.#hiddenElement();
     this.#mutationObserverHelper.unobserve(hiddenElement);
   }
 
@@ -99,8 +112,7 @@ export class NgxFastMarqueeInnerComponent
    * Observe the hidden element to detect when it is mutated.
    */
   #observeHiddenElementMutations(): void {
-    const innerElement = this.#marqueeInnerElement();
-    const [, hiddenElement] = innerElement.children;
+    const hiddenElement = this.#hiddenElement();
     this.#mutationObserverHelper.observe(
       hiddenElement,
       this.#onHiddenElementMutation.bind(this),
@@ -126,8 +138,7 @@ export class NgxFastMarqueeInnerComponent
    * Set the duplication ready attribute.
    */
   #setDuplicationReadyAttribute(): void {
-    const innerElement = this.#marqueeInnerElement();
-    const [, hiddenElement] = innerElement.children;
+    const hiddenElement = this.#hiddenElement();
     this.isDuplicationReady.set(hiddenElement.children.length > 0);
   }
 
@@ -173,8 +184,7 @@ export class NgxFastMarqueeInnerComponent
    * Removes the children from the hidden element.
    */
   #removeDuplicatedContent(): void {
-    const innerElement = this.#marqueeInnerElement();
-    const [, hiddenElement] = innerElement.children;
+    const hiddenElement = this.#hiddenElement();
     hiddenElement.innerHTML = '';
   }
 
@@ -211,8 +221,7 @@ export class NgxFastMarqueeInnerComponent
     fillingSpace: boolean;
     duplications?: number;
   }): void {
-    const innerElement = this.#marqueeInnerElement();
-    const [, hiddenElement] = innerElement.children;
+    const hiddenElement = this.#hiddenElement();
 
     let fragmentDuplicatedContent = this.#cloneContent();
 
@@ -235,11 +244,9 @@ export class NgxFastMarqueeInnerComponent
    * @returns Document fragment with the cloned content.
    */
   #cloneContent(documentFragment?: DocumentFragment): DocumentFragment {
-    const innerElement = this.#marqueeInnerElement();
     const fragmentDuplicatedContent =
       documentFragment || document.createDocumentFragment();
-    const [contentElement] = innerElement.children;
-    const originalContentList = Array.from(contentElement.children);
+    const originalContentList = Array.from(this.#contentElement().children);
     for (const originalContentItem of originalContentList) {
       const clone = originalContentItem.cloneNode(true);
       fragmentDuplicatedContent.appendChild(clone);
@@ -256,8 +263,7 @@ export class NgxFastMarqueeInnerComponent
     marqueeSize: number;
     contentSize: number;
   } {
-    const innerElement = this.#marqueeInnerElement();
-    const [contentElement] = innerElement.children;
+    const contentElement = this.#contentElement();
     const marqueeElement = this.#ngxFastMarqueeComponent.marqueeElement();
     let contentSize = contentElement.clientWidth;
     let marqueeSize = marqueeElement.clientWidth;
