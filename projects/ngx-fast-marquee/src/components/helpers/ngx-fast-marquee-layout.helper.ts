@@ -8,6 +8,9 @@ export class NgxFastMarqueeLayoutHelper {
   /**
    * Retrieves the marquee and content sizes.
    * The sizes can be the width or height depending on the direction of the marquee.
+   * @param params.contentElement - The content element.
+   * @param params.marqueeElement - The marquee element.
+   * @param params.isBlockDirection - True if the direction is block, false otherwise.
    * @returns Object with the marquee and content sizes.
    */
   getSizes(params: {
@@ -43,6 +46,9 @@ export class NgxFastMarqueeLayoutHelper {
 
   /**
    * Validate if the content is overflowing the marquee.
+   * @param params.contentElement - The content element.
+   * @param params.marqueeElement - The marquee element.
+   * @param params.isBlockDirection - True if the direction is block, false otherwise.   *
    * @return True if the content is overflowing, false otherwise.
    */
   isContentOverflowing(params: {
