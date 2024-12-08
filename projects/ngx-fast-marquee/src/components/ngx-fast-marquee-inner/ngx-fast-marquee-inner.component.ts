@@ -71,7 +71,7 @@ export class NgxFastMarqueeInnerComponent
     if (this.#helper.isPlatformServer) {
       return;
     }
-    this.#observeHiddenElement();
+    this.#observeHiddenElementMutations();
     this.#ngxFastMarqueeComponent.observeResizing(
       this.onMarqueeResized.bind(this),
     );
@@ -84,12 +84,19 @@ export class NgxFastMarqueeInnerComponent
     this.#hiddenElementObserver.disconnect();
   }
 
+  /**
+   * Invoked when the marquee is resized using a
+   * debounce time of 200ms.
+   */
   @withDebounceTime(200)
   onMarqueeResized(): void {
     this.#update();
   }
 
-  #observeHiddenElement(): void {
+  /**
+   * Observe the hidden element to detect when it is mutated.
+   */
+  #observeHiddenElementMutations(): void {
     const innerElement = this.#marqueeInnerElement();
     const [, hiddenElement] = innerElement.children;
     const hiddenElementMutationObserver = new MutationObserver(
@@ -99,66 +106,82 @@ export class NgxFastMarqueeInnerComponent
     hiddenElementMutationObserver.observe(hiddenElement, { childList: true });
   }
 
+  /**
+   * Invoked each time the hidden element is mutated.
+   * @param mutations - List of mutations that occurred.
+   */
   #onHiddenElementMutation(mutations: MutationRecord[]): void {
     for (const mutation of mutations) {
       if (mutation.type === 'childList') {
-        this.#setDuplicationReady();
+        this.#setDuplicationReadyAttribute();
       }
     }
   }
 
-  #setDuplicationReady(): void {
+  /**
+   * Set the duplication ready attribute.
+   */
+  #setDuplicationReadyAttribute(): void {
     const innerElement = this.#marqueeInnerElement();
     const [, hiddenElement] = innerElement.children;
     this.isDuplicationReady.set(hiddenElement.children.length > 0);
   }
 
-  #update(): void {
-    requestAnimationFrame(() => {
-      this.#duplicateItems();
-      this.#notifyContentOverflowing();
-    });
-  }
-
-  #notifyContentOverflowing(): void {
-    const { marqueeSize, contentSize } = this.#getSizes();
-    const isContentOverflowing = contentSize > marqueeSize;
+  /**
+   * Set the content overflowing attribute.
+   */
+  #setContentOverflowingAttribute(): void {
+    const isContentOverflowing = this.#isContentOverflowing();
     this.isContentOverflowing.set(isContentOverflowing);
   }
 
-  #duplicateItems(): void {
-    const innerElement = this.#marqueeInnerElement();
-    const isAutoFill = this.#ngxFastMarqueeComponent.autoFill();
-    if (isAutoFill) {
-      this.#duplicateFillingSpace(innerElement);
-      return;
-    }
-    this.#duplicateWithoutFillingSpace(innerElement);
+  /**
+   * Update the inner element animation configuration.
+   */
+  #update(): void {
+    requestAnimationFrame(() => {
+      this.#duplicateContent();
+      this.#setContentOverflowingAttribute();
+    });
   }
 
-  #duplicateFillingSpace(innerElement: HTMLElement): void {
-    const [contentElement, hiddenElement] = innerElement.children;
+  /**
+   * Validate if the content is overflowing the marquee.
+   * @return True if the content is overflowing, false otherwise.
+   */
+  #isContentOverflowing(): boolean {
+    const { marqueeSize, contentSize } = this.#getSizes();
+    const isContentOverflowing = contentSize > marqueeSize;
+    return isContentOverflowing;
+  }
 
-    const marqueeElement = innerElement.parentElement as HTMLElement;
-    const direction = marqueeElement.getAttribute('data-direction');
-    const isBlockDirection = direction === 'up' || direction === 'down';
-
-    let marqueeSize = marqueeElement.clientWidth;
-    let contentSize = contentElement.clientWidth;
-
-    if (isBlockDirection) {
-      marqueeSize = marqueeElement.clientHeight;
-      contentSize = contentElement.clientHeight;
+  /**
+   * Duplicates the content of the inner element.
+   */
+  #duplicateContent(): void {
+    const isAutoFill = this.#ngxFastMarqueeComponent.autoFill();
+    if (isAutoFill) {
+      this.#duplicateFillingSpace();
+      return;
     }
+    this.#duplicateWithoutFillingSpace();
+  }
 
+  /**
+   * Duplicates the content filling the available space.
+   */
+  #duplicateFillingSpace(): void {
+    const innerElement = this.#marqueeInnerElement();
+    const [contentElement, hiddenElement] = innerElement.children;
+    const { marqueeSize, contentSize } = this.#getSizes();
     const duplications = 2 * Math.ceil(marqueeSize / contentSize) - 1;
-
     const originalContentList = Array.from(contentElement.children);
 
     // Removes child nodes of the hidden element
     hiddenElement.innerHTML = '';
+
+    // After hidden element is empty, create the new duplications
     requestAnimationFrame(() => {
-      // Create a single fragment containing all duplications
       const fragmentDuplicatedContent = document.createDocumentFragment();
       for (let i = 0; i < duplications; i++) {
         for (const originalContentItem of originalContentList) {
@@ -170,7 +193,11 @@ export class NgxFastMarqueeInnerComponent
     });
   }
 
-  #duplicateWithoutFillingSpace(innerElement: HTMLElement): void {
+  /**
+   * Duplicates the content without filling the space.
+   */
+  #duplicateWithoutFillingSpace(): void {
+    const innerElement = this.#marqueeInnerElement();
     const [contentElement, hiddenElement] = innerElement.children;
     const isAlreadyDuplicated = hiddenElement.children.length > 0;
     if (isAlreadyDuplicated) {
