@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MarqueeWordsComponent } from 'src/app/shared/components/marquee-words/marquee-words.component';
 import { RepoAdvertisingComponent } from 'src/app/shared/components/repo-advertising/repo-advertising.component';
@@ -26,4 +26,11 @@ import { NgxFastMarqueeModule } from '@ngx-fast-marquee';
   templateUrl: './home-feature.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeFeatureComponent {}
+export class HomeFeatureComponent {
+  play = signal(false);
+  constructor() {
+    setTimeout(() => {
+      this.play.set(true);
+    }, 2000);
+  }
+}

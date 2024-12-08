@@ -61,6 +61,13 @@ export class FastMarqueeComponent implements OnDestroy {
   autoFill = input<boolean>(false);
 
   /**
+   * Whether to play the marquee animation.
+   * True to play the marquee animation, false to pause the marquee animation.
+   * @default true
+   */
+  play = input<boolean>(true);
+
+  /**
    * Whether to pause the marquee when the mouse is over the marquee.
    * @default false
    */
@@ -76,7 +83,7 @@ export class FastMarqueeComponent implements OnDestroy {
    * True if the marquee can animate, false otherwise.
    */
   readonly animate = computed(() => {
-    return !this.useSystemReducedMotion();
+    return this.play() && !this.useSystemReducedMotion();
   });
 
   /**
