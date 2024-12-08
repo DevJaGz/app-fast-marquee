@@ -5,12 +5,12 @@ import {
   computed,
   ElementRef,
   inject,
-  OnDestroy,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { NgxFastMarqueeHelper } from '../helpers';
 import { withDebounceTime } from '../decorators';
+import { FastMarqueeComponent } from '../fast-marquee/fast-marquee.component';
 
 @Component({
   selector: 'ngx-fast-marquee-inner',
@@ -26,14 +26,16 @@ import { withDebounceTime } from '../decorators';
     '[attr.data-content-overflowing]': 'isContentOverflowing()',
   },
 })
-export class NgxFastMarqueeInnerComponent
-  implements AfterContentInit, OnDestroy
-{
+export class NgxFastMarqueeInnerComponent implements AfterContentInit {
   /**
-   * Event emitted when the content of the marquee is overflowing.
+   * True if the content of the marquee is overflowing, false otherwise.
    */
   isContentOverflowing = signal<boolean>(false);
 
+  /**
+   * True if the duplication of the content is ready, false otherwise.
+   * TODO: Change to isContentDuplicationReady
+   */
   isDuplicationReady = signal<boolean>(false);
 
   /**
@@ -49,9 +51,9 @@ export class NgxFastMarqueeInnerComponent
   });
 
   /**
-   * Parent Resize Observer reference.
+   *  Ngx Fast Marquee Component (Parent host component)
    */
-  #parentResizeObserver!: ResizeObserver;
+  ngxFastMarqueeComponent = inject(FastMarqueeComponent);
 
   /**
    * Helper to request operations and statuses
@@ -62,24 +64,9 @@ export class NgxFastMarqueeInnerComponent
     if (this.#helper.isPlatformServer) {
       return;
     }
-    const observer = new ResizeObserver((entries) => {
-      entries.forEach(() => {
-        this.onResize();
-      });
-    });
-    this.#parentResizeObserver = observer;
-    const innerElement = this.#marqueeInnerElement();
-    const parentElement = innerElement.parentElement as HTMLElement;
-    observer.observe(parentElement);
-  }
-
-  ngOnDestroy(): void {
-    if (this.#helper.isPlatformServer) {
-      return;
-    }
-    const innerElement = this.#marqueeInnerElement();
-    const parentElement = innerElement.parentElement as HTMLElement;
-    this.#parentResizeObserver.unobserve(parentElement);
+    this.ngxFastMarqueeComponent.observeResizing(
+      this.onMarqueeResized.bind(this),
+    );
   }
 
   #update(): void {
@@ -169,7 +156,7 @@ export class NgxFastMarqueeInnerComponent
   }
 
   @withDebounceTime(200)
-  onResize(): void {
+  onMarqueeResized(): void {
     this.#update();
   }
 }

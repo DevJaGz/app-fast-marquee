@@ -2,11 +2,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
+  inject,
   input,
+  OnDestroy,
   ViewEncapsulation,
 } from '@angular/core';
 import { Direction, Speed } from '../../types';
 import { NgxFastMarqueeInnerComponent } from '../ngx-fast-marquee-inner/ngx-fast-marquee-inner.component';
+import { NgxFastMarqueeHelper } from '../helpers';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -25,7 +29,7 @@ import { NgxFastMarqueeInnerComponent } from '../ngx-fast-marquee-inner/ngx-fast
     '[attr.data-pause-on-hover]': 'pauseOnHover()',
   },
 })
-export class FastMarqueeComponent {
+export class FastMarqueeComponent implements OnDestroy {
   /**
    * Direction of the marquee.
    * Posible values: `left`, `right`, `up`, `down`.
@@ -67,4 +71,51 @@ export class FastMarqueeComponent {
   readonly animate = computed(() => {
     return !this.useSystemReducedMotion();
   });
+
+  /**
+   * Reference to the Ngx Fast Marquee host element.
+   */
+  marqueeRef = inject(ElementRef<HTMLElement>);
+
+  /**
+   * HTML Marquee Element.
+   */
+  marqueeElement = computed<HTMLElement>(() => {
+    return this.marqueeRef.nativeElement;
+  });
+
+  /**
+   * Resize Observer reference.
+   */
+  #resizeObserver!: ResizeObserver;
+
+  /**
+   * Helper to request operations and statuses
+   */
+  #helper = inject(NgxFastMarqueeHelper);
+
+  /**
+   * Observe the parent element resizing and invoke the callback when it happens.
+   * This method is used from the inner component to observe the parent element resizing.
+   * @param callback - Callback to invoke when the parent element is resized
+   */
+  observeResizing(callback: () => void): void {
+    if (this.#resizeObserver) {
+      // Just in case is invoked many times, but it should not happen
+      return;
+    }
+
+    const observer = new ResizeObserver((entries) => {
+      entries.forEach(() => callback());
+    });
+    this.#resizeObserver = observer;
+    observer.observe(this.marqueeElement());
+  }
+
+  ngOnDestroy(): void {
+    if (this.#helper.isPlatformServer) {
+      return;
+    }
+    this.#resizeObserver.unobserve(this.marqueeElement());
+  }
 }
