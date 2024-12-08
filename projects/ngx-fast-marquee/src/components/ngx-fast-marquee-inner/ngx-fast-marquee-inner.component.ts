@@ -147,7 +147,11 @@ export class NgxFastMarqueeInnerComponent
    * Set the content overflowing attribute.
    */
   #setContentOverflowingAttribute(): void {
-    const isContentOverflowing = this.#isContentOverflowing();
+    const isContentOverflowing = this.#helper.isContentOverflowing({
+      contentElement: this.#contentElement(),
+      marqueeElement: this.#ngxFastMarqueeComponent.marqueeElement(),
+      isBlockDirection: this.#ngxFastMarqueeComponent.isBlockDirection(),
+    });
     this.isContentOverflowing.set(isContentOverflowing);
   }
 
@@ -157,16 +161,6 @@ export class NgxFastMarqueeInnerComponent
   #update(): void {
     this.#duplicateContent();
     this.#setContentOverflowingAttribute();
-  }
-
-  /**
-   * Validate if the content is overflowing the marquee.
-   * @return True if the content is overflowing, false otherwise.
-   */
-  #isContentOverflowing(): boolean {
-    const { marqueeSize, contentSize } = this.#getSizes();
-    const isContentOverflowing = contentSize > marqueeSize;
-    return isContentOverflowing;
   }
 
   /**
@@ -193,7 +187,11 @@ export class NgxFastMarqueeInnerComponent
    * Duplicates the content filling the available space.
    */
   #duplicateFillingSpace(): void {
-    const { marqueeSize, contentSize } = this.#getSizes();
+    const { marqueeSize, contentSize } = this.#helper.getSizes({
+      contentElement: this.#contentElement(),
+      marqueeElement: this.#ngxFastMarqueeComponent.marqueeElement(),
+      isBlockDirection: this.#ngxFastMarqueeComponent.isBlockDirection(),
+    });
     const duplications = 2 * Math.ceil(marqueeSize / contentSize) - 1;
     this.#removeDuplicatedContent();
     this.#createDuplicationsInHiddenElement({
@@ -253,30 +251,5 @@ export class NgxFastMarqueeInnerComponent
       fragmentDuplicatedContent.appendChild(clone);
     }
     return fragmentDuplicatedContent;
-  }
-
-  /**
-   * Retrieves the marquee and content sizes.
-   * The sizes can be the width or height depending on the direction of the marquee.
-   * @returns Object with the marquee and content sizes.
-   */
-  #getSizes(): {
-    marqueeSize: number;
-    contentSize: number;
-  } {
-    const contentElement = this.#contentElement();
-    const marqueeElement = this.#ngxFastMarqueeComponent.marqueeElement();
-    let contentSize = contentElement.clientWidth;
-    let marqueeSize = marqueeElement.clientWidth;
-
-    if (this.#ngxFastMarqueeComponent.isBlockDirection()) {
-      contentSize = contentElement.clientHeight;
-      marqueeSize = marqueeElement.clientHeight;
-    }
-
-    return {
-      marqueeSize,
-      contentSize,
-    };
   }
 }

@@ -26,4 +26,26 @@ export class NgxFastMarqueeHelper {
   get isPlatformServer(): boolean {
     return isPlatformServer(this.#platformId);
   }
+
+  /**
+   * Validate if the direction of the marquee is a block type.
+   * @see {@link NgxFastMarqueeLayoutHelper.isBlockDirection}
+   */
+  isBlockDirection = this.#layoutHelper.isBlockDirection.bind(
+    this.#layoutHelper,
+  );
+
+  /**
+   * Retrieves the marquee and content sizes.
+   * @see {@link NgxFastMarqueeLayoutHelper.getSizes}
+   */
+  getSizes = this.#layoutHelper.getSizes.bind(this.#layoutHelper);
+
+  /**
+   * Validate if the content is overflowing the marquee.
+   * @see {@link NgxFastMarqueeLayoutHelper.isContentOverflowing}
+   */
+  isContentOverflowing = this.#layoutHelper.isContentOverflowing.bind(
+    this.#layoutHelper,
+  );
 }
