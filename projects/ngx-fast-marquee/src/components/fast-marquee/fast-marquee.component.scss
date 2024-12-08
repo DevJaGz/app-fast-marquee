@@ -81,7 +81,7 @@
   &[data-pause-on-hover='true']:hover,
   &[data-pause-on-click='true']:active {
     .ngx-fast-marquee-inner {
-      --nfm-inner-animation-play-state: paused !important;
+      --nfm-inner-animation-play-state: paused;
     }
   }
 }
