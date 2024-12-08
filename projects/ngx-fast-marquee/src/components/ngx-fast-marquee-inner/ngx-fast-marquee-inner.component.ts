@@ -5,6 +5,7 @@ import {
   computed,
   ElementRef,
   inject,
+  OnDestroy,
   output,
   ViewEncapsulation,
 } from '@angular/core';
@@ -23,7 +24,9 @@ import { withDebounceTime } from '../decorators';
     '[class.ngx-fast-marquee-inner]': 'true',
   },
 })
-export class NgxFastMarqueeInnerComponent implements AfterContentInit {
+export class NgxFastMarqueeInnerComponent
+  implements AfterContentInit, OnDestroy
+{
   /**
    * Event emitted when the content of the marquee is overflowing.
    */
@@ -42,6 +45,11 @@ export class NgxFastMarqueeInnerComponent implements AfterContentInit {
   });
 
   /**
+   * Parent Resize Observer reference.
+   */
+  #parentResizeObserver!: ResizeObserver;
+
+  /**
    * Helper to request operations and statuses
    */
   #helper = inject(NgxFastMarqueeHelper);
@@ -55,9 +63,19 @@ export class NgxFastMarqueeInnerComponent implements AfterContentInit {
         this.onResize();
       });
     });
+    this.#parentResizeObserver = observer;
     const innerElement = this.#marqueeInnerElement();
     const parentElement = innerElement.parentElement as HTMLElement;
     observer.observe(parentElement);
+  }
+
+  ngOnDestroy(): void {
+    if (this.#helper.isPlatformServer) {
+      return;
+    }
+    const innerElement = this.#marqueeInnerElement();
+    const parentElement = innerElement.parentElement as HTMLElement;
+    this.#parentResizeObserver.unobserve(parentElement);
   }
 
   #update(): void {
