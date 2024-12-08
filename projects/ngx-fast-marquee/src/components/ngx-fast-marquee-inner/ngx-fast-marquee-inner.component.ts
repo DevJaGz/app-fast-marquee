@@ -21,7 +21,6 @@ import { withDebounceTime } from '../decorators';
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.ngx-fast-marquee-inner]': 'true',
-    '(window:resize)': 'onResize()',
   },
 })
 export class NgxFastMarqueeInnerComponent implements AfterContentInit {
@@ -48,14 +47,25 @@ export class NgxFastMarqueeInnerComponent implements AfterContentInit {
   #helper = inject(NgxFastMarqueeHelper);
 
   ngAfterContentInit(): void {
-    this.#update();
-  }
-
-  #update(): void {
     if (this.#helper.isPlatformServer) {
       return;
     }
+    const observer = new ResizeObserver((entries) => {
+      entries.forEach(() => {
+        this.onResize();
+      });
+    });
+    const innerElement = this.#marqueeInnerElement();
+    const parentElement = innerElement.parentElement as HTMLElement;
+    observer.observe(parentElement);
+  }
+
+  #update(): void {
     requestAnimationFrame(() => {
+      const innerElement = this.#marqueeInnerElement();
+      const parentElement = innerElement.parentElement as HTMLElement;
+      const direction = parentElement.getAttribute('data-direction');
+      console.log('--resize-direction', direction);
       this.#duplicateItems();
       this.#notifyContentOverflowing();
     });
@@ -73,28 +83,63 @@ export class NgxFastMarqueeInnerComponent implements AfterContentInit {
       contentSize = contentElement.clientHeight;
       marqueeSize = marqueeElement.clientHeight;
     }
-    console.log(
-      '--direction:',
-      direction,
-      'contentSize:',
-      contentSize,
-      'marqueeSize:',
-      marqueeSize,
-    );
     const isContentOverflowing = contentSize > marqueeSize;
     this.contentOverflowing.emit(isContentOverflowing);
   }
 
   #duplicateItems(): void {
     const innerElement = this.#marqueeInnerElement();
+    const marqueeElement = innerElement.parentElement as HTMLElement;
+    const isAutoFill = marqueeElement.getAttribute('data-autofill') === 'true';
+    if (isAutoFill) {
+      this.#duplicateFillingSpace(innerElement);
+      return;
+    }
+    this.#duplicateWithoutFillingSpace(innerElement);
+  }
+
+  #duplicateFillingSpace(innerElement: HTMLElement): void {
+    const [contentElement, hiddenElement] = innerElement.children;
+
+    const marqueeElement = innerElement.parentElement as HTMLElement;
+    const direction = marqueeElement.getAttribute('data-direction');
+    const isBlockDirection = direction === 'up' || direction === 'down';
+
+    let marqueeSize = marqueeElement.clientWidth;
+    let contentSize = contentElement.clientWidth;
+
+    if (isBlockDirection) {
+      marqueeSize = marqueeElement.clientHeight;
+      contentSize = contentElement.clientHeight;
+    }
+
+    const duplications = 2 * Math.ceil(marqueeSize / contentSize) - 1;
+    // Create a clone of the original content
+    const originalContentList = Array.from(contentElement.children);
+
+    // Clear the hidden element
+    hiddenElement.innerHTML = '';
+
+    // Create a single fragment containing all duplications
+    const fragmentDuplicatedContent = document.createDocumentFragment();
+    for (let i = 0; i < duplications; i++) {
+      for (const originalContentItem of originalContentList) {
+        const clone = originalContentItem.cloneNode(true);
+        fragmentDuplicatedContent.appendChild(clone);
+      }
+    }
+    hiddenElement.appendChild(fragmentDuplicatedContent.cloneNode(true));
+  }
+
+  #duplicateWithoutFillingSpace(innerElement: HTMLElement): void {
     const [contentElement, hiddenElement] = innerElement.children;
     const isAlreadyDuplicated = hiddenElement.children.length > 0;
     if (isAlreadyDuplicated) {
       return;
     }
-    const numberOfItems = contentElement.children.length;
+    const duplications = contentElement.children.length;
     const fragment = document.createDocumentFragment();
-    for (let i = 0; i < numberOfItems; i++) {
+    for (let i = 0; i < duplications; i++) {
       const item = contentElement.children[i];
       const copy = item.cloneNode(true);
       fragment.appendChild(copy);

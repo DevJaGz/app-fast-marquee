@@ -35,6 +35,12 @@
         flex-direction: row;
       }
     }
+
+    &[data-autofill='true'] {
+      .ngx-fast-marquee-inner {
+        grid-template-columns: repeat(2, auto);
+      }
+    }
   }
 
   &[data-direction='up'],
@@ -53,6 +59,12 @@
       &__content,
       &__content-hidden {
         flex-direction: column;
+      }
+    }
+
+    &[data-autofill='true'] {
+      .ngx-fast-marquee-inner {
+        grid-template-rows: repeat(2, auto);
       }
     }
   }

@@ -3,12 +3,16 @@
   <div class="grid place-items-center h-full relative overflow-x-hidden">
     <fast-marquee
       direction="left"
-      [pauseOnHover]="true">
+      [autoFill]="false"
+      [pauseOnHover]="false">
       <div>Hello</div>
+      <div>HelloLAST</div>
     </fast-marquee>
   </div>
   <div class="grid place-items-center h-full relative overflow-y-hidden">
-    <fast-marquee direction="up">
+    <fast-marquee
+      direction="up"
+      [autoFill]="true">
       <div>Hello</div>
       <div>Hello1</div>
       <div>Hello1</div>
