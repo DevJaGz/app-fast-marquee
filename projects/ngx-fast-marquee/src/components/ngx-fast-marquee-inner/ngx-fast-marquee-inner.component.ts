@@ -9,7 +9,7 @@ import {
   signal,
   ViewEncapsulation,
 } from '@angular/core';
-import { NgxFastMarqueeHelper } from '../helpers';
+import { MutationObserverHelper, NgxFastMarqueeHelper } from '../helpers';
 import { withDebounceTime } from '../decorators';
 import { FastMarqueeComponent } from '../fast-marquee/fast-marquee.component';
 
@@ -53,11 +53,6 @@ export class NgxFastMarqueeInnerComponent
   });
 
   /**
-   * Mutation Observer to observe the hidden element.
-   */
-  #hiddenElementObserver!: MutationObserver;
-
-  /**
    *  Ngx Fast Marquee Component (Parent host component)
    */
   #ngxFastMarqueeComponent = inject(FastMarqueeComponent);
@@ -66,6 +61,11 @@ export class NgxFastMarqueeInnerComponent
    * Helper to request operations and statuses
    */
   #helper = inject(NgxFastMarqueeHelper);
+
+  /**
+   * Helper to observe mutations
+   */
+  #mutationObserverHelper = inject(MutationObserverHelper);
 
   ngAfterContentInit(): void {
     if (this.#helper.isPlatformServer) {
@@ -81,7 +81,9 @@ export class NgxFastMarqueeInnerComponent
     if (this.#helper.isPlatformServer) {
       return;
     }
-    this.#hiddenElementObserver.disconnect();
+    const innerElement = this.#marqueeInnerElement();
+    const [, hiddenElement] = innerElement.children;
+    this.#mutationObserverHelper.unobserve(hiddenElement);
   }
 
   /**
@@ -99,11 +101,13 @@ export class NgxFastMarqueeInnerComponent
   #observeHiddenElementMutations(): void {
     const innerElement = this.#marqueeInnerElement();
     const [, hiddenElement] = innerElement.children;
-    const hiddenElementMutationObserver = new MutationObserver(
+    this.#mutationObserverHelper.observe(
+      hiddenElement,
       this.#onHiddenElementMutation.bind(this),
+      {
+        childList: true,
+      },
     );
-    this.#hiddenElementObserver = hiddenElementMutationObserver;
-    hiddenElementMutationObserver.observe(hiddenElement, { childList: true });
   }
 
   /**

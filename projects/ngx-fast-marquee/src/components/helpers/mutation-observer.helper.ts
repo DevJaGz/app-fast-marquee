@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
-export class MutationObserverService {
+export class MutationObserverHelper {
   private observers = new Map<Element, MutationObserver>();
 
   /**
