@@ -18,10 +18,22 @@
     }
   }
 
+  &__content {
+    visibility: hidden;
+  }
+
   &__content,
   &__content-hidden {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
+  }
+
+  &[data-duplication-ready='true'] {
+    .ngx-fast-marquee-inner {
+      &__content {
+        visibility: visible;
+      }
+    }
   }
 }

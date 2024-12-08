@@ -7,6 +7,7 @@ import {
   inject,
   OnDestroy,
   output,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { NgxFastMarqueeHelper } from '../helpers';
@@ -22,6 +23,7 @@ import { withDebounceTime } from '../decorators';
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.ngx-fast-marquee-inner]': 'true',
+    '[attr.data-duplication-ready]': 'isDuplicationReady()',
   },
 })
 export class NgxFastMarqueeInnerComponent
@@ -31,6 +33,8 @@ export class NgxFastMarqueeInnerComponent
    * Event emitted when the content of the marquee is overflowing.
    */
   contentOverflowing = output<boolean>();
+
+  isDuplicationReady = signal<boolean>(false);
 
   /**
    * Reference to the marquee inner element.
@@ -143,6 +147,7 @@ export class NgxFastMarqueeInnerComponent
         }
       }
       hiddenElement.appendChild(fragmentDuplicatedContent.cloneNode(true));
+      this.isDuplicationReady.set(true);
     });
   }
 
@@ -160,6 +165,7 @@ export class NgxFastMarqueeInnerComponent
       fragment.appendChild(copy);
     }
     hiddenElement.appendChild(fragment);
+    this.isDuplicationReady.set(true);
   }
 
   @withDebounceTime(200)
