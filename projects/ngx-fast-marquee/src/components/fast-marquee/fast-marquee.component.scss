@@ -2,7 +2,20 @@
 
 .ngx-fast-marquee {
   display: block;
+  position: relative;
+
   --nfm-inner-size: 200%;
+  --nfm-gradient-color: transparent;
+  --nfm-gradient-direction: 90deg;
+  --nfm-gradient-start-size: 0px;
+  --nfm-gradient-end-size: 0px;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+  }
 
   &[data-animate='true'] {
     .ngx-fast-marquee-inner {
@@ -19,8 +32,35 @@
   &[data-direction='right'],
   &[data-direction='left'] {
     width: 100%;
+    min-width: 100%;
     height: auto;
-    overflow-x: hidden;
+    overflow-y: visible;
+
+    &::before,
+    &::after {
+      top: 0;
+      height: 100%;
+    }
+
+    &::before {
+      left: 0;
+      width: var(--nfm-gradient-start-size);
+      background: linear-gradient(
+        var(--nfm-gradient-direction),
+        var(--nfm-gradient-color),
+        transparent
+      );
+    }
+
+    &::after {
+      right: 0;
+      width: var(--nfm-gradient-end-size);
+      background: linear-gradient(
+        var(--nfm-gradient-direction),
+        transparent,
+        var(--nfm-gradient-color)
+      );
+    }
 
     .ngx-fast-marquee-inner {
       --nfm-inner-translation: translateX(-50%);
@@ -46,7 +86,35 @@
   &[data-direction='down'] {
     width: auto;
     height: 100%;
-    overflow-y: hidden;
+    min-height: 100%;
+    overflow-x: visible;
+
+    &::before,
+    &::after {
+      left: 0;
+      width: 100%;
+      --nfm-gradient-direction: 0deg;
+    }
+
+    &::before {
+      top: 0;
+      height: var(--nfm-gradient-start-size);
+      background: linear-gradient(
+        var(--nfm-gradient-direction),
+        transparent,
+        var(--nfm-gradient-color)
+      );
+    }
+
+    &::after {
+      bottom: 0;
+      height: var(--nfm-gradient-start-size);
+      background: linear-gradient(
+        var(--nfm-gradient-direction),
+        var(--nfm-gradient-color),
+        transparent
+      );
+    }
 
     .ngx-fast-marquee-inner {
       --nfm-inner-translation: translateY(-50%);
@@ -83,5 +151,9 @@
     .ngx-fast-marquee-inner {
       --nfm-inner-animation-play-state: paused;
     }
+  }
+
+  &[data-use-mask='true'] {
+    background-color: transparent;
   }
 }

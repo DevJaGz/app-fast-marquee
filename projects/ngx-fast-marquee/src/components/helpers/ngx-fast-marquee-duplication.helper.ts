@@ -27,7 +27,6 @@ export class NgxFastMarqueeDuplicationHelper {
     const contentSize = params.contentSize;
     const hiddenElement = params.hiddenElement;
     const duplications = 2 * Math.ceil(marqueeSize / contentSize) - 1;
-
     this.removeDuplicatedContent(hiddenElement);
     this.createDuplicationsInHiddenElement({
       ...params,

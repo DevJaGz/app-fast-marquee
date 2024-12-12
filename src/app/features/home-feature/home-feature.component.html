@@ -3,9 +3,12 @@
   <div class="grid place-items-center h-full relative overflow-x-hidden">
     <fast-marquee
       direction="left"
-      [autoFill]="true"
+      [autoFill]="false"
       [pauseOnHover]="true"
-      [play]="play()">
+      [play]="play()"
+      gradientColor="#171717"
+      [gradientStartSize]="500"
+      [gradientSize]="100">
       <div>FIRSTHello</div>
       <div>HelloLAST</div>
     </fast-marquee>
@@ -14,7 +17,9 @@
     <fast-marquee
       direction="up"
       [autoFill]="true"
-      [pauseOnClick]="true">
+      [pauseOnClick]="true"
+      gradientColor="#171717"
+      [gradientSize]="100">
       <div>FIRSTHello</div>
       <div>Hello1</div>
       <div>Hello1</div>
@@ -61,7 +66,7 @@
   </div>
   <div class="grid place-items-center h-full relative overflow-x-hidden">
     <fast-marquee direction="right">
-      <div>FIRSTHello</div>
+      <div class="overflow-decoration">FIRSTHello</div>
       <div>Hello1</div>
       <div>Hello1</div>
       <div>Hello1</div>

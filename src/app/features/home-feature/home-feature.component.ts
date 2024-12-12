@@ -25,6 +25,28 @@ import { NgxFastMarqueeModule } from '@ngx-fast-marquee';
   ],
   templateUrl: './home-feature.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: `
+    .overflow-decoration {
+      position: relative;
+    }
+
+    .overflow-decoration::before {
+      position: absolute;
+      content: '';
+      top: -50%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: green;
+      animation: marquee-decoration 10s linear infinite;
+      z-index: 1;
+    }
+
+    .--vertical::before {
+      top: 0;
+      left: -50%;
+    }
+  `,
 })
 export class HomeFeatureComponent {
   play = signal(false);

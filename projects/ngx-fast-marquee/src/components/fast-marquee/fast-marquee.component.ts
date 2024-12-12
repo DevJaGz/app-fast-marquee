@@ -28,6 +28,15 @@ import { NgxFastMarqueeHelper, ResizeObserverHelper } from '../helpers';
     '[attr.data-autofill]': 'autoFill()',
     '[attr.data-pause-on-hover]': 'pauseOnHover()',
     '[attr.data-pause-on-click]': 'pauseOnClick()',
+    '[attr.data-use-mask]': 'useMask()',
+    '[attr.data-mask-start-percentage]': 'maskStartPercentage()',
+    '[attr.data-mask-end-percentage]': 'maskEndPercentage()',
+    '[attr.data-mask-percentage]': 'maskPercentage()',
+    '[style.--nfm-gradient-start-size.px]':
+      'gradientStartSize()? gradientStartSize(): gradientSize()',
+    '[style.--nfm-gradient-end-size.px]':
+      'gradientEndSize()? gradientEndSize():  gradientSize()',
+    '[style.--nfm-gradient-color]': 'gradientColor()',
   },
 })
 export class FastMarqueeComponent implements OnDestroy {
@@ -78,6 +87,54 @@ export class FastMarqueeComponent implements OnDestroy {
    * @default false
    */
   pauseOnClick = input<boolean>(false);
+
+  /**
+   * Whether to use the masks on the start and end sides of the marquee.
+   * You can configure the mask percentages using the `maskStartPercentage`, `maskEndPercentage` and `maskPercentage` inputs.
+   *
+   * **Important**: If the mask is used, the marquee content (items) cannot overflow the marquee.
+   * @see [Issue](https://stackoverflow.com/questions/9194923/using-a-css-mask-without-element-acting-like-it-has-overflow-hidden)
+   * @default false
+   */
+  useMask = input<boolean>(false);
+
+  /**
+   * Start percentage of the mask.
+   * Suitable Range: 0 - 100, where:
+   * If direction is horizontal (left or right):
+   *  - 0 is the left side of the marquee and 100 is the center of the marquee.
+   * If direction is vertical (up or down):
+   * - 0 is the top side of the marquee and 100 is the center of the marquee.
+   * @default 0
+   */
+  maskStartPercentage = input<number>(0);
+
+  /**
+   * End percentage of the mask.
+   * Suitable Range: 0 - 100, where:
+   * If direction is horizontal (left or right):
+   *  - 0 is the right side of the marquee and 100 is the center of the marquee.
+   * If direction is vertical (up or down):
+   * - 0 is the bottom side of the marquee and 100 is the center of the marquee.
+   * @default 0
+   */
+  maskEndPercentage = input<number>(0);
+
+  /**
+   * Percentage of the mask.
+   * Suitable Range: 0 - 100, where 0 is no mask and 100 is full mask from
+   * start to center and end to the center.
+   * @default 0
+   */
+  maskPercentage = input<number>(0);
+
+  gradientStartSize = input<number>(0);
+
+  gradientEndSize = input<number>(0);
+
+  gradientSize = input<number>(0);
+
+  gradientColor = input<string>('transparent');
 
   /**
    * True if the marquee can animate, false otherwise.
