@@ -37,6 +37,10 @@ import { NgxFastMarqueeHelper, ResizeObserverHelper } from '../helpers';
     '[style.--nfm-gradient-end-size.px]':
       'gradientEndSize()? gradientEndSize():  gradientSize()',
     '[style.--nfm-gradient-color]': 'gradientColor()',
+    '[style.--nfm-mask-start-percentage.%]':
+      'maskStartPercentage() ? maskStartPercentage() : maskPercentage()',
+    '[style.--nfm-mask-end-percentage.%]':
+      'maskEndPercentage() ? maskEndPercentage() : maskPercentage()',
   },
 })
 export class FastMarqueeComponent implements OnDestroy {

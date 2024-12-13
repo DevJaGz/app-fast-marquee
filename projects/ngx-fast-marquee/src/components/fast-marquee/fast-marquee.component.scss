@@ -6,9 +6,11 @@
 
   --nfm-inner-size: 200%;
   --nfm-gradient-color: transparent;
-  --nfm-gradient-direction: 90deg;
+  --nfm-fading-direction: 90deg;
   --nfm-gradient-start-size: 0px;
   --nfm-gradient-end-size: 0px;
+  --nfm-mask-start-percentage: 0%;
+  --nfm-mask-end-percentage: 0%;
 
   &::before,
   &::after {
@@ -46,7 +48,7 @@
       left: 0;
       width: var(--nfm-gradient-start-size);
       background: linear-gradient(
-        var(--nfm-gradient-direction),
+        var(--nfm-fading-direction),
         var(--nfm-gradient-color),
         transparent
       );
@@ -56,7 +58,7 @@
       right: 0;
       width: var(--nfm-gradient-end-size);
       background: linear-gradient(
-        var(--nfm-gradient-direction),
+        var(--nfm-fading-direction),
         transparent,
         var(--nfm-gradient-color)
       );
@@ -93,14 +95,14 @@
     &::after {
       left: 0;
       width: 100%;
-      --nfm-gradient-direction: 0deg;
+      --nfm-fading-direction: 0deg;
     }
 
     &::before {
       top: 0;
       height: var(--nfm-gradient-start-size);
       background: linear-gradient(
-        var(--nfm-gradient-direction),
+        var(--nfm-fading-direction),
         transparent,
         var(--nfm-gradient-color)
       );
@@ -110,7 +112,7 @@
       bottom: 0;
       height: var(--nfm-gradient-start-size);
       background: linear-gradient(
-        var(--nfm-gradient-direction),
+        var(--nfm-fading-direction),
         var(--nfm-gradient-color),
         transparent
       );
@@ -154,6 +156,19 @@
   }
 
   &[data-use-mask='true'] {
-    background-color: transparent;
+    $linear-gradient: linear-gradient(
+      var(--nfm-fading-direction),
+      transparent,
+      white calc(var(--nfm-mask-start-percentage) * 0.5),
+      white calc(100% - var(--nfm-mask-end-percentage) * 0.5),
+      transparent
+    );
+
+    &::before,
+    &::after {
+      display: none;
+    }
+    -webkit-mask: $linear-gradient;
+    mask: $linear-gradient;
   }
 }
