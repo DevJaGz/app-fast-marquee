@@ -1,8 +1,4 @@
 .ngx-fast-marquee-inner {
-  --nfm-inner-animation-duration: 10s;
-  --nfm-inner-animation-iteration-count: infinite;
-  --nfm-inner-animation-play-state: paused;
-
   animation-name: ngxFastMarqueeAnimation;
   animation-fill-mode: forwards;
   animation-timing-function: linear;

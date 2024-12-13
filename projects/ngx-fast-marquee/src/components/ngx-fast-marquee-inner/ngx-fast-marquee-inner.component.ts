@@ -25,21 +25,12 @@ import { FastMarqueeComponent } from '../fast-marquee/fast-marquee.component';
     '[class.ngx-fast-marquee-inner]': 'true',
     '[attr.data-duplication-ready]': 'isDuplicationReady()',
     '[attr.data-content-overflowing]': 'isContentOverflowing()',
+    '[style.--nfm-number-of-items]': 'numberOfItems()',
   },
 })
 export class NgxFastMarqueeInnerComponent
   implements AfterContentInit, OnDestroy
 {
-  /**
-   * True if the content of the marquee is overflowing, false otherwise.
-   */
-  isContentOverflowing = signal<boolean>(false);
-
-  /**
-   * True if the duplication of the content is ready, false otherwise.
-   */
-  isDuplicationReady = signal<boolean>(false);
-
   /**
    * Reference to the marquee inner element.
    */
@@ -80,6 +71,21 @@ export class NgxFastMarqueeInnerComponent
    * Helper to observe mutations
    */
   #mutationObserverHelper = inject(MutationObserverHelper);
+
+  /**
+   * True if the content of the marquee is overflowing, false otherwise.
+   */
+  isContentOverflowing = signal<boolean>(false);
+
+  /**
+   * True if the duplication of the content is ready, false otherwise.
+   */
+  isDuplicationReady = signal<boolean>(false);
+
+  /**
+   * Number of items inside the marquee inner element.
+   */
+  numberOfItems = this.#helper.currentNumberOfItems;
 
   ngAfterContentInit(): void {
     if (this.#helper.isPlatformServer) {
@@ -162,6 +168,7 @@ export class NgxFastMarqueeInnerComponent
   #update(): void {
     this.#duplicateContent();
     this.#setContentOverflowingAttribute();
+    this.#setSpeed();
   }
 
   /**
@@ -183,4 +190,6 @@ export class NgxFastMarqueeInnerComponent
       hiddenElement: this.#hiddenElement(),
     });
   }
+
+  #setSpeed(): void {}
 }

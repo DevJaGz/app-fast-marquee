@@ -3,7 +3,7 @@ import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { NgxFastMarqueeDuplicationHelper } from './ngx-fast-marquee-duplication.helper';
 import { NgxFastMarqueeLayoutHelper } from './ngx-fast-marquee-layout.helper';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class NgxFastMarqueeHelper {
   /**
    * Platform ID of the current application.
@@ -26,6 +26,12 @@ export class NgxFastMarqueeHelper {
   get isPlatformServer(): boolean {
     return isPlatformServer(this.#platformId);
   }
+
+  /**
+   * Number of items inside the marquee inner element.
+   * @see {@link NgxFastMarqueeDuplicationHelper.currentNumberOfItems}
+   */
+  readonly currentNumberOfItems = this.#duplicationHelper.currentNumberOfItems;
 
   /**
    * Validate if the direction of the marquee is a block type.

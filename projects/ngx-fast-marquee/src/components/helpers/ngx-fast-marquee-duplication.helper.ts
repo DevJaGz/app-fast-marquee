@@ -1,13 +1,25 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class NgxFastMarqueeDuplicationHelper {
+  /**
+   * Store the current number of items inside the marquee inner element.
+   */
+  #currentNumberOfItems = signal<number>(0);
+
+  /**
+   * Number of items inside the marquee inner element.
+   * This is the sum of the number of items inside the content element and the hidden element.
+   */
+  readonly currentNumberOfItems = this.#currentNumberOfItems.asReadonly();
+
   /**
    * Remove Duplicated Content from the provided hidden element.
    * @param hiddenElement - The hidden element to remove the duplicated content.
    */
   removeDuplicatedContent(hiddenElement: Element): void {
     hiddenElement.innerHTML = '';
+    this.#currentNumberOfItems.set(0);
   }
 
   /**
@@ -79,6 +91,7 @@ export class NgxFastMarqueeDuplicationHelper {
         });
       }
     }
+
     requestAnimationFrame(() => {
       hiddenElement.appendChild(fragmentDuplicatedContent);
     });
@@ -103,6 +116,7 @@ export class NgxFastMarqueeDuplicationHelper {
     for (const originalContentItem of originalContentList) {
       const clone = originalContentItem.cloneNode(true);
       fragmentDuplicatedContent.appendChild(clone);
+      this.#currentNumberOfItems.update((current) => current + 1);
     }
 
     return fragmentDuplicatedContent;

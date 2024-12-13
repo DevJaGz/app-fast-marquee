@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Direction } from '../../types';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class NgxFastMarqueeLayoutHelper {
   /**
    * Retrieves the marquee and content sizes.
