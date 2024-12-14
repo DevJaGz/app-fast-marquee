@@ -39,6 +39,7 @@ import { NgxFastMarqueeLayoutHelper } from '../helpers/ngx-fast-marquee-layout.h
     '[attr.data-mask-start-percentage]': 'maskStartPercentage()',
     '[attr.data-mask-end-percentage]': 'maskEndPercentage()',
     '[attr.data-mask-percentage]': 'maskPercentage()',
+    '[attr.data-speed]': 'speed()',
     '[style.--nfm-gradient-start-size.px]':
       'gradientStartSize()? gradientStartSize(): gradientSize()',
     '[style.--nfm-gradient-end-size.px]':
@@ -213,6 +214,13 @@ export class FastMarqueeComponent implements OnDestroy {
    */
   readonly isBlockDirection = computed(() => {
     return this.#helper.isBlockDirection(this.direction());
+  });
+
+  /**
+   * True if the speed is quantitative, false otherwise.
+   */
+  readonly isQuantitativeSpeed = computed(() => {
+    return typeof this.speed() === 'number';
   });
 
   /**

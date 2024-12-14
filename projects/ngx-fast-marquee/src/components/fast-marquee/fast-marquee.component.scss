@@ -177,14 +177,20 @@
   }
 
   &[data-speed='fast'] {
-    --nfm-inner-animation-duration: calc(var(--nfm-number-of-items) * 0.5s);
+    .ngx-fast-marquee-inner {
+      --nfm-inner-animation-duration: calc(1s);
+    }
   }
 
   &[data-speed='medium'] {
-    --nfm-inner-animation-duration: calc(var(--nfm-number-of-items) * 5s);
+    .ngx-fast-marquee-inner {
+      --nfm-inner-animation-duration: calc(5s);
+    }
   }
 
   &[data-speed='slow'] {
-    --nfm-inner-animation-duration: calc(var(--nfm-number-of-items) * 10s);
+    .ngx-fast-marquee-inner {
+      --nfm-inner-animation-duration: calc(10s);
+    }
   }
 }
