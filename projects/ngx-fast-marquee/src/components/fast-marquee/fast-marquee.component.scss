@@ -144,12 +144,16 @@
 
   &[data-direction='right'],
   &[data-direction='down'] {
-    --nfm-inner-animation-direction: reverse;
+    .ngx-fast-marquee-inner {
+      --nfm-inner-animation-direction: reverse;
+    }
   }
 
   &[data-direction='left'],
   &[data-direction='up'] {
-    --nfm-inner-animation-direction: normal;
+    .ngx-fast-marquee-inner {
+      --nfm-inner-animation-direction: normal;
+    }
   }
 
   &[data-pause-on-hover='true']:hover,
