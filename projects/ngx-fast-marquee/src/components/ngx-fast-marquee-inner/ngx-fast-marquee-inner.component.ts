@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   ElementRef,
   inject,
   OnDestroy,
@@ -73,6 +74,11 @@ export class NgxFastMarqueeInnerComponent
   #mutationObserverHelper = inject(MutationObserverHelper);
 
   /**
+   * Flag to check if the component is initialized.
+   */
+  #isFirstUpdate = false;
+
+  /**
    * True if the content of the marquee is overflowing, false otherwise.
    */
   isContentOverflowing = signal<boolean>(false);
@@ -86,6 +92,19 @@ export class NgxFastMarqueeInnerComponent
    * Number of items inside the marquee inner element.
    */
   numberOfItems = this.#helper.currentNumberOfItems;
+
+  constructor() {
+    if (this.#helper.isPlatformServer) {
+      return;
+    }
+    effect(() => {
+      this.#ngxFastMarqueeComponent.speed();
+      if (!this.#isFirstUpdate) {
+        return;
+      }
+      this.onSpeedChanged();
+    });
+  }
 
   ngAfterContentInit(): void {
     if (this.#helper.isPlatformServer) {
@@ -117,12 +136,22 @@ export class NgxFastMarqueeInnerComponent
   }
 
   /**
+   * Invoked when the speed is changed using a
+   * debounce time of 200ms.
+   */
+  @withDebounceTime(200)
+  onSpeedChanged(): void {
+    this.#setQuantitativeSpeed();
+  }
+
+  /**
    * Update the inner element animation configuration.
    */
   #update(): void {
     this.#duplicateContent();
     this.#setContentOverflowingAttribute();
     this.#setQuantitativeSpeed();
+    this.#isFirstUpdate = true;
   }
 
   /**

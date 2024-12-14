@@ -50,9 +50,14 @@ import { NgxFastMarqueeModule } from '@ngx-fast-marquee';
 })
 export class HomeFeatureComponent {
   play = signal(false);
+  speed = signal(50);
   constructor() {
     setTimeout(() => {
       this.play.set(true);
     }, 2000);
+
+    setTimeout(() => {
+      this.speed.set(150);
+    }, 6000);
   }
 }

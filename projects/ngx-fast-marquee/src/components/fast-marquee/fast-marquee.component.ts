@@ -10,9 +10,13 @@ import {
 } from '@angular/core';
 import { Direction, Speed } from '../../types';
 import { NgxFastMarqueeInnerComponent } from '../ngx-fast-marquee-inner/ngx-fast-marquee-inner.component';
-import { NgxFastMarqueeHelper, ResizeObserverHelper } from '../helpers';
-import { NgxFastMarqueeDuplicationHelper } from '../helpers/ngx-fast-marquee-duplication.helper';
-import { NgxFastMarqueeLayoutHelper } from '../helpers/ngx-fast-marquee-layout.helper';
+import {
+  NgxFastMarqueeHelper,
+  ResizeObserverHelper,
+  NgxFastMarqueeDuplicationHelper,
+  NfxFastMarqueeSpeedHelper,
+  NgxFastMarqueeLayoutHelper,
+} from '../helpers';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -27,6 +31,7 @@ import { NgxFastMarqueeLayoutHelper } from '../helpers/ngx-fast-marquee-layout.h
     NgxFastMarqueeHelper,
     NgxFastMarqueeDuplicationHelper,
     NgxFastMarqueeLayoutHelper,
+    NfxFastMarqueeSpeedHelper,
   ],
   host: {
     '[class.ngx-fast-marquee]': 'true',
@@ -220,7 +225,7 @@ export class FastMarqueeComponent implements OnDestroy {
    * True if the speed is quantitative, false otherwise.
    */
   readonly isQuantitativeSpeed = computed(() => {
-    return typeof this.speed() === 'number';
+    return this.#helper.isQuantitativeSpeed(this.speed());
   });
 
   /**
