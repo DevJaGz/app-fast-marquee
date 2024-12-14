@@ -117,6 +117,15 @@ export class NgxFastMarqueeInnerComponent
   }
 
   /**
+   * Update the inner element animation configuration.
+   */
+  #update(): void {
+    this.#duplicateContent();
+    this.#setContentOverflowingAttribute();
+    this.#setQuantitativeSpeed();
+  }
+
+  /**
    * Observe the hidden element to detect when it is mutated.
    */
   #observeHiddenElementMutations(): void {
@@ -163,15 +172,6 @@ export class NgxFastMarqueeInnerComponent
   }
 
   /**
-   * Update the inner element animation configuration.
-   */
-  #update(): void {
-    this.#duplicateContent();
-    this.#setContentOverflowingAttribute();
-    this.#setSpeed();
-  }
-
-  /**
    * Duplicates the content of the inner element.
    */
   #duplicateContent(): void {
@@ -191,5 +191,23 @@ export class NgxFastMarqueeInnerComponent
     });
   }
 
-  #setSpeed(): void {}
+  /**
+   * Set the quantitative speed of the marquee animation.
+   */
+  #setQuantitativeSpeed(): void {
+    const isQuantitativeSpeed =
+      this.#ngxFastMarqueeComponent.isQuantitativeSpeed();
+
+    if (!isQuantitativeSpeed) {
+      return;
+    }
+
+    this.#helper.setInnerAnimationDuration({
+      marqueeInnerElement: this.#marqueeInnerElement(),
+      contentElement: this.#contentElement(),
+      isBlockDirection: this.#ngxFastMarqueeComponent.isBlockDirection(),
+      CSSPropertyName: '--nfm-inner-animation-duration',
+      speed: this.#ngxFastMarqueeComponent.speed() as number,
+    });
+  }
 }
