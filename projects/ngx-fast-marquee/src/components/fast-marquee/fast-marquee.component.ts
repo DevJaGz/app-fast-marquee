@@ -116,9 +116,11 @@ export class FastMarqueeComponent implements OnDestroy {
    * Whether to use the masks on the start and end sides of the marquee.
    * You can configure the mask percentages using the `maskStartPercentage`, `maskEndPercentage` and `maskPercentage` inputs.
    *
-   * **Important**: If the mask is used, the marquee content (items) cannot overflow the marquee.
+   * **Important**:
+   * - If the mask is used, the marquee content (items) cannot overflow the marquee.
+   * - Using the mask cannot allow the items to overflow the marquee as you can see in the
+   * [Issue](https://stackoverflow.com/questions/9194923/using-a-css-mask-without-element-acting-like-it-has-overflow-hidden)
    *
-   * @see [Issue](https://stackoverflow.com/questions/9194923/using-a-css-mask-without-element-acting-like-it-has-overflow-hidden)
    * @default false
    */
   useMask = input<boolean>(false);
