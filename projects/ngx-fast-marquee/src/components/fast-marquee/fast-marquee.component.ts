@@ -117,9 +117,9 @@ export class FastMarqueeComponent implements OnDestroy {
    * You can configure the mask percentages using the `maskStartPercentage`, `maskEndPercentage` and `maskPercentage` inputs.
    *
    * **Important**:
-   * - If the mask is used, the marquee content (items) cannot overflow the marquee.
-   * - Using the mask cannot allow the items to overflow the marquee as you can see in the
-   * [Issue](https://stackoverflow.com/questions/9194923/using-a-css-mask-without-element-acting-like-it-has-overflow-hidden)
+   * - If the mask is used, the marquee content (items) cannot overflow the marquee as you can see in the following
+   * [Issue](https://stackoverflow.com/questions/9194923/using-a-css-mask-without-element-acting-like-it-has-overflow-hidden).
+   * If you need to allow the overflow of the items, you can use the `gradient` feature.
    *
    * @default false
    */
