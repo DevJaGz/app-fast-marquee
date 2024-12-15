@@ -10,8 +10,8 @@ import {
   signal,
   ViewEncapsulation,
 } from '@angular/core';
-import { MutationObserverHelper, NgxFastMarqueeHelper } from '../helpers';
-import { withDebounceTime } from '../decorators';
+import { MutationObserverHelper, NgxFastMarqueeHelper } from '../../helpers';
+import { withDebounceTime } from '../../decorators';
 import { FastMarqueeComponent } from '../fast-marquee/fast-marquee.component';
 
 @Component({

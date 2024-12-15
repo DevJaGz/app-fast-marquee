@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Speed } from '../../types';
+import { Speed } from '../types';
 
 @Injectable()
 export class NfxFastMarqueeSpeedHelper {
@@ -16,6 +16,7 @@ export class NfxFastMarqueeSpeedHelper {
    * Set the animation duration for the marquee inner element.
    *
    * @param params.CSSPropertyName - The name of the CSS property to set.
+   * @param params.contentElement - The element that has the original content.
    * @param params.marqueeInnerElement - The marquee inner element.
    * @param params.isBlockDirection - True if the direction is block, false otherwise.
    * @param params.speed - The speed of the marquee in pixels per second.

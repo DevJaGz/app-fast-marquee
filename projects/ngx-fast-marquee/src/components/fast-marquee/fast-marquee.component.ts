@@ -16,7 +16,7 @@ import {
   NgxFastMarqueeDuplicationHelper,
   NfxFastMarqueeSpeedHelper,
   NgxFastMarqueeLayoutHelper,
-} from '../helpers';
+} from '../../helpers';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector

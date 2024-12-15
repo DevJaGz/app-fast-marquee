@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Direction } from '../../types';
+import { Direction } from '../types';
 
 @Injectable()
 export class NgxFastMarqueeLayoutHelper {
