@@ -112,7 +112,7 @@ export class NgxFastMarqueeInnerComponent
     }
     this.#observeHiddenElementMutations();
     this.#ngxFastMarqueeComponent.observeResizing(
-      // This is exectued at the initialization of the component
+      // The following callback-method is exectued at the initialization of the component
       // and when the marquee is resized.
       this.onMarqueeResized.bind(this),
     );

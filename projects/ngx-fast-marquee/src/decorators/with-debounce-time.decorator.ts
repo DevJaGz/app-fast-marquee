@@ -1,3 +1,30 @@
+/**
+ * Decorator to debounce a function execution.
+ *
+ * @example
+ * ```ts
+ * class MyClass {
+ *   @withDebounceTime(250)
+ *   myMethod(arg1: string, arg2: number): void {
+ *     // ...
+ *   }
+ *
+ *   constructor() {
+ *     const interval = setInterval(() => {
+ *       this.myMethod('arg1', 1); // It will be invoked once only after 500ms = intervals duration (250ms) + debounce time (250ms)
+ *     }, 50);
+ *
+ *     setTimeout(() => {
+ *       clearInterval(interval);
+ *     }, 250);
+ *   }
+ *
+ * }
+ * ```
+ *
+ * @param delayMs - Time in milliseconds to debounce the function execution
+ * @returns - Decoratored function
+ */
 export function withDebounceTime(delayMs: number) {
   const debounceTimers = new WeakMap<
     object,
