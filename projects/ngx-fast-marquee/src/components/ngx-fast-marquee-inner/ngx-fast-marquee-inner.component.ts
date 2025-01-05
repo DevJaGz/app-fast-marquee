@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { MutationObserverHelper, NgxFastMarqueeHelper } from '../../helpers';
 import { withDebounceTime } from '../../decorators';
-import { FastMarqueeComponent } from '../fast-marquee/fast-marquee.component';
+import { NgxFastMarqueeComponent } from '../ngx-fast-marquee/ngx-fast-marquee.component';
 
 @Component({
   selector: 'ngx-fast-marquee-inner',
@@ -61,7 +61,7 @@ export class NgxFastMarqueeInnerComponent
   /**
    *  Ngx Fast Marquee Component (Parent host component)
    */
-  #ngxFastMarqueeComponent = inject(FastMarqueeComponent);
+  #ngxFastMarqueeComponent = inject(NgxFastMarqueeComponent);
 
   /**
    * Helper to request operations and statuses

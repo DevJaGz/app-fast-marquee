@@ -1,0 +1,112 @@
+:host {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  --_mask-start-percentage: 0%;
+  --_mask-end-percentage: 0%;
+  --_mask-direction: 90deg;
+
+  .ngx-fast-marquee__inner {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &[data-animated="true"] {
+    overflow: hidden;
+    --_linear-gradient: linear-gradient(
+      var(--_mask-direction),
+      transparent,
+      white calc(var(--_mask-start-percentage) * 0.5),
+      white calc(100% - var(--_mask-end-percentage) * 0.5),
+      transparent
+    );
+    -webkit-mask: var(--_linear-gradient);
+    mask: var(--_linear-gradient);
+
+    &[data-direction="left"],
+    &[data-direction="right"] {
+      --_mask-direction: 90deg;
+      width: 100%;
+      height: auto;
+
+      .ngx-fast-marquee__inner {
+        flex-direction: row;
+        --_translation: translateX(var(--_move-percentage));
+      }
+    }
+
+    &[data-direction="up"],
+    &[data-direction="down"] {
+      --_mask-direction: 180deg;
+      width: auto;
+      height: 100%;
+
+      .ngx-fast-marquee__inner {
+        flex-direction: column;
+        --_translation: translateY(var(--_move-percentage));
+      }
+    }
+
+    &[data-direction="right"],
+    &[data-direction="down"] {
+      --_animation-direction: reverse;
+    }
+
+    &[data-direction="left"],
+    &[data-direction="up"] {
+      --_animation-direction: normal;
+    }
+
+    .ngx-fast-marquee__inner {
+      --_move-percentage: -50%;
+      --_number-of-marquee-items: 0;
+      --_animation-duration: 0s;
+      --_animation-iteration-count: infinite;
+      --_animation-play-state: running;
+
+      width: max-content;
+      flex-wrap: nowrap;
+      animation-name: move;
+      animation-duration: var(--_animation-duration);
+      animation-direction: var(--_animation-direction);
+      animation-fill-mode: forwards;
+      animation-timing-function: linear;
+      animation-iteration-count: var(--_animation-iteration-count);
+      animation-play-state: var(--_animation-play-state);
+
+      &[data-speed="fast"] {
+        --_animation-duration: calc(var(--_number-of-marquee-items) * 0.5s);
+      }
+
+      &[data-speed="medium"] {
+        --_animation-duration: calc(var(--_number-of-marquee-items) * 5s);
+      }
+
+      &[data-speed="slow"] {
+        --_animation-duration: calc(var(--_number-of-marquee-items) * 10s);
+      }
+
+      &[data-state="running"] {
+        --_animation-play-state: running;
+      }
+
+      &[data-state="paused"] {
+        --_animation-play-state: paused;
+      }
+
+      &[data-pause-on-hover="true"]:hover {
+        --_animation-play-state: paused !important;
+      }
+
+      &[data-pause-on-click="true"]:active {
+        --_animation-play-state: paused !important;
+      }
+    }
+  }
+}
+
+@keyframes move {
+  to {
+    transform: var(--_translation);
+  }
+}
