@@ -38,6 +38,7 @@ Demo application and publishable Angular library in a single monorepo.
 3. **Markdown-link rule**: every reference to a file, directory, path, URL, or command inside any documentation file ([`AGENTS.md`](AGENTS.md), README, CONTRIBUTING) must be written as a Markdown link, never bare text.
 4. **Conventional Commits**: commit messages must follow [Conventional Commits](https://www.conventionalcommits.org/) format. Husky [`.husky/pre-commit`](.husky/pre-commit) runs lint-staged (lint + Prettier) automatically.
 5. **Angular idioms**: follow the [`angular-developer`](.agents/skills/angular-developer/SKILL.md) skill — standalone components, signals, `@if`/`@for`, `inject()`, OnPush strategy.
+6. **Clean up processes**: any agent that starts a dev server, watcher, or other process that opens a port (e.g. via `npm run start`, `ng serve`) must stop that process and verify the port is released (e.g. `Get-NetTCPConnection`/`netstat`, not just `Ctrl+C`) before finishing the task, since orphaned `node.exe` child processes can survive a plain interrupt on Windows.
 
 ## AI Agent Workflow
 
