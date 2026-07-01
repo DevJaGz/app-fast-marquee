@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  WritableSignal,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, WritableSignal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxFastMarqueeModule } from '@ngx-fast-marquee';
 import { EMOJIS } from '@core';

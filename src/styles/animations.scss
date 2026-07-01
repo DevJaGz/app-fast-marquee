@@ -6,21 +6,17 @@
 @keyframes twinkle {
   0%,
   100% {
-    filter: drop-shadow(
-      0 0 4px gold
-    ); /* Adjust the shadow color and size as needed */
+    filter: drop-shadow(0 0 4px gold); /* Adjust the shadow color and size as needed */
   }
   50% {
-    filter: drop-shadow(
-      0 0 2px gold
-    ); /* Adjust the shadow color and size as needed */
+    filter: drop-shadow(0 0 2px gold); /* Adjust the shadow color and size as needed */
   }
 }
 
 .--vanish-right-animation {
   position: relative;
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: -20%;
@@ -29,11 +25,10 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      var(--_vanish-bg, theme("colors.zinc.900")) 5%,
-      var(--_vanish-bg, theme("colors.zinc.900")) 100%
+      var(--_vanish-bg, theme('colors.zinc.900')) 5%,
+      var(--_vanish-bg, theme('colors.zinc.900')) 100%
     );
-    animation: vanish-right var(--_vanish-duration, 3s) linear forwards
-      var(--_vanish-delay, 0.7s);
+    animation: vanish-right var(--_vanish-duration, 3s) linear forwards var(--_vanish-delay, 0.7s);
     z-index: 1;
   }
 }
@@ -41,7 +36,7 @@
 .--vanish-left-animation {
   position: relative;
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     right: -20%;
@@ -50,11 +45,10 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      var(--_vanish-bg, theme("colors.zinc.900")) 5%,
-      var(--_vanish-bg, theme("colors.zinc.900")) 100%
+      var(--_vanish-bg, theme('colors.zinc.900')) 5%,
+      var(--_vanish-bg, theme('colors.zinc.900')) 100%
     );
-    animation: vanish-left var(--_vanish-duration, 3s) linear forwards
-      var(--_vanish-delay, 0.7s);
+    animation: vanish-left var(--_vanish-duration, 3s) linear forwards var(--_vanish-delay, 0.7s);
     z-index: 1;
   }
 }

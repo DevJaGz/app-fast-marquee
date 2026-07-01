@@ -1,9 +1,6 @@
 <div
-  class="border border-zinc-800 h-full rounded-tl-3xl rounded-tr-3xl overflow-hidden py-6 animate-flip-up animate-once animate-duration-1000 animate-delay-700"
->
-  <h4
-    class="text-right sm:text-center text-xl px-4 mb-10 max-w-[200px] sm:max-w-none ml-auto"
-  >
+  class="border border-zinc-800 h-full rounded-tl-3xl rounded-tr-3xl overflow-hidden py-6 animate-flip-up animate-once animate-duration-1000 animate-delay-700">
+  <h4 class="text-right sm:text-center text-xl px-4 mb-10 max-w-[200px] sm:max-w-none ml-auto">
     Current Speed:
     <span class="text-orange-600 font-bold text-4xl">{{ speed() }}</span> [px/s]
   </h4>
@@ -11,29 +8,12 @@
     [speed]="speed()"
     direction="right"
     [maskPercentage]="40"
-    class="animate-bounce animate-infinite animate-duration-[2000ms]"
-  >
-    <div
-      class="p-4 text-3xl font-serif text-neutral-200 grid place-items-center"
-    >
-      Ngx
-    </div>
-    <div class="p-4 text-xl font-bold text-neutral-300 grid place-items-center">
-      Fast
-    </div>
-    <div
-      class="p-4 text-4xl font-mono text-neutral-400 grid place-items-center"
-    >
-      Marquee
-    </div>
-    <div class="p-4 text-xl font-bold text-neutral-500 grid place-items-center">
-      Ngx
-    </div>
-    <div class="p-4 2xl font-bold text-neutral-600 grid place-items-center">
-      Fast
-    </div>
-    <div class="p-4 4xl italic text-neutral-700 grid place-items-center">
-      Marquee
-    </div>
+    class="animate-bounce animate-infinite animate-duration-[2000ms]">
+    <div class="p-4 text-3xl font-serif text-neutral-200 grid place-items-center">Ngx</div>
+    <div class="p-4 text-xl font-bold text-neutral-300 grid place-items-center">Fast</div>
+    <div class="p-4 text-4xl font-mono text-neutral-400 grid place-items-center">Marquee</div>
+    <div class="p-4 text-xl font-bold text-neutral-500 grid place-items-center">Ngx</div>
+    <div class="p-4 2xl font-bold text-neutral-600 grid place-items-center">Fast</div>
+    <div class="p-4 4xl italic text-neutral-700 grid place-items-center">Marquee</div>
   </ngx-fast-marquee>
 </div>

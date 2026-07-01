@@ -1,15 +1,7 @@
 <div class="w-full py-4 relative">
-  <ngx-fast-marquee
-    [speed]="100"
-    direction="left"
-    [maskPercentage]="40"
-    [pauseOnClick]="true"
-  >
+  <ngx-fast-marquee [speed]="100" direction="left" [maskPercentage]="40" [pauseOnClick]="true">
     @for (brandImage of brandImages(); track $index) {
-      <app-brand-card
-        [brandImage]="brandImage"
-        [brandName]="brandImageNames[$index]"
-      />
+      <app-brand-card [brandImage]="brandImage" [brandName]="brandImageNames[$index]" />
     }
   </ngx-fast-marquee>
 </div>

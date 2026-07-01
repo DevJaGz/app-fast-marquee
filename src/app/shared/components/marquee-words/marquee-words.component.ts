@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  WritableSignal,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, WritableSignal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxFastMarqueeModule } from '@ngx-fast-marquee';
 import { WORDS_POOL } from '@core';
@@ -58,9 +52,7 @@ export class MarqueeWordsComponent implements OnInit {
    * @returns Random words.
    */
   private _getRandomWordsFromPool(): string[] {
-    const poolKeysFiltered = this._poolKeys.filter(
-      (poolKey) => poolKey !== this._lastPoolKey,
-    );
+    const poolKeysFiltered = this._poolKeys.filter(poolKey => poolKey !== this._lastPoolKey);
     const randomPoolIndex = Math.floor(Math.random() * poolKeysFiltered.length);
     const randomPoolKey = poolKeysFiltered[randomPoolIndex];
     this._lastPoolKey = randomPoolKey;

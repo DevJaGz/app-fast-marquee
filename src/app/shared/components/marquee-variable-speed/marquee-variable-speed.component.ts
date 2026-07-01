@@ -42,7 +42,7 @@ export class MarqueeVariableSpeedComponent implements AfterViewInit {
   }
 
   private _updateMarqueeSpeed(): void {
-    this.speedIndex.update((index) => {
+    this.speedIndex.update(index => {
       if (index === this._SPEEDS.length - 1) {
         return 0;
       }

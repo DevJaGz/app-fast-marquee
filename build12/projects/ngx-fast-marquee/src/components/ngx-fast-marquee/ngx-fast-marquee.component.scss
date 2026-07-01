@@ -11,7 +11,7 @@
     flex-wrap: wrap;
   }
 
-  &[data-animated="true"] {
+  &[data-animated='true'] {
     overflow: hidden;
     --_linear-gradient: linear-gradient(
       var(--_mask-direction),
@@ -23,8 +23,8 @@
     -webkit-mask: var(--_linear-gradient);
     mask: var(--_linear-gradient);
 
-    &[data-direction="left"],
-    &[data-direction="right"] {
+    &[data-direction='left'],
+    &[data-direction='right'] {
       --_mask-direction: 90deg;
       width: 100%;
       height: auto;
@@ -35,8 +35,8 @@
       }
     }
 
-    &[data-direction="up"],
-    &[data-direction="down"] {
+    &[data-direction='up'],
+    &[data-direction='down'] {
       --_mask-direction: 180deg;
       width: auto;
       height: 100%;
@@ -47,13 +47,13 @@
       }
     }
 
-    &[data-direction="right"],
-    &[data-direction="down"] {
+    &[data-direction='right'],
+    &[data-direction='down'] {
       --_animation-direction: reverse;
     }
 
-    &[data-direction="left"],
-    &[data-direction="up"] {
+    &[data-direction='left'],
+    &[data-direction='up'] {
       --_animation-direction: normal;
     }
 
@@ -74,31 +74,31 @@
       animation-iteration-count: var(--_animation-iteration-count);
       animation-play-state: var(--_animation-play-state);
 
-      &[data-speed="fast"] {
+      &[data-speed='fast'] {
         --_animation-duration: calc(var(--_number-of-marquee-items) * 0.5s);
       }
 
-      &[data-speed="medium"] {
+      &[data-speed='medium'] {
         --_animation-duration: calc(var(--_number-of-marquee-items) * 5s);
       }
 
-      &[data-speed="slow"] {
+      &[data-speed='slow'] {
         --_animation-duration: calc(var(--_number-of-marquee-items) * 10s);
       }
 
-      &[data-state="running"] {
+      &[data-state='running'] {
         --_animation-play-state: running;
       }
 
-      &[data-state="paused"] {
+      &[data-state='paused'] {
         --_animation-play-state: paused;
       }
 
-      &[data-pause-on-hover="true"]:hover {
+      &[data-pause-on-hover='true']:hover {
         --_animation-play-state: paused !important;
       }
 
-      &[data-pause-on-click="true"]:active {
+      &[data-pause-on-click='true']:active {
         --_animation-play-state: paused !important;
       }
     }

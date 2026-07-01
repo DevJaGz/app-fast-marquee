@@ -178,10 +178,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "projects/ngx-fast-marquee/**/*.ts",
-              "projects/ngx-fast-marquee/**/*.html"
-            ]
+            "lintFilePatterns": ["projects/ngx-fast-marquee/**/*.ts", "projects/ngx-fast-marquee/**/*.html"]
           }
         }
       }

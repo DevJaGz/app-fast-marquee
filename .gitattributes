@@ -1,0 +1,7 @@
+* text=auto eol=lf
+
+# Preserve Windows batch/cmd scripts if added later
+*.{cmd,bat} text eol=crlf
+
+# Binary assets
+*.{png,jpg,jpeg,gif,ico,webp,svg,woff,woff2,ttf,eot} binary

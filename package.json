@@ -9,7 +9,24 @@
     "lint:fix": "ng lint --fix",
     "prepare": "husky install",
     "format": "prettier --write \"**/*.{json,html,ts,scss}\"",
-    "prettier:fix": "npm run format && npm run lint:fix"
+    "prettier:fix": "npm run format && npm run lint:fix",
+    "lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,html}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "projects/ngx-fast-marquee/**/*.{ts,html}": [
+      "prettier --write",
+      "eslint --fix --config projects/ngx-fast-marquee/.eslintrc.json"
+    ],
+    "server.ts": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "build12/**/*.{ts,html}": "prettier --write",
+    "*.{json,scss}": "prettier --write"
   },
   "engines": {
     "node": ">=18.16.0",
@@ -61,6 +78,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "lint-staged": "^17.0.8",
     "ng-packagr": "^18.2.1",
     "postcss": "^8.4.31",
     "prettier": "^3.1.0",

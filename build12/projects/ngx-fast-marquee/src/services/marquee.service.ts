@@ -44,10 +44,7 @@ export class MarqueeService {
       this.updateMask();
     }
 
-    if (
-      this._hasInputChange(changes, 'autoFill') ||
-      this._hasInputChange(changes, 'useSystemReducedMotion')
-    ) {
+    if (this._hasInputChange(changes, 'autoFill') || this._hasInputChange(changes, 'useSystemReducedMotion')) {
       this.update();
     }
 
@@ -73,10 +70,7 @@ export class MarqueeService {
    */
   update(): void {
     const { useSystemReducedMotion, autoFill } = this._marqueeComponent;
-    if (
-      useSystemReducedMotion &&
-      this._reducedMotionService.hasSystemReducedMotion()
-    ) {
+    if (useSystemReducedMotion && this._reducedMotionService.hasSystemReducedMotion()) {
       this._setAsAnimated(false);
       return;
     }
@@ -108,7 +102,7 @@ export class MarqueeService {
         marqueeInnerElement,
         '--_animation-duration',
         `${middleSizeInPx / speed}s`,
-        RendererStyleFlags2.DashCase,
+        RendererStyleFlags2.DashCase
       );
       return;
     }
@@ -119,9 +113,7 @@ export class MarqueeService {
     const { marqueeInnerElement, direction } = this._marqueeComponent;
     const marqueeInnerElementSize = marqueeInnerElement.getBoundingClientRect();
     const size =
-      direction === 'left' || direction === 'right'
-        ? marqueeInnerElementSize.width
-        : marqueeInnerElementSize.height;
+      direction === 'left' || direction === 'right' ? marqueeInnerElementSize.width : marqueeInnerElementSize.height;
     return size / 2;
   }
 
@@ -152,8 +144,7 @@ export class MarqueeService {
    * Update the mask of the marquee
    */
   updateMask(): void {
-    const { maskEndPercentage, maskStartPercentage, maskPercentage } =
-      this._marqueeComponent;
+    const { maskEndPercentage, maskStartPercentage, maskPercentage } = this._marqueeComponent;
     if (maskStartPercentage != null || maskEndPercentage != null) {
       this._updateMaskFromStartToEndPercentage();
     }
@@ -172,7 +163,7 @@ export class MarqueeService {
       marqueeInnerElement,
       '--_animation-play-state',
       play ? 'running' : 'paused',
-      RendererStyleFlags2.DashCase,
+      RendererStyleFlags2.DashCase
     );
   }
 
@@ -180,31 +171,21 @@ export class MarqueeService {
    * Update the pause on hover of the marquee setting the data attribute 'data-pause-on-hover'.
    */
   updatePauseOnHover(): void {
-    const { pauseOnHover, renderer, marqueeInnerElement } =
-      this._marqueeComponent;
-    renderer.setAttribute(
-      marqueeInnerElement,
-      'data-pause-on-hover',
-      String(pauseOnHover),
-    );
+    const { pauseOnHover, renderer, marqueeInnerElement } = this._marqueeComponent;
+    renderer.setAttribute(marqueeInnerElement, 'data-pause-on-hover', String(pauseOnHover));
   }
 
   /**
    * Update the pause on click of the marquee setting the data attribute 'data-pause-on-click'.
    */
   updatePauseOnClick(): void {
-    const { pauseOnClick, renderer, marqueeInnerElement } =
-      this._marqueeComponent;
-    renderer.setAttribute(
-      marqueeInnerElement,
-      'data-pause-on-click',
-      String(pauseOnClick),
-    );
+    const { pauseOnClick, renderer, marqueeInnerElement } = this._marqueeComponent;
+    renderer.setAttribute(marqueeInnerElement, 'data-pause-on-click', String(pauseOnClick));
   }
 
   constructor(
     private _reducedMotionService: ReducedMotionService,
-    private _marqueeDuplicationService: MarqueeDuplicationService,
+    private _marqueeDuplicationService: MarqueeDuplicationService
   ) {}
 
   /**
@@ -221,12 +202,7 @@ export class MarqueeService {
    */
   private _updateMovePercentage(value: number, sign = '-'): void {
     const { marqueeInnerElement, renderer } = this._marqueeComponent;
-    renderer.setStyle(
-      marqueeInnerElement,
-      '--_move-percentage',
-      `${sign}${value}%`,
-      RendererStyleFlags2.DashCase,
-    );
+    renderer.setStyle(marqueeInnerElement, '--_move-percentage', `${sign}${value}%`, RendererStyleFlags2.DashCase);
   }
 
   /**
@@ -234,14 +210,13 @@ export class MarqueeService {
    * This is done in order to calculate speed from the predefined CSS calculation.
    */
   private _updateNumberOfMarqueeItems(): void {
-    const { marqueeInnerElement, renderer, numberOfMarqueeItems } =
-      this._marqueeComponent;
+    const { marqueeInnerElement, renderer, numberOfMarqueeItems } = this._marqueeComponent;
     this._currentNumberOfMarqueeItems = numberOfMarqueeItems;
     renderer.setStyle(
       marqueeInnerElement,
       '--_number-of-marquee-items',
       String(numberOfMarqueeItems),
-      RendererStyleFlags2.DashCase,
+      RendererStyleFlags2.DashCase
     );
   }
 
@@ -249,20 +224,14 @@ export class MarqueeService {
    * Update the mask of the marquee from start to end percentages.
    */
   private _updateMaskFromStartToEndPercentage(): void {
-    const { maskStartPercentage, maskEndPercentage, marqueeElement, renderer } =
-      this._marqueeComponent;
+    const { maskStartPercentage, maskEndPercentage, marqueeElement, renderer } = this._marqueeComponent;
     renderer.setStyle(
       marqueeElement,
       '--_mask-start-percentage',
       `${maskStartPercentage}%`,
-      RendererStyleFlags2.DashCase,
+      RendererStyleFlags2.DashCase
     );
-    renderer.setStyle(
-      marqueeElement,
-      '--_mask-end-percentage',
-      `${maskEndPercentage}%`,
-      RendererStyleFlags2.DashCase,
-    );
+    renderer.setStyle(marqueeElement, '--_mask-end-percentage', `${maskEndPercentage}%`, RendererStyleFlags2.DashCase);
   }
 
   /**
@@ -270,26 +239,12 @@ export class MarqueeService {
    */
   private _updateMaskFromPercentage(): void {
     const { maskPercentage, marqueeElement, renderer } = this._marqueeComponent;
-    renderer.setStyle(
-      marqueeElement,
-      '--_mask-start-percentage',
-      `${maskPercentage}%`,
-      RendererStyleFlags2.DashCase,
-    );
-    renderer.setStyle(
-      marqueeElement,
-      '--_mask-end-percentage',
-      `${maskPercentage}%`,
-      RendererStyleFlags2.DashCase,
-    );
+    renderer.setStyle(marqueeElement, '--_mask-start-percentage', `${maskPercentage}%`, RendererStyleFlags2.DashCase);
+    renderer.setStyle(marqueeElement, '--_mask-end-percentage', `${maskPercentage}%`, RendererStyleFlags2.DashCase);
   }
 
   private _hasInputChange(changes: SimpleChanges, key: string): boolean {
-    return (
-      changes[key] &&
-      !changes[key].firstChange &&
-      changes[key].currentValue !== changes[key].previousValue
-    );
+    return changes[key] && !changes[key].firstChange && changes[key].currentValue !== changes[key].previousValue;
   }
 
   /**
@@ -318,10 +273,7 @@ export class MarqueeService {
       }
       break;
     }
-    const marqueeItemsChunk = marqueeItemsArray.slice(
-      originalMarqueeItems.length,
-      2 * originalMarqueeItems.length,
-    );
+    const marqueeItemsChunk = marqueeItemsArray.slice(originalMarqueeItems.length, 2 * originalMarqueeItems.length);
     return originalMarqueeItems.some((item, index) => {
       const marqueeItem = marqueeItemsChunk[index];
       if (!marqueeItem) return false;

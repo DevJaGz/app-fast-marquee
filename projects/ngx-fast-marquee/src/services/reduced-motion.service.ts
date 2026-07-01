@@ -11,9 +11,6 @@ export class ReducedMotionService {
    */
   hasSystemReducedMotion(): boolean {
     const { defaultView } = this._document;
-    return (
-      defaultView?.matchMedia('(prefers-reduced-motion: reduce)').matches ??
-      false
-    );
+    return defaultView?.matchMedia('(prefers-reduced-motion: reduce)').matches ?? false;
   }
 }

@@ -24,9 +24,7 @@ import { MarqueeDuplicationService } from '../../services/marquee-duplication.se
   styleUrls: ['./ngx-fast-marquee.component.scss'],
   providers: [MarqueeService, MarqueeDuplicationService],
 })
-export class NgxFastMarqueeComponent
-  implements OnChanges, AfterContentInit, AfterContentChecked, MarqueeModel
-{
+export class NgxFastMarqueeComponent implements OnChanges, AfterContentInit, AfterContentChecked, MarqueeModel {
   /**
    * Reference to the marquee inner element.
    */
@@ -165,7 +163,7 @@ export class NgxFastMarqueeComponent
     private _hostRef: ElementRef<HTMLElement>,
     public renderer: Renderer2,
     private _marqueeService: MarqueeService,
-    private _ngZone: NgZone,
+    private _ngZone: NgZone
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {

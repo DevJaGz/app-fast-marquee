@@ -32,11 +32,9 @@ export class MarqueeDuplicationService {
    */
   private _removeDuplicateItems(): void {
     const { marqueeInnerElement } = this._marqueeComponent;
-    marqueeInnerElement
-      .querySelectorAll('[aria-hidden="true"]')
-      .forEach(function (element) {
-        element.remove();
-      });
+    marqueeInnerElement.querySelectorAll('[aria-hidden="true"]').forEach(function (element) {
+      element.remove();
+    });
   }
 
   /**
@@ -47,10 +45,7 @@ export class MarqueeDuplicationService {
     const { marqueeInnerElement, renderer } = this._marqueeComponent;
     const numberOfDuplicates = this._getNumberOfDuplicates();
     const marqueeItems = Array.from(marqueeInnerElement.children);
-    const marqueeItemsToBeDuplicated = Array.from(
-      { length: numberOfDuplicates },
-      () => marqueeItems,
-    ).flat();
+    const marqueeItemsToBeDuplicated = Array.from({ length: numberOfDuplicates }, () => marqueeItems).flat();
     const fragment = this._document.createDocumentFragment();
     for (const marqueeItem of marqueeItemsToBeDuplicated) {
       const marqueeItemClone = marqueeItem.cloneNode(true) as HTMLElement;
@@ -72,27 +67,19 @@ export class MarqueeDuplicationService {
   private _getNumberOfDuplicates(): number {
     const { direction } = this._marqueeComponent;
     const [marqueeDOMRect, marqueeInnerDOMRect] = this._getBoundedClientRects();
-    const marqueeSize =
-      direction === 'left' || direction === 'right'
-        ? marqueeDOMRect.width
-        : marqueeDOMRect.height;
+    const marqueeSize = direction === 'left' || direction === 'right' ? marqueeDOMRect.width : marqueeDOMRect.height;
     const marqueeInnerSize =
-      direction === 'left' || direction === 'right'
-        ? marqueeInnerDOMRect.width
-        : marqueeInnerDOMRect.height;
+      direction === 'left' || direction === 'right' ? marqueeInnerDOMRect.width : marqueeInnerDOMRect.height;
     const numberOfDuplicates = Math.ceil(marqueeSize / marqueeInnerSize);
     if (marqueeSize > marqueeInnerSize) {
       const numberOfDuplicatesAdjustedByScreen = 2 * numberOfDuplicates;
-      const isNumberOfDuplicatesAdjustedByScreenOdd =
-        numberOfDuplicatesAdjustedByScreen % 2 !== 0;
+      const isNumberOfDuplicatesAdjustedByScreenOdd = numberOfDuplicatesAdjustedByScreen % 2 !== 0;
       return isNumberOfDuplicatesAdjustedByScreenOdd
         ? numberOfDuplicatesAdjustedByScreen
         : numberOfDuplicatesAdjustedByScreen + 1;
     }
     const isNumberOfDuplicatesOdd = numberOfDuplicates % 2 !== 0;
-    return isNumberOfDuplicatesOdd
-      ? numberOfDuplicates
-      : numberOfDuplicates + 1;
+    return isNumberOfDuplicatesOdd ? numberOfDuplicates : numberOfDuplicates + 1;
   }
 
   /**
@@ -101,9 +88,6 @@ export class MarqueeDuplicationService {
    */
   private _getBoundedClientRects(): [DOMRect, DOMRect] {
     const { marqueeElement, marqueeInnerElement } = this._marqueeComponent;
-    return [
-      marqueeElement.getBoundingClientRect(),
-      marqueeInnerElement.getBoundingClientRect(),
-    ];
+    return [marqueeElement.getBoundingClientRect(), marqueeInnerElement.getBoundingClientRect()];
   }
 }
