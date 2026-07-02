@@ -48,10 +48,12 @@ bun add ngx-fast-marquee
 
 | Angular Version | Library Version                   |
 | --------------- | ------------------------- |
-| `>=17`           | `0.2.2`  |
+| `>=17`           | `0.3.0`  |
 | `>=12`           | `0.2.0`  |
 
 ## 🚀 Getting Started
+
+### NgModule applications
 
 Import the `NgxFastMarqueeModule` in your `AppModule`:
 
@@ -65,6 +67,37 @@ import { NgxFastMarqueeModule } from "ngx-fast-marquee";
 })
 export class AppModule {}
 ```
+
+No additional setup is needed: `NgxFastMarqueeModule` automatically registers the library's idle-callback compatibility guard at bootstrap (see the Safari/iOS note below).
+
+### Standalone applications
+
+Add `provideFastMarquee()` to your `bootstrapApplication()` providers, and import `NgxFastMarqueeModule` in the component that renders the marquee:
+
+```typescript
+import { bootstrapApplication } from "@angular/platform-browser";
+import { provideFastMarquee } from "ngx-fast-marquee";
+
+bootstrapApplication(AppComponent, {
+  providers: [provideFastMarquee()],
+});
+```
+
+```typescript
+import { Component } from "@angular/core";
+import { NgxFastMarqueeModule } from "ngx-fast-marquee";
+
+@Component({
+  standalone: true,
+  imports: [NgxFastMarqueeModule],
+  templateUrl: "./app.component.html",
+})
+export class AppComponent {}
+```
+
+> ⚠️ **Required for `@defer` usage (Safari/iOS)**: if `<ngx-fast-marquee>` is rendered inside a `@defer` block (e.g. `@defer (on idle)`), `provideFastMarquee()` **must** be registered in your `bootstrapApplication()` providers. Some Safari/iOS builds expose `requestIdleCallback` without `cancelIdleCallback`, and Angular's `@defer` idle scheduler crashes in that environment — see [issue #5](https://github.com/DevJaGz/app-fast-marquee/issues/5) and the upstream bug [angular/angular#53721](https://github.com/angular/angular/issues/53721) — **before** the deferred chunk containing the marquee can load, so only a bootstrap-time provider can prevent it. The same applies if a lazy-loaded module imports `NgxFastMarqueeModule`: register `provideFastMarquee()` at the root bootstrap.
+
+### Usage
 
 Use the `ngx-fast-marquee` component in your templates:
 
