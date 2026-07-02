@@ -1,7 +1,7 @@
 packages:
   - '.'
 
-allowBuilds:
+onlyBuiltDependencies:
   esbuild: true
   lmdb: true
   msgpackr-extract: true
