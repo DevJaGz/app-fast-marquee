@@ -1,8 +1,4 @@
-﻿# Library capability — ngx-fast-marquee
-
-Specs for the publishable `ngx-fast-marquee` Angular library.
-
-## Requirements
+## ADDED Requirements
 
 ### Requirement: Idle Callback Browser Compatibility
 
