@@ -6,7 +6,6 @@ Angular services for the `ngx-fast-marquee` library.
 
 | Node | Path |
 |------|------|
-| Source of truth | [`AGENTS.md`](../../../../AGENTS.md) |
 | Library Source | [`src/AGENTS.md`](../AGENTS.md) |
 
 ## Conventions

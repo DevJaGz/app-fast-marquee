@@ -6,7 +6,6 @@ Global SCSS partials shared across the application.
 
 | Node | Path |
 |------|------|
-| Source of truth | [`AGENTS.md`](../../AGENTS.md) |
 | Application Source Root | [`src/AGENTS.md`](../AGENTS.md) |
 
 ## Conventions

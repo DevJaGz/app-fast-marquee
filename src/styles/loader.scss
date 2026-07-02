@@ -2,7 +2,8 @@
 .loader {
   width: 65px;
   display: grid;
-  --mask: radial-gradient(12px at left 15px top 50%, #0000 95%, #000),
+  --mask:
+    radial-gradient(12px at left 15px top 50%, #0000 95%, #000),
     radial-gradient(12px at right 15px top 50%, #0000 95%, #000);
   -webkit-mask: var(--mask);
   mask: var(--mask);
