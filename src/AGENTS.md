@@ -6,7 +6,6 @@ Application source root for `app-fast-marquee`.
 
 | Node | Path |
 |------|------|
-| Source of truth | [`AGENTS.md`](../AGENTS.md) |
 | App module | [`src/app/AGENTS.md`](app/AGENTS.md) |
 | Static assets | [`src/assets/AGENTS.md`](assets/AGENTS.md) |
 | Global SCSS | [`src/styles/AGENTS.md`](styles/AGENTS.md) |

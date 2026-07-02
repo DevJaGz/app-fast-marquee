@@ -17,6 +17,7 @@ import { Direction, Speed } from '../../types';
 import { MarqueeService } from '../../services/marquee.service';
 import { MarqueeModel } from '../../models/marquee.model';
 import { MarqueeDuplicationService } from '../../services/marquee-duplication.service';
+import { ensureIdleCallbackFallback } from '../../utils/idle-callback-compat.util';
 
 @Component({
   selector: 'ngx-fast-marquee',
@@ -164,7 +165,11 @@ export class NgxFastMarqueeComponent implements OnChanges, AfterContentInit, Aft
     public renderer: Renderer2,
     private _marqueeService: MarqueeService,
     private _ngZone: NgZone
-  ) {}
+  ) {
+    // Defensive guard for non-`@defer` instantiation paths only; `@defer (on idle)` crashes
+    // before this constructor can run, so that case requires `provideFastMarquee()` at bootstrap.
+    ensureIdleCallbackFallback();
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     this._marqueeService.updateOnInputChanges(changes);
