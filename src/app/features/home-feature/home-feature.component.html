@@ -5,6 +5,16 @@
   <!-- <app-marquee-line-rotation
     class="absolute bottom-0 left-0 right-0 h-[30vh]"
   /> -->
+  @defer (on idle) {
+    <ngx-fast-marquee
+      class="deferred-idle-marquee absolute top-[60%] left-0 right-0 animate-fade"
+      [maskPercentage]="20"
+      [speed]="100">
+      @for (word of deferredWords; track $index) {
+        <span class="text-base px-6 text-slate-400">{{ word }}</span>
+      }
+    </ngx-fast-marquee>
+  }
   <app-marquee-variable-speed class="absolute bottom-0 left-0 sm:left-1/4 right-0 sm:right-1/4 h-[30vh]" />
   <app-marquee-words class="absolute top-0 left-4 bottom-0 animate-fade-right" />
   <app-repo-advertising />
