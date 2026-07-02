@@ -23,5 +23,13 @@
 
 - [x] 4.1 Run `npm run lint` (or `npm run lint:fix`) and `npm run format` (or `npm run prettier:fix`) and resolve any violations.
 - [x] 4.2 Run `npm run build:lib` to confirm the library compiles, `provideFastMarquee` appears correctly in the generated type definitions, and `ensureIdleCallbackFallback` is not leaked as a public export.
-- [x] 4.3 Manually reproduce in a real WebKit engine (e.g. Playwright `webkit` with an init script defining `window.requestIdleCallback` and deleting `window.cancelIdleCallback`): render a page with `@defer (on idle) { <ngx-fast-marquee /> }` (a) without `provideFastMarquee()` in bootstrap providers — confirm the crash still occurs, documenting the limit of what the library can guarantee without the required integration step — and (b) with `provideFastMarquee()` — confirm no `ReferenceError`/`NG0200` appears.
+- [x] 4.3 Verify in real browser engines via the Playwright e2e suite ([`e2e/tests/idle-callback-guard.spec.ts`](e2e/tests/idle-callback-guard.spec.ts)): with Safari asymmetry simulated via `addInitScript`, (a) the `no-idle-guard` scenario confirms the upstream `cancelIdleCallback` crash still occurs without `provideFastMarquee()`, and (b) the default app confirms the `@defer (on idle)` marquee loads without errors when the guard is registered. Runs in both Chromium and WebKit.
 - [x] 4.4 Add a `@defer (on idle)`-wrapped usage of `<ngx-fast-marquee>` to the demo app (`src/`), wire `provideFastMarquee()` into its bootstrap config, run `npm run start`, and visually confirm it renders and animates correctly; then stop the dev server and verify its port is released.
+
+## 5. E2E suite (Playwright)
+
+- [x] 5.1 Add `@playwright/test` and `playwright-ng-schematics`; wire the [`e2e`](angular.json) target and [`playwright.config.ts`](playwright.config.ts) (Chromium + WebKit, production default app on port 4200).
+- [x] 5.2 Add [`e2e/tests/idle-callback-guard.spec.ts`](e2e/tests/idle-callback-guard.spec.ts) with Safari asymmetry simulation and assertions for both guarded and unguarded paths.
+- [x] 5.3 Add the `no-idle-guard` build/serve configuration in [`angular.json`](angular.json) and fixture [`e2e/fixtures/app.config.no-idle-guard.ts`](e2e/fixtures/app.config.no-idle-guard.ts); expose server URLs via [`e2e/support/servers.ts`](e2e/support/servers.ts).
+- [x] 5.4 Add Docker runner ([`docker-compose.e2e.yml`](docker-compose.e2e.yml), [`e2e/support/e2e-docker.mjs`](e2e/support/e2e-docker.mjs)) and [`pnpm e2e`](package.json) / [`pnpm e2e:local`](package.json) scripts.
+- [x] 5.5 Document the suite in [`e2e/AGENTS.md`](e2e/AGENTS.md), root [`AGENTS.md`](AGENTS.md), and [`README.md`](README.md).

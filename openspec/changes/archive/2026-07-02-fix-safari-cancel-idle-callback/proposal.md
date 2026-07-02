@@ -12,6 +12,7 @@ Critically, the crash happens at `@defer (on idle)` trigger-scheduling time — 
 - Keep a defensive call to `ensureIdleCallbackFallback()` in `NgxFastMarqueeComponent`'s constructor as well, as belt-and-suspenders for non-`@defer` instantiation paths (e.g. dynamic component creation). This does **not** protect the `@defer (on idle)` scenario by itself — `provideFastMarquee()` (directly, or transitively via `NgxFastMarqueeModule`) is the part that does.
 - Add Jasmine/Karma unit tests that (a) verify the guard utility's fallback behavior in isolation, and (b) prove ordering — that installing `provideFastMarquee()` before a `@defer (on idle)` block is processed prevents the crash in a simulated asymmetric-support environment.
 - Document the required one-line bootstrap integration (standalone apps) and the automatic behavior (NgModule apps) in the library `README.md`.
+- Add a Playwright end-to-end suite ([`e2e/`](e2e/)) that automates verification in Chromium and WebKit: the default app (with guard) and a `no-idle-guard` scenario (without guard) that reproduces the upstream crash, runnable via [`pnpm e2e`](package.json) (Docker) or [`pnpm e2e:local`](package.json) (local).
 
 ## Capabilities
 
@@ -22,12 +23,14 @@ _None — this hardens existing library behavior rather than introducing a new c
 ### Modified Capabilities
 
 - `library`: the library must remain functional when the host browser has asymmetric or missing `requestIdleCallback`/`cancelIdleCallback` support (e.g. Safari/iOS), including when the marquee is rendered inside a `@defer (on idle)` block — instead of depending on the consuming app's Angular version having a correct feature-detection guard, and instead of assuming a fix inside the component itself runs early enough.
+- `application`: the demo app must ship an e2e suite that verifies the idle-callback guard in real browsers, including crash reproduction when `provideFastMarquee()` is omitted.
 
 ## Impact
 
 - **Affected code**: `projects/ngx-fast-marquee/src/` — new utility (idle-callback compatibility guard), a new public provider function, a call site in `components/ngx-fast-marquee/ngx-fast-marquee.component.ts`, and a `providers` addition to `ngx-fast-marquee.module.ts`.
 - **New public API**: `provideFastMarquee()` exported from `public-api.ts` — standalone consumers must add it to their bootstrap providers if they render `ngx-fast-marquee` inside a `@defer` block; documented as a required integration step, not silently automatic, for that usage pattern.
-- **Affected tests**: new spec file(s) under `projects/ngx-fast-marquee/src/` exercising both the guard utility and the bootstrap-vs-`@defer` ordering, run via `ng test ngx-fast-marquee`.
-- **Affected docs**: `projects/ngx-fast-marquee/README.md` — new setup step plus compatibility notes.
-- **No dependency changes**: implemented with native `setTimeout`/`clearTimeout`/`APP_INITIALIZER`, no new packages.
+- **Affected tests**: new spec file(s) under `projects/ngx-fast-marquee/src/` exercising both the guard utility and the bootstrap-vs-`@defer` ordering, run via `ng test ngx-fast-marquee`; new Playwright e2e specs under [`e2e/tests/`](e2e/tests/) run via [`pnpm e2e`](package.json).
+- **Affected docs**: `projects/ngx-fast-marquee/README.md` — new setup step plus compatibility notes; root [`AGENTS.md`](AGENTS.md), [`e2e/AGENTS.md`](e2e/AGENTS.md), and [`README.md`](README.md) — e2e commands and conventions.
+- **New dev dependencies**: `@playwright/test`, `playwright-ng-schematics` (e2e only; not shipped with the library).
+- **Library runtime**: implemented with native `setTimeout`/`clearTimeout`/`APP_INITIALIZER`, no new runtime packages.
 - **No breaking changes to existing behavior**: additive only; existing component inputs/outputs (`Direction`, `Speed`, etc.) are untouched. Note: standalone consumers using `@defer` around the marquee must add the new provider for the fix to take effect — this is a required action for that usage pattern, not a behavior change to existing code.

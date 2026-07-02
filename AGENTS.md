@@ -8,6 +8,7 @@ Demo application and publishable Angular library in a single monorepo.
 |------|------|
 | Application | [`src/`](src/) |
 | Library | [`projects/ngx-fast-marquee/`](projects/ngx-fast-marquee/) |
+| E2E suite | [`e2e/`](e2e/) |
 | OpenSpec workflow | [`openspec/`](openspec/) |
 | Angular skills | [`.agents/skills/`](.agents/skills/) |
 | Stale snapshot (out of scope) | [`build12/`](build12/) |
@@ -23,6 +24,8 @@ Demo application and publishable Angular library in a single monorepo.
 | `npm run lint:fix` | Run ESLint and auto-fix violations |
 | `npm run format` | Check formatting with Prettier |
 | `npm run prettier:fix` | Auto-fix formatting with Prettier |
+| `pnpm e2e` | Run the full e2e suite in Docker ([`e2e/support/e2e-docker.mjs`](e2e/support/e2e-docker.mjs) → [`docker-compose.e2e.yml`](docker-compose.e2e.yml)) |
+| `pnpm e2e:local` | Run the full e2e suite without Docker (`ng e2e`; needs local Playwright browsers) |
 
 ## Navigation
 
@@ -30,6 +33,7 @@ Demo application and publishable Angular library in a single monorepo.
 |------|------|
 | Application | [`src/AGENTS.md`](src/AGENTS.md) |
 | Library | [`projects/ngx-fast-marquee/AGENTS.md`](projects/ngx-fast-marquee/AGENTS.md) |
+| E2E suite | [`e2e/AGENTS.md`](e2e/AGENTS.md) |
 
 ## Conventions
 

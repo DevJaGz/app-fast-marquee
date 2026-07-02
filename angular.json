@@ -79,6 +79,18 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "no-idle-guard": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "prerender": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/app/app.config.ts",
+                  "with": "e2e/fixtures/app.config.no-idle-guard.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -91,9 +103,17 @@
             },
             "development": {
               "buildTarget": "app-fast-marquee:build:development"
+            },
+            "no-idle-guard": {
+              "buildTarget": "app-fast-marquee:build:no-idle-guard",
+              "port": 4201
             }
           },
           "defaultConfiguration": "development"
+        },
+        "e2e": {
+          "builder": "playwright-ng-schematics:playwright",
+          "options": {}
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

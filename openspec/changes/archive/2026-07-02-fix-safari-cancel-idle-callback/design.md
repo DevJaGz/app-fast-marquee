@@ -86,6 +86,21 @@ Ship as a minor release (new public API surface: `provideFastMarquee()`), not a 
 - **Standalone-component consumers**, especially anyone wrapping `<ngx-fast-marquee>` in `@defer`: add `provideFastMarquee()` to `bootstrapApplication()`'s `providers` array. Call this out explicitly in release notes and at the top of the README's standalone usage section.
 - Non-breaking to existing rendering behavior either way; rollback is a simple downgrade if unexpected regressions surface.
 
+## Verification: E2E suite
+
+Unit tests prove the guard utility and bootstrap ordering in isolation; a Playwright e2e suite ([`e2e/`](e2e/)) verifies the full stack in real Chromium and WebKit engines.
+
+**Architecture:**
+
+- Single entry point: [`ng e2e`](angular.json) via [`playwright-ng-schematics`](https://github.com/jfgreffier/playwright-ng-schematics) → [`playwright.config.ts`](playwright.config.ts).
+- Two concurrent dev servers started by Playwright's `webServer`:
+  - **Default app** (port 4200): production configuration with `provideFastMarquee()` — tests the guarded happy path.
+  - **`no-idle-guard` scenario** (port 4201): [`fileReplacements`](angular.json) swaps [`src/app/app.config.ts`](src/app/app.config.ts) for [`e2e/fixtures/app.config.no-idle-guard.ts`](e2e/fixtures/app.config.no-idle-guard.ts) (omits the guard) — tests crash reproduction.
+- Safari asymmetry is simulated in both tests via Playwright `addInitScript` (`requestIdleCallback` present, `cancelIdleCallback` deleted), matching issue #5.
+- Docker runner ([`docker-compose.e2e.yml`](docker-compose.e2e.yml) + [`e2e/support/e2e-docker.mjs`](e2e/support/e2e-docker.mjs)): derives the Playwright image tag from the installed `@playwright/test` version so image and package never drift.
+
+**Why a scenario instead of test hooks in app code:** the guard omission must happen at bootstrap provider level — a Playwright-side simulation alone cannot remove `provideFastMarquee()` from an already-bootstrapped app. The `no-idle-guard` scenario uses Angular's `fileReplacements` to serve a fixture config without modifying [`src/`](src/) runtime code.
+
 ## Open Questions
 
 None — root cause, crash-timing trace, fix activation point, and verification strategy are all confirmed against the actual upstream Angular source (18.2.14 through 21.2.17) and the reported error signature.

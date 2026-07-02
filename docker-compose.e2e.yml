@@ -1,0 +1,25 @@
+# Self-contained e2e runner: browsers, the Angular dev servers, and the Playwright
+# suite all live in one disposable container — nothing is published to host ports.
+# The image tag is interpolated from the installed @playwright/test version by
+# e2e/support/e2e-docker.mjs, the `pnpm e2e` entry point — never hardcode it here.
+services:
+  e2e:
+    image: 'mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION:?run via pnpm e2e (set by e2e/support/e2e-docker.mjs)}-noble'
+    working_dir: /work
+    ipc: host
+    environment:
+      CI: '1'
+      NG_CLI_ANALYTICS: 'false'
+    volumes:
+      - .:/work
+      # Overlay volumes keep the Linux install and caches apart from the host's
+      # Windows-native node_modules (esbuild, @parcel/watcher, lmdb binaries).
+      - e2e-node-modules:/work/node_modules
+      - e2e-angular-cache:/work/.angular
+      - e2e-pnpm-store:/pnpm-store
+    command: bash -c "npm i -g pnpm@11 && pnpm install --frozen-lockfile --store-dir /pnpm-store && pnpm exec ng e2e"
+
+volumes:
+  e2e-node-modules:
+  e2e-angular-cache:
+  e2e-pnpm-store:

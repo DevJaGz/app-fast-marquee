@@ -54,11 +54,33 @@ npm run build:lib
 
 ## Testing
 
+### Unit tests
+
 ```bash
 ng test
 ```
 
 Runs unit tests via [Karma](https://karma-runner.github.io/) / [Jasmine](https://jasmine.github.io/).
+
+### End-to-end tests
+
+```bash
+pnpm e2e
+```
+
+Runs the full Playwright suite in Docker ([`e2e/support/e2e-docker.mjs`](e2e/support/e2e-docker.mjs) → [`docker-compose.e2e.yml`](docker-compose.e2e.yml)). Requires Docker.
+
+```bash
+pnpm e2e:local
+```
+
+Runs the same suite locally (`ng e2e`). Requires a one-time browser install:
+
+```bash
+pnpm exec playwright install chromium webkit
+```
+
+The suite verifies the Safari/iOS idle-callback guard ([issue #5](https://github.com/DevJaGz/app-fast-marquee/issues/5)) in Chromium and WebKit. See [`e2e/AGENTS.md`](e2e/AGENTS.md) for architecture and conventions.
 
 ## Lint & Format
 
@@ -75,6 +97,7 @@ Runs unit tests via [Karma](https://karma-runner.github.io/) / [Jasmine](https:/
 app-fast-marquee/
 ├── src/                          # Demo application source
 ├── projects/ngx-fast-marquee/   # Publishable library
+├── e2e/                          # Playwright end-to-end suite
 ├── openspec/                     # OpenSpec specs and changes
 ├── .agents/skills/               # Angular agent skills
 ├── .cursor/commands/             # OpenSpec Cursor commands
@@ -85,6 +108,7 @@ app-fast-marquee/
 |------|-------------|
 | [`src/`](src/) | Demo application source |
 | [`projects/ngx-fast-marquee/`](projects/ngx-fast-marquee/) | Publishable library |
+| [`e2e/`](e2e/) | Playwright end-to-end suite |
 | [`openspec/`](openspec/) | OpenSpec specs and changes |
 | [`.agents/skills/`](.agents/skills/) | Angular agent skills |
 | [`.cursor/commands/`](.cursor/commands/) | OpenSpec Cursor commands |
