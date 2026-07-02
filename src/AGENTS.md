@@ -6,7 +6,6 @@ Application source root for `app-fast-marquee`.
 
 | Node | Path |
 |------|------|
-| Source of truth | [`AGENTS.md`](../AGENTS.md) |
 | App module | [`src/app/AGENTS.md`](app/AGENTS.md) |
 | Static assets | [`src/assets/AGENTS.md`](assets/AGENTS.md) |
 | Global SCSS | [`src/styles/AGENTS.md`](styles/AGENTS.md) |
@@ -19,3 +18,4 @@ Before proceeding, read and follow [`AGENTS.md`](../AGENTS.md) — it is the man
 - All new components use inline SCSS (`inlineStyle: true`), `changeDetection: OnPush`. These are Angular CLI schematics defaults — do not override.
 - SCSS partials in [`src/styles/`](styles/) are importable without relative paths (`includePaths` is set). Import them with `@use 'filename'` (without path prefix).
 - Build target: `npm run build:app`. Dev server: `npm run start`.
+- The home feature renders `<ngx-fast-marquee>` inside `@defer (on idle)` with `provideFastMarquee()` in bootstrap — see [`src/app/AGENTS.md`](app/AGENTS.md). E2e coverage lives in [`e2e/AGENTS.md`](../e2e/AGENTS.md).
