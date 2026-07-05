@@ -1,9 +1,8 @@
-import { DOCUMENT } from '@angular/common';
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, inject, DOCUMENT } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class ReducedMotionService {
-  constructor(@Inject(DOCUMENT) private _document: Document) {}
+  private readonly _document = inject(DOCUMENT);
 
   /**
    * Check if the system has reduced motion.

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,9 +8,7 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BrandCardComponent {
-  @Input()
-  brandImage = '';
+  readonly brandImage = input('');
 
-  @Input()
-  brandName = '';
+  readonly brandName = input('');
 }

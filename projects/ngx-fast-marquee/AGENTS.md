@@ -14,6 +14,7 @@ Before proceeding, read and follow [`AGENTS.md`](../../AGENTS.md) — it is the 
 
 - **Selector prefix**: `ngx-fast-marquee` (set in [`angular.json`](../../angular.json)).
 - **Build**: `npm run build:lib`. Output goes to `dist/ngx-fast-marquee/`.
+- **Tests**: `npm run test:lib` (Vitest, jsdom environment). Since the library's own `build` architect target uses the `ng-packagr` builder (incompatible with the `@angular/build:unit-test` builder's `buildTarget` option), [`angular.json`](../../angular.json) defines a dedicated `test-build` architect target (`@angular/build:application`) used only to compile spec files. jsdom doesn't implement the idle-callback APIs, so [`src/test-setup.ts`](src/test-setup.ts) polyfills them before tests run — keep it in sync if idle-callback behavior changes.
 - **No app-only dependencies**: do not add dependencies that are only needed by the demo app. Keep peer deps lean.
 - Every new public symbol (component, service, type, model, provider function) must be exported through [`src/public-api.ts`](src/public-api.ts).
 - Keep the library's own [`README.md`](README.md), Angular compatibility table, and semver version in sync with any public API changes.

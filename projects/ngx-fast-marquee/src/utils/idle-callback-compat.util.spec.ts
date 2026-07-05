@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { ensureIdleCallbackFallback } from './idle-callback-compat.util';
 
 /**
@@ -83,8 +84,8 @@ describe('ensureIdleCallbackFallback', () => {
 
     ensureIdleCallbackFallback();
 
-    const ranCallback = jasmine.createSpy('ranCallback');
-    const cancelledCallback = jasmine.createSpy('cancelledCallback');
+    const ranCallback = vi.fn();
+    const cancelledCallback = vi.fn();
     window.requestIdleCallback(ranCallback);
     const cancelledHandle = window.requestIdleCallback(cancelledCallback);
     window.cancelIdleCallback(cancelledHandle);

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgModule, provideZonelessChangeDetection } from '@angular/core';
 import { DeferBlockBehavior, TestBed } from '@angular/core/testing';
 import { NgxFastMarqueeComponent } from '../components/ngx-fast-marquee/ngx-fast-marquee.component';
 import { provideFastMarquee } from './fast-marquee.providers';
@@ -23,6 +23,17 @@ import { provideFastMarquee } from './fast-marquee.providers';
   standalone: false,
 })
 class DeferOnIdleHostComponent {}
+
+/**
+ * Statically declares both components together so the AOT template compiler can resolve
+ * `<ngx-fast-marquee>` inside `DeferOnIdleHostComponent`'s template. `TestBed`'s own ad hoc
+ * `declarations` array (the previous approach) is only resolved by the JIT compiler at runtime,
+ * which the Vitest/esbuild build pipeline does not fall back to.
+ */
+@NgModule({
+  declarations: [DeferOnIdleHostComponent, NgxFastMarqueeComponent],
+})
+class DeferOnIdleHostModule {}
 
 /**
  * View of `window` where the idle-callback APIs are optional and writable, so the test can
@@ -67,8 +78,8 @@ describe('provideFastMarquee ordering with @defer (on idle)', () => {
     // protection in play is `provideFastMarquee()` — mirroring a standalone consumer's
     // `bootstrapApplication()` wiring.
     TestBed.configureTestingModule({
-      declarations: [DeferOnIdleHostComponent, NgxFastMarqueeComponent],
-      providers: [provideFastMarquee()],
+      imports: [DeferOnIdleHostModule],
+      providers: [provideFastMarquee(), provideZonelessChangeDetection()],
       deferBlockBehavior: DeferBlockBehavior.Playthrough,
     });
 

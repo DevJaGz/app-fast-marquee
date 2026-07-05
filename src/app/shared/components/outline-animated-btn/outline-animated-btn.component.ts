@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OutlineAnimatedBtnDirective } from '../../directives/outline-animated-btn.directive';
 
@@ -9,9 +9,7 @@ import { OutlineAnimatedBtnDirective } from '../../directives/outline-animated-b
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OutlineAnimatedBtnComponent {
-  @Input()
-  href = '#';
+  readonly href = input('#');
 
-  @Input()
-  target = '_blank';
+  readonly target = input('_blank');
 }

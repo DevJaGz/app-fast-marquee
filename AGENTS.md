@@ -20,6 +20,8 @@ Demo application and publishable Angular library in a single monorepo.
 | `npm run start` | Serve the application in development mode |
 | `npm run build:app` | Build the application |
 | `npm run build:lib` | Build the publishable library |
+| `npm run test:app` | Run the application's unit tests (Vitest) |
+| `npm run test:lib` | Run the library's unit tests (Vitest) |
 | `npm run lint` | Run ESLint across the workspace |
 | `npm run lint:fix` | Run ESLint and auto-fix violations |
 | `npm run format` | Check formatting with Prettier |
@@ -41,8 +43,10 @@ Demo application and publishable Angular library in a single monorepo.
 2. **Lint/format gate**: all new or edited code must conform to the [ESLint config](`.eslintrc.json`) and [Prettier](`.prettierrc.json`). Run `npm run lint` (or `npm run lint:fix`) and `npm run format` before completing. Never bypass ESLint/Prettier.
 3. **Markdown-link rule**: every reference to a file, directory, path, URL, or command inside any documentation file ([`AGENTS.md`](AGENTS.md), README, CONTRIBUTING) must be written as a Markdown link, never bare text.
 4. **Conventional Commits**: commit messages must follow [Conventional Commits](https://www.conventionalcommits.org/) format. Husky [`.husky/pre-commit`](.husky/pre-commit) runs lint-staged (lint + Prettier) automatically.
-5. **Angular idioms**: follow the [`angular-developer`](.agents/skills/angular-developer/SKILL.md) skill — standalone components, signals, `@if`/`@for`, `inject()`, OnPush strategy.
+5. **Angular idioms**: follow the [`angular-developer`](.agents/skills/angular-developer/SKILL.md) skill — standalone components, signals, `@if`/`@for`, `inject()`, OnPush strategy. Both the app and the library are **zoneless** (`provideZonelessChangeDetection()` in [`src/app/app.config.ts`](src/app/app.config.ts); no `zone.js` dependency) and use signal-based `input()`/`output()`/`viewChild()` exclusively — do not introduce `@Input()`/`@Output()`/`@ViewChild()` decorators or reintroduce `zone.js` in new code.
 6. **Clean up processes**: any agent that starts a dev server, watcher, or other process that opens a port (e.g. via `npm run start`, `ng serve`) must stop that process and verify the port is released (e.g. `Get-NetTCPConnection`/`netstat`, not just `Ctrl+C`) before finishing the task, since orphaned `node.exe` child processes can survive a plain interrupt on Windows.
+7. **Unit tests run on Vitest**: both projects' `test` architect targets use the experimental `@angular/build:unit-test` builder with `runner: "vitest"` (configured in [`angular.json`](angular.json)), not Karma. See [`src/AGENTS.md`](src/AGENTS.md) and [`projects/ngx-fast-marquee/AGENTS.md`](projects/ngx-fast-marquee/AGENTS.md) for project-specific setup notes.
+8. **Node engine floor**: [`package.json`](package.json) `engines.node` tracks Angular's own supported range (currently `^20.19.0 || ^22.12.0 || >=24.0.0`, matching [`@angular/core`](node_modules/@angular/core/package.json)) — bump it in lockstep with every Angular major upgrade, never independently.
 
 ## AI Agent Workflow
 

@@ -1,9 +1,12 @@
-import { Injectable, RendererStyleFlags2, SimpleChanges } from '@angular/core';
+import { inject, Injectable, RendererStyleFlags2, SimpleChanges } from '@angular/core';
 import { MarqueeModel } from '../models/marquee.model';
 import { ReducedMotionService } from './reduced-motion.service';
 import { MarqueeDuplicationService } from './marquee-duplication.service';
 @Injectable()
 export class MarqueeService {
+  private readonly _reducedMotionService = inject(ReducedMotionService);
+  private readonly _marqueeDuplicationService = inject(MarqueeDuplicationService);
+
   /**
    * Set the marquee component instance.
    * @param marqueeComponent - NGX Fast Marquee component instance.
@@ -70,14 +73,14 @@ export class MarqueeService {
    */
   update(): void {
     const { useSystemReducedMotion, autoFill } = this._marqueeComponent;
-    if (useSystemReducedMotion && this._reducedMotionService.hasSystemReducedMotion()) {
+    if (useSystemReducedMotion() && this._reducedMotionService.hasSystemReducedMotion()) {
       this._setAsAnimated(false);
       return;
     }
 
     this._setAsAnimated(true);
 
-    if (autoFill) {
+    if (autoFill()) {
       this._marqueeDuplicationService.duplicateItems();
       this._updateNumberOfMarqueeItems();
     }
@@ -96,24 +99,28 @@ export class MarqueeService {
    */
   updateSpeed(): void {
     const { speed, marqueeInnerElement, renderer } = this._marqueeComponent;
-    if (typeof speed === 'number') {
+    const speedValue = speed();
+    if (typeof speedValue === 'number') {
       const middleSizeInPx = this._getMiddleMarqueeSizeInPx();
       renderer.setStyle(
         marqueeInnerElement,
         '--_animation-duration',
-        `${middleSizeInPx / speed}s`,
+        `${middleSizeInPx / speedValue}s`,
         RendererStyleFlags2.DashCase
       );
       return;
     }
-    renderer.setAttribute(marqueeInnerElement, 'data-speed', speed);
+    renderer.setAttribute(marqueeInnerElement, 'data-speed', speedValue);
   }
 
   private _getMiddleMarqueeSizeInPx(): number {
     const { marqueeInnerElement, direction } = this._marqueeComponent;
     const marqueeInnerElementSize = marqueeInnerElement.getBoundingClientRect();
+    const directionValue = direction();
     const size =
-      direction === 'left' || direction === 'right' ? marqueeInnerElementSize.width : marqueeInnerElementSize.height;
+      directionValue === 'left' || directionValue === 'right'
+        ? marqueeInnerElementSize.width
+        : marqueeInnerElementSize.height;
     return size / 2;
   }
 
@@ -122,7 +129,7 @@ export class MarqueeService {
    */
   updateDirection(): void {
     const { direction, marqueeElement, renderer } = this._marqueeComponent;
-    renderer.setAttribute(marqueeElement, 'data-direction', direction);
+    renderer.setAttribute(marqueeElement, 'data-direction', direction());
   }
 
   /**
@@ -133,7 +140,7 @@ export class MarqueeService {
    */
   updateMovePercentage(): void {
     const { autoFill } = this._marqueeComponent;
-    if (!autoFill) {
+    if (!autoFill()) {
       this._updateMovePercentage(100);
       return;
     }
@@ -145,11 +152,11 @@ export class MarqueeService {
    */
   updateMask(): void {
     const { maskEndPercentage, maskStartPercentage, maskPercentage } = this._marqueeComponent;
-    if (maskStartPercentage != null || maskEndPercentage != null) {
+    if (maskStartPercentage() != null || maskEndPercentage() != null) {
       this._updateMaskFromStartToEndPercentage();
     }
 
-    if (maskPercentage != null) {
+    if (maskPercentage() != null) {
       this._updateMaskFromPercentage();
     }
   }
@@ -162,7 +169,7 @@ export class MarqueeService {
     renderer.setStyle(
       marqueeInnerElement,
       '--_animation-play-state',
-      play ? 'running' : 'paused',
+      play() ? 'running' : 'paused',
       RendererStyleFlags2.DashCase
     );
   }
@@ -172,7 +179,7 @@ export class MarqueeService {
    */
   updatePauseOnHover(): void {
     const { pauseOnHover, renderer, marqueeInnerElement } = this._marqueeComponent;
-    renderer.setAttribute(marqueeInnerElement, 'data-pause-on-hover', String(pauseOnHover));
+    renderer.setAttribute(marqueeInnerElement, 'data-pause-on-hover', String(pauseOnHover()));
   }
 
   /**
@@ -180,13 +187,8 @@ export class MarqueeService {
    */
   updatePauseOnClick(): void {
     const { pauseOnClick, renderer, marqueeInnerElement } = this._marqueeComponent;
-    renderer.setAttribute(marqueeInnerElement, 'data-pause-on-click', String(pauseOnClick));
+    renderer.setAttribute(marqueeInnerElement, 'data-pause-on-click', String(pauseOnClick()));
   }
-
-  constructor(
-    private _reducedMotionService: ReducedMotionService,
-    private _marqueeDuplicationService: MarqueeDuplicationService
-  ) {}
 
   /**
    * Private reference to the marquee component instance.
@@ -228,10 +230,15 @@ export class MarqueeService {
     renderer.setStyle(
       marqueeElement,
       '--_mask-start-percentage',
-      `${maskStartPercentage}%`,
+      `${maskStartPercentage()}%`,
       RendererStyleFlags2.DashCase
     );
-    renderer.setStyle(marqueeElement, '--_mask-end-percentage', `${maskEndPercentage}%`, RendererStyleFlags2.DashCase);
+    renderer.setStyle(
+      marqueeElement,
+      '--_mask-end-percentage',
+      `${maskEndPercentage()}%`,
+      RendererStyleFlags2.DashCase
+    );
   }
 
   /**
@@ -239,8 +246,19 @@ export class MarqueeService {
    */
   private _updateMaskFromPercentage(): void {
     const { maskPercentage, marqueeElement, renderer } = this._marqueeComponent;
-    renderer.setStyle(marqueeElement, '--_mask-start-percentage', `${maskPercentage}%`, RendererStyleFlags2.DashCase);
-    renderer.setStyle(marqueeElement, '--_mask-end-percentage', `${maskPercentage}%`, RendererStyleFlags2.DashCase);
+    const maskPercentageValue = maskPercentage();
+    renderer.setStyle(
+      marqueeElement,
+      '--_mask-start-percentage',
+      `${maskPercentageValue}%`,
+      RendererStyleFlags2.DashCase
+    );
+    renderer.setStyle(
+      marqueeElement,
+      '--_mask-end-percentage',
+      `${maskPercentageValue}%`,
+      RendererStyleFlags2.DashCase
+    );
   }
 
   private _hasInputChange(changes: SimpleChanges, key: string): boolean {

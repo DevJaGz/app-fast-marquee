@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideClientHydration } from '@angular/platform-browser';
 
@@ -12,5 +12,5 @@ import { routes } from '../../src/app/app.routes';
  * suite. Keep its exports in sync with `src/app/app.config.ts`.
  */
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideClientHydration()],
+  providers: [provideZonelessChangeDetection(), provideRouter(routes), provideClientHydration()],
 };

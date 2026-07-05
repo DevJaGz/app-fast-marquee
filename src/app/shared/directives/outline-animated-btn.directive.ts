@@ -1,11 +1,11 @@
-import { Directive, HostListener, Renderer2, RendererStyleFlags2 } from '@angular/core';
+import { Directive, HostListener, inject, Renderer2, RendererStyleFlags2 } from '@angular/core';
 
 @Directive({
   selector: 'button a [appOutlineAnimatedBtn]',
   standalone: true,
 })
 export class OutlineAnimatedBtnDirective {
-  constructor(private _renderer: Renderer2) {}
+  private readonly _renderer = inject(Renderer2);
 
   @HostListener('mousemove', ['$event'])
   onMouseMove(event: MouseEvent): void {

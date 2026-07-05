@@ -1,17 +1,17 @@
-import { Renderer2 } from '@angular/core';
+import { Renderer2, Signal } from '@angular/core';
 import { Direction, Speed } from '../types';
 
 export abstract class MarqueeModel {
-  abstract speed: Speed;
-  abstract direction: Direction;
-  abstract autoFill: boolean;
-  abstract useSystemReducedMotion: boolean;
-  abstract maskStartPercentage: number;
-  abstract maskEndPercentage: number;
-  abstract maskPercentage: number;
-  abstract pauseOnHover: boolean;
-  abstract pauseOnClick: boolean;
-  abstract play: boolean;
+  abstract speed: Signal<Speed>;
+  abstract direction: Signal<Direction>;
+  abstract autoFill: Signal<boolean>;
+  abstract useSystemReducedMotion: Signal<boolean>;
+  abstract maskStartPercentage: Signal<number>;
+  abstract maskEndPercentage: Signal<number>;
+  abstract maskPercentage: Signal<number>;
+  abstract pauseOnHover: Signal<boolean>;
+  abstract pauseOnClick: Signal<boolean>;
+  abstract play: Signal<boolean>;
   abstract renderer: Renderer2;
   abstract marqueeItems: HTMLCollection;
   abstract get marqueeElement(): HTMLElement;

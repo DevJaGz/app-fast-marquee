@@ -8,7 +8,7 @@ import { WelcomePlaceholderComponent } from './core/components/welcome-placehold
   imports: [CommonModule, RouterOutlet, WelcomePlaceholderComponent],
   template: `<div class="h-screen bg-zinc-900 text-slate-200">
     @defer (on timer(2000ms)) {
-      <router-outlet></router-outlet>
+      <router-outlet />
     } @placeholder {
       <app-welcome-placeholder />
     }

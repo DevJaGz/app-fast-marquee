@@ -9,7 +9,7 @@ describe('provideFastMarquee', () => {
     expect(providers.length).toBe(1);
     const provider = providers[0] as ValueProvider;
     expect(provider.provide).toBe(APP_INITIALIZER);
-    expect(provider.multi).toBeTrue();
+    expect(provider.multi).toBe(true);
     expect(provider.useValue).toBe(ensureIdleCallbackFallback);
   });
 });

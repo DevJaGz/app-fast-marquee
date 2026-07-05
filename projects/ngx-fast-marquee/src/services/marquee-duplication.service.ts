@@ -1,9 +1,10 @@
-import { Inject, Injectable } from '@angular/core';
+import { inject, Injectable, DOCUMENT } from '@angular/core';
 import { MarqueeModel } from '../models/marquee.model';
-import { DOCUMENT } from '@angular/common';
 
 @Injectable()
 export class MarqueeDuplicationService {
+  private readonly _document = inject(DOCUMENT);
+
   /**
    * Set the marquee component instance.
    * @param marqueeComponent - NGX Fast Marquee component instance.
@@ -19,8 +20,6 @@ export class MarqueeDuplicationService {
     this._removeDuplicateItems();
     this._createDuplicateItems();
   }
-
-  constructor(@Inject(DOCUMENT) private _document: Document) {}
 
   /**
    * Private reference to the marquee component instance.
@@ -66,10 +65,12 @@ export class MarqueeDuplicationService {
    */
   private _getNumberOfDuplicates(): number {
     const { direction } = this._marqueeComponent;
+    const directionValue = direction();
     const [marqueeDOMRect, marqueeInnerDOMRect] = this._getBoundedClientRects();
-    const marqueeSize = direction === 'left' || direction === 'right' ? marqueeDOMRect.width : marqueeDOMRect.height;
+    const marqueeSize =
+      directionValue === 'left' || directionValue === 'right' ? marqueeDOMRect.width : marqueeDOMRect.height;
     const marqueeInnerSize =
-      direction === 'left' || direction === 'right' ? marqueeInnerDOMRect.width : marqueeInnerDOMRect.height;
+      directionValue === 'left' || directionValue === 'right' ? marqueeInnerDOMRect.width : marqueeInnerDOMRect.height;
     const numberOfDuplicates = Math.ceil(marqueeSize / marqueeInnerSize);
     if (marqueeSize > marqueeInnerSize) {
       const numberOfDuplicatesAdjustedByScreen = 2 * numberOfDuplicates;
