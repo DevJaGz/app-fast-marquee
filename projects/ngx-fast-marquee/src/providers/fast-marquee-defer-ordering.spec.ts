@@ -19,6 +19,8 @@ import { provideFastMarquee } from './fast-marquee.providers';
       <div class="defer-placeholder">placeholder</div>
     }
   `,
+  // eslint-disable-next-line @angular-eslint/prefer-standalone -- declared via TestBed to mirror an NgModule host
+  standalone: false,
 })
 class DeferOnIdleHostComponent {}
 

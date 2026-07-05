@@ -4,7 +4,6 @@ import { OutlineAnimatedBtnDirective } from '../../directives/outline-animated-b
 
 @Component({
   selector: 'app-outline-animated-btn',
-  standalone: true,
   imports: [CommonModule, OutlineAnimatedBtnDirective],
   templateUrl: './outline-animated-btn.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

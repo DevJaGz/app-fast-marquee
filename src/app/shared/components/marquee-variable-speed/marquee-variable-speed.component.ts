@@ -14,10 +14,8 @@ import { NgxFastMarqueeModule } from '@ngx-fast-marquee';
 
 @Component({
   selector: 'app-marquee-variable-speed',
-  standalone: true,
   imports: [CommonModule, NgxFastMarqueeModule],
   templateUrl: './marquee-variable-speed.component.html',
-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MarqueeVariableSpeedComponent implements AfterViewInit {

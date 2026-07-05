@@ -5,7 +5,6 @@ import { WelcomePlaceholderComponent } from './core/components/welcome-placehold
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [CommonModule, RouterOutlet, WelcomePlaceholderComponent],
   template: `<div class="h-screen bg-zinc-900 text-slate-200">
     @defer (on timer(2000ms)) {

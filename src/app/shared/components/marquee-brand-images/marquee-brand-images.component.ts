@@ -7,8 +7,7 @@ import { FileNamePipe } from '../../pipes';
 
 @Component({
   selector: 'app-marquee-brand-images',
-  standalone: true,
-  imports: [CommonModule, NgxFastMarqueeModule, BrandCardComponent, FileNamePipe],
+  imports: [CommonModule, NgxFastMarqueeModule, BrandCardComponent],
   providers: [FileNamePipe],
   templateUrl: './marquee-brand-images.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

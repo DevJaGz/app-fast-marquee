@@ -24,6 +24,8 @@ import { ensureIdleCallbackFallback } from '../../utils/idle-callback-compat.uti
   templateUrl: './ngx-fast-marquee.component.html',
   styleUrls: ['./ngx-fast-marquee.component.scss'],
   providers: [MarqueeService, MarqueeDuplicationService],
+  // eslint-disable-next-line @angular-eslint/prefer-standalone -- declared in NgxFastMarqueeModule for NgModule-based consumers
+  standalone: false,
 })
 export class NgxFastMarqueeComponent implements OnChanges, AfterContentInit, AfterContentChecked, MarqueeModel {
   /**

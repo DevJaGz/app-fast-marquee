@@ -5,7 +5,6 @@ import { EMOJIS } from '@core';
 
 @Component({
   selector: 'app-marquee-emojis',
-  standalone: true,
   imports: [CommonModule, NgxFastMarqueeModule],
   templateUrl: './marquee-emojis.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

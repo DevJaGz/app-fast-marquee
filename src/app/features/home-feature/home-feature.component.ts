@@ -6,12 +6,10 @@ import { RepoAdvertisingComponent } from 'src/app/shared/components/repo-adverti
 import { MarqueeBrandImagesComponent } from 'src/app/shared/components/marquee-brand-images/marquee-brand-images.component';
 import { MarqueeCardsComponent } from 'src/app/shared/components/marquee-cards/marquee-cards.component';
 import { MarqueeEmojisComponent } from 'src/app/shared/components/marquee-emojis/marquee-emojis.component';
-import { MarqueeLineRotationComponent } from 'src/app/shared/components/marquee-line-rotation/marquee-line-rotation.component';
 import { MarqueeVariableSpeedComponent } from 'src/app/shared/components/marquee-variable-speed/marquee-variable-speed.component';
 
 @Component({
   selector: 'app-home-feature',
-  standalone: true,
   imports: [
     CommonModule,
     NgxFastMarqueeModule,
@@ -20,7 +18,6 @@ import { MarqueeVariableSpeedComponent } from 'src/app/shared/components/marquee
     RepoAdvertisingComponent,
     MarqueeCardsComponent,
     MarqueeEmojisComponent,
-    MarqueeLineRotationComponent,
     MarqueeVariableSpeedComponent,
   ],
   templateUrl: './home-feature.component.html',

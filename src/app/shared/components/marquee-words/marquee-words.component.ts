@@ -5,7 +5,6 @@ import { WORDS_POOL } from '@core';
 
 @Component({
   selector: 'app-marquee-words',
-  standalone: true,
   imports: [CommonModule, NgxFastMarqueeModule],
   templateUrl: './marquee-words.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

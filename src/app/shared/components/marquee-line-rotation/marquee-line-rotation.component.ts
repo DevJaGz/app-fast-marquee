@@ -4,7 +4,6 @@ import { NgxFastMarqueeModule } from '@ngx-fast-marquee';
 
 @Component({
   selector: 'app-marquee-line-rotation',
-  standalone: true,
   imports: [CommonModule, NgxFastMarqueeModule],
   templateUrl: './marquee-line-rotation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

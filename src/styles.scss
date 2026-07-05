@@ -1,12 +1,12 @@
+@use 'fonts';
+@use 'animations';
+@use 'buttons';
+@use 'loader';
+@use 'marquees';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import 'fonts.scss';
-@import 'animations.scss';
-@import 'buttons.scss';
-@import 'loader.scss';
-@import 'marquees.scss';
 
 html,
 body {

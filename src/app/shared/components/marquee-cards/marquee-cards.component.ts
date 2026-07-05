@@ -5,7 +5,6 @@ import { ProfileCardComponent } from '../profile-card/profile-card.component';
 
 @Component({
   selector: 'app-marquee-cards',
-  standalone: true,
   imports: [CommonModule, NgxFastMarqueeModule, ProfileCardComponent],
   templateUrl: './marquee-cards.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

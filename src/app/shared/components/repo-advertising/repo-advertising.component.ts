@@ -4,7 +4,6 @@ import { OutlineAnimatedBtnComponent } from '../outline-animated-btn/outline-ani
 
 @Component({
   selector: 'app-repo-advertising',
-  standalone: true,
   imports: [CommonModule, OutlineAnimatedBtnComponent],
   templateUrl: './repo-advertising.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

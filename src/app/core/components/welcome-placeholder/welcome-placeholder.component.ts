@@ -4,7 +4,6 @@ import { WelcomeMessageComponent } from '../welcome-message/welcome-message.comp
 
 @Component({
   selector: 'app-welcome-placeholder',
-  standalone: true,
   imports: [CommonModule, WelcomeMessageComponent],
   templateUrl: './welcome-placeholder.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
