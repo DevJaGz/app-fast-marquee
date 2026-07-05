@@ -13,12 +13,12 @@ export class MarqueeWordsComponent implements OnInit {
   /**
    *  Words to be displayed in the marquee.
    */
-  words: WritableSignal<string[]> = signal([]);
+  readonly words: WritableSignal<string[]> = signal([]);
 
   /**
    * True if the words have been changed.
    */
-  hasNewWords: WritableSignal<boolean> = signal(false);
+  readonly hasNewWords: WritableSignal<boolean> = signal(false);
 
   ngOnInit(): void {
     this._handleWordsReplacing();

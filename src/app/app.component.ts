@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { WelcomePlaceholderComponent } from './core/components/welcome-placeholder/welcome-placeholder.component';
 
 @Component({
   selector: 'app-root',
   imports: [CommonModule, RouterOutlet, WelcomePlaceholderComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<div class="h-screen bg-zinc-900 text-slate-200">
     @defer (on timer(2000ms)) {
       <router-outlet />

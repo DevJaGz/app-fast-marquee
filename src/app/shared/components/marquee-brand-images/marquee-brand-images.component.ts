@@ -14,6 +14,6 @@ import { FileNamePipe } from '../../pipes';
 })
 export class MarqueeBrandImagesComponent {
   fileNamePipe = inject(FileNamePipe);
-  brandImages: WritableSignal<string[]> = signal(BRAND_IMAGES);
+  readonly brandImages: WritableSignal<string[]> = signal(BRAND_IMAGES);
   brandImageNames = this.brandImages().map(brandImage => this.fileNamePipe.transform(brandImage));
 }

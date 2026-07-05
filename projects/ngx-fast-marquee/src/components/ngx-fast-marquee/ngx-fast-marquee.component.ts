@@ -1,5 +1,6 @@
 import {
   AfterContentInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Renderer2,
@@ -26,6 +27,7 @@ import { ensureIdleCallbackFallback } from '../../utils/idle-callback-compat.uti
   providers: [MarqueeService, MarqueeDuplicationService],
   // eslint-disable-next-line @angular-eslint/prefer-standalone -- declared in NgxFastMarqueeModule for NgModule-based consumers
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgxFastMarqueeComponent implements OnChanges, AfterContentInit, AfterContentChecked, MarqueeModel {
   private readonly _hostRef = inject<ElementRef<HTMLElement>>(ElementRef);

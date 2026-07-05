@@ -10,5 +10,5 @@ import { EMOJIS } from '@core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MarqueeEmojisComponent {
-  emojis: WritableSignal<string[]> = signal(EMOJIS);
+  readonly emojis: WritableSignal<string[]> = signal(EMOJIS);
 }

@@ -29,7 +29,11 @@
           }
         ],
         "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": ["error"]
+        "@typescript-eslint/no-unused-vars": ["error"],
+        "@angular-eslint/prefer-inject": "error",
+        "@angular-eslint/prefer-signals": "error",
+        "@angular-eslint/prefer-output-emitter-ref": "error",
+        "@angular-eslint/prefer-on-push-component-change-detection": "error"
       }
     },
     {

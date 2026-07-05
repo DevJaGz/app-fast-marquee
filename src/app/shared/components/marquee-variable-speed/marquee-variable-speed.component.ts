@@ -19,8 +19,8 @@ import { NgxFastMarqueeModule } from '@ngx-fast-marquee';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MarqueeVariableSpeedComponent implements AfterViewInit {
-  speedIndex: WritableSignal<number> = signal(0);
-  speed = computed(() => this._SPEEDS[this.speedIndex()]);
+  readonly speedIndex: WritableSignal<number> = signal(0);
+  readonly speed = computed(() => this._SPEEDS[this.speedIndex()]);
 
   private readonly _ngZone = inject(NgZone);
   private readonly _changeDetectorRef = inject(ChangeDetectorRef);

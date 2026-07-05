@@ -1,4 +1,4 @@
-import { Component, NgModule, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule, provideZonelessChangeDetection } from '@angular/core';
 import { DeferBlockBehavior, TestBed } from '@angular/core/testing';
 import { NgxFastMarqueeComponent } from '../components/ngx-fast-marquee/ngx-fast-marquee.component';
 import { provideFastMarquee } from './fast-marquee.providers';
@@ -21,6 +21,7 @@ import { provideFastMarquee } from './fast-marquee.providers';
   `,
   // eslint-disable-next-line @angular-eslint/prefer-standalone -- declared via TestBed to mirror an NgModule host
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 class DeferOnIdleHostComponent {}
 
