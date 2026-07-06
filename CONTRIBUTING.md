@@ -2,17 +2,19 @@
 
 This repository contains two deliverables: the demo application [`app-fast-marquee`](src/) and the publishable library [`ngx-fast-marquee`](projects/ngx-fast-marquee/).
 
+**All mandatory repository conventions live in [`knowledge/conventions.md`](knowledge/conventions.md)** — read them before contributing; this guide is only the human quick-start. AI agents must additionally follow [`knowledge/guardrails.md`](knowledge/guardrails.md).
+
 ---
 
 ## 1. Getting Started
 
-**Prerequisites**
+**Prerequisites** (from [`package.json`](package.json) `engines`)
 
-| Tool | Minimum version |
-|------|----------------|
-| [Node.js](https://nodejs.org/) | 18.16.0 |
-| [npm](https://docs.npmjs.com/) | 9.5.1 |
-| [pnpm](https://pnpm.io/) | 8.6.12 |
+| Tool | Supported versions |
+|------|--------------------|
+| [Node.js](https://nodejs.org/) | `^20.19.0 \|\| ^22.12.0 \|\| >=24.0.0` |
+| [npm](https://docs.npmjs.com/) | `>=9.5.1` |
+| [pnpm](https://pnpm.io/) | `>=8.6.12` |
 
 ```bash
 git clone <repo-url>
@@ -24,7 +26,7 @@ pnpm install
 
 ## 2. Development Workflow
 
-1. Branch off `main` with a descriptive name:
+1. Branch off `master` with a descriptive name:
    - `feat/my-feature`
    - `fix/the-bug`
 2. Start the dev server: [`npm run start`](package.json)
@@ -33,56 +35,30 @@ pnpm install
 
 ---
 
-## 3. Lint & Format Gate
+## 3. Quality Gates
 
-Run these before every commit. The [Husky](https://typicode.github.io/husky/) [pre-commit hook](.husky/pre-commit) runs lint-staged automatically on staged [`.ts`](src/), [`.html`](src/), [`.scss`](src/), and [`.json`](package.json) files, but you should verify manually before pushing.
+Lint and formatting are mandatory and enforced by the [Husky](https://typicode.github.io/husky/) [pre-commit hook](.husky/pre-commit) — see repository convention 2 in [`knowledge/conventions.md`](knowledge/conventions.md).
 
 | Check | Command |
 |-------|---------|
-| ESLint (check) | [`npm run lint`](package.json) |
-| ESLint (auto-fix) | [`npm run lint:fix`](package.json) |
-| Prettier (write) | [`npm run format`](package.json) |
-| Prettier (fix) | [`npm run prettier:fix`](package.json) |
+| ESLint (check / fix) | [`npm run lint`](package.json) / [`npm run lint:fix`](package.json) |
+| Prettier (write / fix) | [`npm run format`](package.json) / [`npm run prettier:fix`](package.json) |
+| Unit tests ([Vitest](https://vitest.dev/), see convention 7) | [`npm run test:app`](package.json) / [`npm run test:lib`](package.json) |
+| E2E ([Playwright](https://playwright.dev/) in Docker) | [`pnpm e2e`](package.json) |
 
-Config files: [`.eslintrc.json`](.eslintrc.json), [`projects/ngx-fast-marquee/.eslintrc.json`](projects/ngx-fast-marquee/.eslintrc.json), [`.prettierrc.json`](.prettierrc.json).
-
-> **Never** pass `--no-verify` or otherwise bypass ESLint or Prettier unless explicitly instructed by a maintainer.
+All tests must pass before opening a PR.
 
 ---
 
-## 4. Running Tests
+## 4. Commit Messages
 
-```bash
-ng test
-```
-
-Runs [Karma](https://karma-runner.github.io/)/[Jasmine](https://jasmine.github.io/) unit tests. All tests must pass before opening a PR.
+Commits follow [Conventional Commits](https://www.conventionalcommits.org/) (`<type>(<scope>): <description>`, e.g. `feat(library): add pause-on-hover input`). [commitlint](https://commitlint.js.org/) and [`commitlint.config.js`](commitlint.config.js) are present, but there is no `commit-msg` hook — the format is checked by convention and PR review, not mechanically enforced. See repository convention 4 in [`knowledge/conventions.md`](knowledge/conventions.md).
 
 ---
 
-## 5. Commit Messages (Conventional Commits)
+## 5. Pull Request Flow
 
-Format: `<type>(<scope>): <description>`
-
-**Example:** `feat(library): add pause-on-hover input`
-
-| Type | When to use |
-|------|-------------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation only |
-| `style` | Formatting, no logic change |
-| `refactor` | Code restructure, no behavior change |
-| `test` | Adding or updating tests |
-| `chore` | Build process, tooling, dependencies |
-
-[commitlint](https://commitlint.js.org/) enforces this format automatically via [`commitlint.config.js`](commitlint.config.js). See the [Conventional Commits spec](https://www.conventionalcommits.org/) for full details.
-
----
-
-## 6. Pull Request Flow
-
-1. Push your branch and open a PR targeting `main`.
+1. Push your branch and open a PR targeting `master`.
 2. Write a clear description of **what** changed and **why**.
 3. Ensure lint, format, and tests all pass.
 4. For changes touching the library public API, update [`projects/ngx-fast-marquee/README.md`](projects/ngx-fast-marquee/README.md).
@@ -90,9 +66,9 @@ Format: `<type>(<scope>): <description>`
 
 ---
 
-## 7. OpenSpec Change Workflow
+## 6. OpenSpec Change Workflow
 
-For any non-trivial change (new features, architecture decisions, breaking changes), use the OpenSpec workflow inside [Cursor](https://cursor.com/):
+For any non-trivial change (new features, architecture decisions, breaking changes), use the OpenSpec workflow in your AI agent environment:
 
 | Step | Command | Purpose |
 |------|---------|---------|
@@ -104,13 +80,8 @@ Specs live in [`openspec/specs/`](openspec/specs/), split into [`openspec/specs/
 
 ---
 
-## 8. AGENTS.md Upkeep
+## 7. Documentation & Knowledge Upkeep
 
-Every change that modifies code, structure, dependencies, scripts, or conventions **must** update the relevant [`AGENTS.md`](AGENTS.md) (root + affected child) in the **same commit**. This keeps the AI agent harness accurate.
-
-Child [`AGENTS.md`](AGENTS.md) files:
-
-- [`src/AGENTS.md`](src/AGENTS.md) — application source
-- [`projects/ngx-fast-marquee/AGENTS.md`](projects/ngx-fast-marquee/AGENTS.md) — library source
+Every change that modifies code, structure, dependencies, scripts, or conventions **must** update the relevant [`AGENTS.md`](AGENTS.md) in the same commit (repository convention 1), and any change affecting a decision, policy, convention, or lesson must update the [`knowledge/`](knowledge/) bundle per the same-change rule — both defined in [`knowledge/conventions.md`](knowledge/conventions.md).
 
 > Before generating any Angular code, read [`.agents/skills/angular-developer/SKILL.md`](.agents/skills/angular-developer/SKILL.md).

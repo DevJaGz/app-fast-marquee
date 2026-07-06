@@ -12,7 +12,7 @@ Application source root for `app-fast-marquee`.
 
 ## Conventions
 
-Before proceeding, read and follow [`AGENTS.md`](../AGENTS.md) — it is the mandatory single source of truth.
+Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../knowledge/conventions.md) — they are the mandatory single source of truth.
 
 - Selector prefix for all application components: `app` (configured in [`angular.json`](../angular.json)).
 - All new components use inline SCSS (`inlineStyle: true`), `changeDetection: OnPush`. These are Angular CLI schematics defaults — do not override.

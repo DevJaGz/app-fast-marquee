@@ -10,7 +10,7 @@ Data models and interfaces for the `ngx-fast-marquee` library.
 
 ## Conventions
 
-Before proceeding, read and follow [`AGENTS.md`](../../../../AGENTS.md) — it is the mandatory single source of truth.
+Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../../../../knowledge/conventions.md) — they are the mandatory single source of truth.
 
 - Contains data models and interfaces (e.g. [`marquee.model.ts`](marquee.model.ts)).
 - Models must not import from `components/` or `services/` — they are pure data shapes.

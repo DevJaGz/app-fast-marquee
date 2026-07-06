@@ -10,7 +10,7 @@ Global SCSS partials shared across the application.
 
 ## Conventions
 
-Before proceeding, read and follow [`AGENTS.md`](../../AGENTS.md) — it is the mandatory single source of truth.
+Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../../knowledge/conventions.md) — they are the mandatory single source of truth.
 
 - This directory contains global SCSS partials: [`animations.scss`](animations.scss), [`buttons.scss`](buttons.scss), [`fonts.scss`](fonts.scss), [`loader.scss`](loader.scss), [`marquees.scss`](marquees.scss).
 - These partials are available without path prefix anywhere in the app (`includePaths` in [`angular.json`](../../angular.json)).

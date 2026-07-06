@@ -10,7 +10,7 @@ Angular application module root.
 
 ## Conventions
 
-Before proceeding, read and follow [`AGENTS.md`](../../AGENTS.md) — it is the mandatory single source of truth.
+Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../../knowledge/conventions.md) — they are the mandatory single source of truth.
 
 - Feature architecture: `core/` (app-wide singletons: layout, guards, interceptors), `shared/` (reusable components, directives, pipes), `features/` (page-level feature components/routes).
 - All components are **standalone** (no NgModule declarations except the root app config).

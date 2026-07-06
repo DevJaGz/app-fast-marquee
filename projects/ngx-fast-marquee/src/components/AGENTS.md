@@ -10,7 +10,7 @@ Standalone Angular components for the `ngx-fast-marquee` library.
 
 ## Conventions
 
-Before proceeding, read and follow [`AGENTS.md`](../../../../AGENTS.md) — it is the mandatory single source of truth.
+Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../../../../knowledge/conventions.md) — they are the mandatory single source of truth.
 
 - **Barrel**: all component exports are re-exported from [`index.ts`](index.ts).
 - All components are **standalone** (no NgModule wrapping at component level; NgModule lives in `src/` for backward-compat consumers).

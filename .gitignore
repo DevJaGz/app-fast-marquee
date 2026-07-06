@@ -44,6 +44,9 @@ yarn-error.log
 testem.log
 /typings
 
+# Obsidian vault workspace
+.obsidian/
+
 # System files
 .DS_Store
 Thumbs.db

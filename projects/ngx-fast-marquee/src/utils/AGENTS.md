@@ -10,7 +10,7 @@ Framework-free utility functions for the `ngx-fast-marquee` library.
 
 ## Conventions
 
-Before proceeding, read and follow [`AGENTS.md`](../../../../AGENTS.md) — it is the mandatory single source of truth.
+Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../../../../knowledge/conventions.md) — they are the mandatory single source of truth.
 
 - Utilities: [`idle-callback-compat.util.ts`](idle-callback-compat.util.ts) exports `ensureIdleCallbackFallback()`, the Safari/iOS idle-callback compatibility guard (see [angular/angular#53721](https://github.com/angular/angular/issues/53721)).
 - Utilities in this folder are **internal**: they are deliberately not re-exported from [`public-api.ts`](../public-api.ts); consumers integrate through `provideFastMarquee()` in [`../providers/fast-marquee.providers.ts`](../providers/fast-marquee.providers.ts).

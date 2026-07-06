@@ -30,7 +30,7 @@ Current scenarios:
 
 ## Conventions
 
-Before proceeding, read and follow [`AGENTS.md`](../AGENTS.md) — it is the mandatory single source of truth.
+Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../knowledge/conventions.md) — they are the mandatory single source of truth.
 
 - **Version derivation**: the Docker image tag in [`docker-compose.e2e.yml`](../docker-compose.e2e.yml) is interpolated from `PLAYWRIGHT_VERSION`, which [`support/e2e-docker.mjs`](support/e2e-docker.mjs) sets from the installed [`@playwright/test`](../package.json) — never hardcode the tag; upgrading the package is all that's needed.
 - **Decision ladder for new tests** (prefer the earliest rung that works): (1) a plain spec in [`tests/`](tests/) against the default app; (2) Playwright-side simulation — `addInitScript`, `page.route`, clock control — like the Safari simulation in [`tests/idle-callback-guard.spec.ts`](tests/idle-callback-guard.spec.ts); (3) a new scenario, only when the app's provider/DI composition itself must differ.

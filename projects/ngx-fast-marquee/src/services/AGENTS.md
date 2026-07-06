@@ -10,7 +10,7 @@ Angular services for the `ngx-fast-marquee` library.
 
 ## Conventions
 
-Before proceeding, read and follow [`AGENTS.md`](../../../../AGENTS.md) — it is the mandatory single source of truth.
+Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../../../../knowledge/conventions.md) — they are the mandatory single source of truth.
 
 - Services: [`marquee.service.ts`](marquee.service.ts), [`marquee-duplication.service.ts`](marquee-duplication.service.ts), [`reduced-motion.service.ts`](reduced-motion.service.ts).
 - Use `inject()` for dependency injection (no constructor injection).

@@ -10,6 +10,7 @@ Demo application and publishable Angular library in a single monorepo.
 | Library | [`projects/ngx-fast-marquee/`](projects/ngx-fast-marquee/) |
 | E2E suite | [`e2e/`](e2e/) |
 | OpenSpec workflow | [`openspec/`](openspec/) |
+| Knowledge base (OKF) | [`knowledge/`](knowledge/) |
 | Angular skills | [`.agents/skills/`](.agents/skills/) |
 | Stale snapshot (out of scope) | [`build12/`](build12/) |
 
@@ -24,7 +25,7 @@ Demo application and publishable Angular library in a single monorepo.
 | `npm run test:lib` | Run the library's unit tests (Vitest) |
 | `npm run lint` | Run ESLint across the workspace |
 | `npm run lint:fix` | Run ESLint and auto-fix violations |
-| `npm run format` | Check formatting with Prettier |
+| `npm run format` | Format code with Prettier (rewrites files) |
 | `npm run prettier:fix` | Auto-fix formatting with Prettier |
 | `pnpm e2e` | Run the full e2e suite in Docker ([`e2e/support/e2e-docker.mjs`](e2e/support/e2e-docker.mjs) → [`docker-compose.e2e.yml`](docker-compose.e2e.yml)) |
 | `pnpm e2e:local` | Run the full e2e suite without Docker (`ng e2e`; needs local Playwright browsers) |
@@ -36,20 +37,15 @@ Demo application and publishable Angular library in a single monorepo.
 | Application | [`src/AGENTS.md`](src/AGENTS.md) |
 | Library | [`projects/ngx-fast-marquee/AGENTS.md`](projects/ngx-fast-marquee/AGENTS.md) |
 | E2E suite | [`e2e/AGENTS.md`](e2e/AGENTS.md) |
+| Knowledge base | [`knowledge/index.md`](knowledge/index.md) |
 
 ## Conventions
 
-1. **Auto-update**: any change to code, structure, dependencies, scripts, or conventions must update the relevant [`AGENTS.md`](AGENTS.md) (root + affected child) in the same change.
-2. **Lint/format gate**: all new or edited code must conform to the [ESLint config](`.eslintrc.json`) and [Prettier](`.prettierrc.json`). Run `npm run lint` (or `npm run lint:fix`) and `npm run format` before completing. Never bypass ESLint/Prettier.
-3. **Markdown-link rule**: every reference to a file, directory, path, URL, or command inside any documentation file ([`AGENTS.md`](AGENTS.md), README, CONTRIBUTING) must be written as a Markdown link, never bare text.
-4. **Conventional Commits**: commit messages must follow [Conventional Commits](https://www.conventionalcommits.org/) format. Husky [`.husky/pre-commit`](.husky/pre-commit) runs lint-staged (lint + Prettier) automatically.
-5. **Angular idioms**: follow the [`angular-developer`](.agents/skills/angular-developer/SKILL.md) skill — standalone components, signals, `@if`/`@for`, `inject()`, OnPush strategy. Both the app and the library are **zoneless** (`provideZonelessChangeDetection()` in [`src/app/app.config.ts`](src/app/app.config.ts); no `zone.js` dependency) and use signal-based `input()`/`output()`/`viewChild()` exclusively — do not introduce `@Input()`/`@Output()`/`@ViewChild()` decorators or reintroduce `zone.js` in new code. This is enforced by [`.eslintrc.json`](.eslintrc.json)'s `@angular-eslint/prefer-signals`, `@angular-eslint/prefer-output-emitter-ref`, `@angular-eslint/prefer-inject`, and `@angular-eslint/prefer-on-push-component-change-detection` rules — `npm run lint` fails if these idioms regress.
-6. **Clean up processes**: any agent that starts a dev server, watcher, or other process that opens a port (e.g. via `npm run start`, `ng serve`) must stop that process and verify the port is released (e.g. `Get-NetTCPConnection`/`netstat`, not just `Ctrl+C`) before finishing the task, since orphaned `node.exe` child processes can survive a plain interrupt on Windows.
-7. **Unit tests run on Vitest**: both projects' `test` architect targets use the experimental `@angular/build:unit-test` builder with `runner: "vitest"` (configured in [`angular.json`](angular.json)), not Karma. See [`src/AGENTS.md`](src/AGENTS.md) and [`projects/ngx-fast-marquee/AGENTS.md`](projects/ngx-fast-marquee/AGENTS.md) for project-specific setup notes.
-8. **Node engine floor**: [`package.json`](package.json) `engines.node` tracks Angular's own supported range (currently `^20.19.0 || ^22.12.0 || >=24.0.0`, matching [`@angular/core`](node_modules/@angular/core/package.json)) — bump it in lockstep with every Angular major upgrade, never independently.
-9. **Lint tooling floor**: `@angular-eslint/*` and `@typescript-eslint/*` in [`package.json`](package.json) must track the installed `@angular/core` major (currently the `20.x` line) and TypeScript version respectively — bump them in the same change as any Angular major upgrade. A version lag silently disables new `@angular-eslint` rules and can leave `@typescript-eslint` running against a TypeScript version it doesn't officially support.
+All repository conventions live in [`knowledge/conventions.md`](knowledge/conventions.md) — read and follow them before making any change; they are mandatory. Operational guardrails (autonomous vs confirmation-required vs forbidden actions) live in [`knowledge/guardrails.md`](knowledge/guardrails.md).
 
 ## AI Agent Workflow
+
+**Project memory** lives in the [`knowledge/`](knowledge/) OKF bundle. Start at [`knowledge/index.md`](knowledge/index.md) to locate the decisions, guardrails, and lessons relevant to the task before making implementation decisions; load only the pages the task needs.
 
 **Angular skills** live in [`.agents/skills/`](.agents/skills/). The [`angular-developer`](.agents/skills/angular-developer/SKILL.md) skill provides Angular coding guidance — read it before generating any Angular code.
 

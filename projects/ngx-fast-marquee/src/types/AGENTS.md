@@ -10,7 +10,7 @@ Plain TypeScript types and enums for the `ngx-fast-marquee` library.
 
 ## Conventions
 
-Before proceeding, read and follow [`AGENTS.md`](../../../../AGENTS.md) — it is the mandatory single source of truth.
+Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../../../../knowledge/conventions.md) — they are the mandatory single source of truth.
 
 - **Barrel**: all type exports are re-exported from [`index.ts`](index.ts). Current types: [`direction.type.ts`](direction.type.ts), [`speed.type.ts`](speed.type.ts).
 - Types are plain TypeScript types/enums — no Angular dependencies.

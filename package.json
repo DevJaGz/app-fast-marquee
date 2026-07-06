@@ -12,7 +12,7 @@
     "e2e": "node e2e/support/e2e-docker.mjs",
     "e2e:local": "ng e2e",
     "prepare": "husky install",
-    "format": "prettier --write \"**/*.{json,html,ts,scss}\"",
+    "format": "prettier --write \"**/*.{json,html,ts,scss}\" \"knowledge/**/*.md\"",
     "prettier:fix": "npm run format && npm run lint:fix",
     "lint-staged": "lint-staged"
   },
@@ -30,7 +30,8 @@
       "eslint --fix"
     ],
     "build12/**/*.{ts,html}": "prettier --write",
-    "*.{json,scss}": "prettier --write"
+    "*.{json,scss}": "prettier --write",
+    "knowledge/**/*.md": "prettier --write"
   },
   "engines": {
     "node": "^20.19.0 || ^22.12.0 || >=24.0.0",

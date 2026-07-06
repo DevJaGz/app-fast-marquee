@@ -10,7 +10,7 @@ Static assets served with the application.
 
 ## Conventions
 
-Before proceeding, read and follow [`AGENTS.md`](../../AGENTS.md) — it is the mandatory single source of truth.
+Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../../knowledge/conventions.md) — they are the mandatory single source of truth.
 
 - All static assets (fonts, images, icons) live here and are referenced via the `assets` array in [`angular.json`](../../angular.json).
 - Fonts are under `src/assets/fonts/` and loaded via SCSS in [`src/styles/fonts.scss`](../styles/fonts.scss).

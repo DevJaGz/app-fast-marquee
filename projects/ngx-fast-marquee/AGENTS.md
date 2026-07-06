@@ -10,7 +10,7 @@ Publishable Angular component library for the fast-marquee monorepo.
 
 ## Conventions
 
-Before proceeding, read and follow [`AGENTS.md`](../../AGENTS.md) — it is the mandatory single source of truth.
+Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../../knowledge/conventions.md) — they are the mandatory single source of truth.
 
 - **Selector prefix**: `ngx-fast-marquee` (set in [`angular.json`](../../angular.json)).
 - **Build**: `npm run build:lib`. Output goes to `dist/ngx-fast-marquee/`.

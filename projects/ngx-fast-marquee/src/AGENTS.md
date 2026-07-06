@@ -16,7 +16,7 @@ Source root for the `ngx-fast-marquee` publishable library.
 
 ## Conventions
 
-Before proceeding, read and follow [`AGENTS.md`](../../../AGENTS.md) — it is the mandatory single source of truth.
+Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../../../knowledge/conventions.md) — they are the mandatory single source of truth.
 
 - **Public API discipline**: **every** exported symbol must be re-exported from [`public-api.ts`](public-api.ts). Do not import library internals directly from the app.
   - **Exception**: internal helpers under [`utils/`](utils/AGENTS.md) (e.g. `ensureIdleCallbackFallback`) are deliberately kept out of [`public-api.ts`](public-api.ts); consumers integrate through `provideFastMarquee()` from [`providers/`](providers/AGENTS.md).
