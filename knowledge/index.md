@@ -9,7 +9,7 @@ okf_version: '0.1'
 
 # Policies
 
-- [Project Conventions](conventions.md) - Mandatory repository conventions - lint gate, commits, Angular idioms, tooling floors, and the same-change rule for keeping this knowledge bundle current.
+- [Project Conventions](conventions.md) - Mandatory repository conventions - lint gate, commits, Angular idioms, tooling floors, self-contained clarity, single-source documentation, reusable code, and the same-change rule for keeping this knowledge bundle current.
 - [Operational Guardrails](guardrails.md) - Which actions AI agents may perform autonomously, which need human confirmation, and which are forbidden — read before acting.
 - [Knowledge Base Maintenance](meta.md) - How to structure, link, and maintain this OKF bundle — OKF frontmatter, type vocabulary, reserved files, linking, ownership boundaries, and the lint checklist. Read this only when creating or restructuring a concept, not for ordinary code changes.
 

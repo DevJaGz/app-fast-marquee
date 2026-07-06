@@ -1,0 +1,6 @@
+---
+description: Read all repository conventions before acting or replying.
+alwaysApply: true
+---
+
+Before any action or user reply: read **all** conventions in [knowledge/conventions.md](knowledge/conventions.md) per [AGENTS.md](AGENTS.md). Do not restate them — follow them in full.
