@@ -6,6 +6,7 @@ Publishable Angular component library for the fast-marquee monorepo.
 
 | Node | Path |
 |------|------|
+| Consumer documentation | [`README.md`](README.md) — install, usage, public API, Angular compatibility |
 | Library Source | [`src/AGENTS.md`](src/AGENTS.md) |
 
 ## Conventions
