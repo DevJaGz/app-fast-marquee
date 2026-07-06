@@ -1,0 +1,51 @@
+# Proposal: refactor-core-adapter-architecture
+
+## Why
+
+The library still runs on module-era idioms — [`ngOnChanges`/`SimpleChanges` plumbing, per-cycle `ngAfterContentChecked` dirty-checking, `NgZone` timers, a non-standalone component](../../../projects/ngx-fast-marquee/src/components/ngx-fast-marquee/ngx-fast-marquee.component.ts) — and every piece of engine logic lives in Angular `@Injectable` services coupled to the component instance through an abstract [`MarqueeModel`](../../../projects/ngx-fast-marquee/src/models/marquee.model.ts), so nothing is shareable with the planned Angular 12 Patchable line. The [branch-model and version-line decision](../../../knowledge/decisions/branch-model-version-lines.md) requires a shared framework-agnostic `core/` before the `12.x` line can be born.
+
+This Phase 3 refactor is a **ground-up redesign**, not a port, and it is a **pure refactor with no behavior change**: the marquee's feature behavior is specified and locked by the prerequisite [`specify-marquee-behavior`](../../specify-marquee-behavior/proposal.md) change (requirements F1–F12 plus a black-box e2e suite), and this change keeps that suite green while rebuilding the internals. The current implementation is used **only as the inventory of features to preserve**; none of its mechanisms are treated as a reference architecture. Each feature's implementation is re-derived from first principles, choosing the right primitive in this order of preference — **CSS → `computed()` signals → DOM observers → one carefully-scoped `effect()`** — to deliver, for the whole library source, the best possible: clean and maintainable code (G1), maximum performance (G2), and minimum bundle size (G3).
+
+## What Changes
+
+- Restructure [`projects/ngx-fast-marquee/src/`](../../../projects/ngx-fast-marquee/src/) into:
+  - `core/` — THE ENGINE: pure TypeScript with zero `@angular/*` imports and zero RxJS. Measurement, duplication math + DOM writes, animation-value computation, and the reduced-motion policy source.
+  - `adapter/` — THE SHELL: thin Angular layer (signals on the `20.x` line; a future decorator adapter on `12.x`).
+  - `public-api.ts` — unchanged entry point.
+- **Rebuild the modern adapter from scratch** around signals + OnPush, assigning each feature its correct primitive (full mapping in [design.md](design.md) D3):
+  - **All pure input-derived state becomes declarative `computed()` bindings.** `data-direction`, `data-speed` (qualitative), `data-pause-on-hover`, `data-pause-on-click`, `data-animated`, and the `--_animation-play-state`, `--_move-percentage`, and `--_mask-*-percentage` custom properties are all `computed()` off signal `input()`s and bound with `[attr.data-*]` / `[style.--_*]`. OnPush re-evaluates them exactly when an input changes — no imperative writes, no dirty-checking (G2).
+  - **Numeric-speed duration is a `computed()`** reading a `measuredSize` signal, so `--_animation-duration` reacts to resize and content changes for free — no imperative `updateSpeed()`.
+  - **Measurement-dependent imperative work (duplication) lives in the engine**, triggered by a `MutationObserver` on the projected content and a debounced `ResizeObserver` on the host.
+  - **Exactly one `effect()`** bridges the duplication-affecting inputs (`autoFill`, `direction`, `animated`) to `engine.requestReplan()`. It sets no signal and reads no DOM inline — it only marks the engine dirty and schedules a post-render flush (design D3, D-effect).
+  - `afterNextRender` (client-only, SSR-safe) boots the engine and emits `mounted`; `DestroyRef` tears observers down; `NgZone`, `Renderer2`, `@HostListener`, `ngOnChanges`, `ngAfterContentChecked`, the `MarqueeModel` abstract class, and the three `@Injectable` services are removed (G1, G2).
+- Preserve the behavior contract from [`specify-marquee-behavior`](../../specify-marquee-behavior/proposal.md) with the new mechanisms — e.g. live reduced motion is implemented by the `core/` `matchMedia` source feeding `animated = computed(() => !(useSystemReducedMotion() && prefersReducedMotion()))`, and post-init input reactivity falls out of the `computed()` bindings — but this change introduces **no new behavior**; all behavior corrections were made and e2e-locked by the prerequisite change.
+- Make `NgxFastMarqueeComponent` standalone and keep `NgxFastMarqueeModule` as a thin import/export wrapper, preserving the template-level API parity contract (selector, input/output names/types/defaults, `NgxFastMarqueeModule`, `provideFastMarquee()`).
+- Enforce the architecture rules mechanically where possible:
+  - **A1** — no `@angular/*` or `rxjs` imports in `core/` (ESLint import restriction).
+  - **A2** — `core/` type-checks under the minimum TypeScript version required by its own line's Angular floor, not a shared/lowest-common floor. Verified against the official [Angular compatibility table](https://angular.dev/reference/versions) (2026-07-06): the `20.x` line's Angular-20 floor requires TypeScript `>=5.8.0 <6.0.0` (first stable release `5.8.2`); the future `12.x` line's Angular-12 floor requires TypeScript `~4.2.3`. **This change scopes A2 enforcement to the `20.x` line only** — `core/` here type-checks at the TypeScript 5.8.2 floor. The `12.x` line's independently-dialected `core/` (TS 4.2.3 floor) is out of scope, deferred to a separate future change.
+  - **A3** — `core/` uses only long-established platform APIs (`ResizeObserver`, `MutationObserver`, `matchMedia`, `getBoundingClientRect`, `cloneNode`), or ships a local fallback (precedent: [`idle-callback-compat.util.ts`](../../../projects/ngx-fast-marquee/src/utils/idle-callback-compat.util.ts)).
+  - **A4** — `core/` stays a folder, not a package; synchronized Active-first via `git cherry-pick`; backport-bound fixes isolate `core/` changes in dedicated commits.
+  - **A5** — SSR contract: side-effect-free construction, no DOM reads/writes before `afterNextRender`, final static server markup, idempotent for `@defer` hydrate blocks, no Zone.js dependency for correctness.
+  - **A6 (revised)** — modern adapter restricted to the stable-API allowlist (`signal`, `computed`, `input()`, `output()`, `model()`, signal queries, `afterNextRender`, `DestroyRef`, `inject()`, `isPlatformBrowser`, `provideAppInitializer`) **plus exactly one sanctioned `effect()`** used solely as the input→imperative-replan bridge (must set no signal). `effect()` for state propagation is banned (that is `computed`/`linkedSignal`'s job); `afterRender`, `afterEveryRender`, and `afterRenderEffect` are banned (not stable-at-floor; DOM-change reactions use observers, which the Angular docs prefer).
+- Migrate the internals of `provideFastMarquee()` from the `APP_INITIALIZER` multi-provider to `provideAppInitializer` (stable since v19, within the line's floor), keeping the exported function name and behavior unchanged (maintainer ruling, 2026-07-06).
+- Keep zero RxJS and remove dead module-era code; measure both the packed artifact ([`npm pack`](https://docs.npmjs.com/cli/commands/npm-pack)) **and a minimal standalone-consumer build** before and after the refactor, and record the deltas for the `20.1.0` release notes (G3). No version bump happens in this change.
+- **No behavior change**: the refactor preserves every behavior specified and e2e-locked by [`specify-marquee-behavior`](../../specify-marquee-behavior/proposal.md); its e2e suite is re-run unchanged as the gate.
+
+## Capabilities
+
+### New Capabilities
+
+None — all requirement changes land in the existing `library` capability.
+
+### Modified Capabilities
+
+- `library`: adds requirements for the core/adapter source architecture and core dialect rules (A1–A4), the SSR/zoneless rendering contract (A5), the modern-adapter stable-API discipline including the single sanctioned `effect()` (A6), the update model and performance contract (declarative bindings + observers, no per-cycle dirty checking, CSS-only animation), and the dual consumption surface (standalone component import + `NgxFastMarqueeModule` wrapper) with an unchanged template-level binding surface. The marquee feature-behavior requirements are owned by [`specify-marquee-behavior`](../../specify-marquee-behavior/proposal.md); the existing Idle Callback Browser Compatibility requirement is unaffected.
+
+## Impact
+
+- **Library source**: everything under [`projects/ngx-fast-marquee/src/`](../../../projects/ngx-fast-marquee/src/) is rebuilt — `components/`, `services/`, `models/`, `types/`, `utils/`, `providers/` dissolve into `core/` + `adapter/`. Child `AGENTS.md` files move/update in the same change per the [repository conventions](../../../knowledge/conventions.md).
+- **Tooling (confirmation granted)**: the A1/A6 ESLint restrictions and the A2 TypeScript 5.8.2 core type-check touch [`.eslintrc.json`](../../../.eslintrc.json) and TypeScript/build configuration. Per [operational guardrails](../../../knowledge/guardrails.md) these edits are confirmation-gated; the maintainer granted that confirmation on 2026-07-06, scoped to this refactor (ESLint overrides, `tsconfig.core-dialect.json`, and the TypeScript 5.8.2 npm-alias devDependency).
+- **npm surface**: template-level binding surface unchanged; the class instance surface may change (out of contract per the branch-model decision) — a release-notes note is required when `20.x` ships.
+- **Frozen values**: the library's `version`, `peerDependencies`, and README compatibility table are not touched (guardrail-frozen until the version-line plan executes).
+- **Tests**: the black-box e2e behavior suite (and its `playground` scenario) is authored by the prerequisite [`specify-marquee-behavior`](../../specify-marquee-behavior/proposal.md) change; this refactor **re-runs that suite unchanged as its behavior gate** and adds **pure-function `core/` unit tests** for the extracted math/logic edge cases (duplicate-count resolution, numeric-speed rate, mask resolution, reduced-motion policy) plus adapter TestBed tests (template-surface parity, no-DOM-before-`afterNextRender`, one-replan-per-input-change). See [design.md](design.md) Test Strategy.
+- **Knowledge base**: the adopted architecture is recorded in [`knowledge/decisions/`](../../../knowledge/decisions/) with index and [log](../../../knowledge/log.md) updates in the same change.

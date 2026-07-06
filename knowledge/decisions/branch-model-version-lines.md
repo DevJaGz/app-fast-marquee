@@ -1,13 +1,13 @@
 ---
 type: Decision
 title: Branch Model and Two-Version-Line Publishing Strategy
-description: Planned branch-per-version-line model (Active/Patchable/Archived) and the 20.x / 12.x npm publishing lines with the major-equals-Angular-floor rule.
+description: Planned branch-per-version-line model (Active/Patchable/Archived) and the 20.x / 12.x npm publishing lines with the major-equals-Angular-floor rule, plus each line's own verified minimum-TypeScript dialect floor for core/.
 tags:
   - release
   - branching
   - library
 status: planned
-timestamp: 2026-07-06T00:00:00Z
+timestamp: 2026-07-06T04:00:00Z
 ---
 
 **Status: planned — none of this is implemented yet.** The repository should evolve toward this model; agents must not partially apply it (e.g. bump versions or create branches) without explicit direction.
@@ -26,6 +26,17 @@ timestamp: 2026-07-06T00:00:00Z
 **API parity contract**: both lines expose the same template-level binding surface (selector, input/output names/types/defaults, event payloads, `NgxFastMarqueeModule`, `provideFastMarquee()`). The class instance surface is out of contract. This boundary must be published in the README and the `20.0.0` release notes before first publish, since decorator-properties → signal-inputs breaks the class surface even though the template surface is stable.
 
 The [idle-callback guard](idle-callback-guard.md) requirement applies to both lines; it may become a no-op if the upstream Angular bug is fixed, but the API and guarantee stay (spec: [library.spec.md](../../openspec/specs/library/library.spec.md)).
+
+## Core dialect floors (per line, not shared)
+
+Each version line hosts its own `core/` copy (the framework-agnostic engine — see the core/adapter architecture established by the [`refactor-core-adapter-architecture`](../../openspec/changes/refactor-core-adapter-architecture/) change), and each line's `core/` is dialected to **that line's own Angular-floor minimum TypeScript** — not a single floor shared across both lines. This lets each line's `core/` take advantage of the best language features its own floor allows, alongside that line's own Angular capabilities.
+
+Verified against the [official Angular compatibility table](https://angular.dev/reference/versions) (2026-07-06):
+
+- **`20.x` line** — Angular 20.0.x–20.3.x require TypeScript `>=5.8.0 <6.0.0`. The first stable release in that range is `5.8.2` (`5.8.0` was Beta-only, `5.8.1` RC-only); `5.8.2` is therefore the line's `core/` dialect floor.
+- **`12.x` line** — Angular 12.0.x requires TypeScript `~4.2.3`; that is the line's `core/` dialect floor.
+
+This corrects an earlier framing (carried into the initial `refactor-core-adapter-architecture` proposal) that tied the dialect check for whichever line was being refactored to the _Patchable_ line's floor rather than to that line's _own_ floor. The `12.x` line's own `core/` rewrite — and its 4.2.3-floor dialect check — is separate future work; it is not produced by the `20.x`-focused refactor.
 
 ## Branch model
 
@@ -60,7 +71,7 @@ A real npm audience spans old and new Angular majors. One codebase cannot idioma
 
 - [projects/ngx-fast-marquee/package.json](../../projects/ngx-fast-marquee/package.json) `version`/`peerDependencies` and the library README compatibility table — **frozen until this plan executes; changing them requires explicit confirmation** (see [guardrails](../guardrails.md)).
 - Future CI/CD workflows, repository rulesets, and docs deployment.
-- The `12.x` line implies a future shared-`core/` restructuring of the library source.
+- The `12.x` line implies a future independently-dialected `core/` restructuring of the library source (each line hosts its own copy, per the [core dialect floors](#core-dialect-floors-per-line-not-shared) above — not a single shared `core/`).
 
 # Current state vs plan (verified 2026-07-06)
 
@@ -73,3 +84,5 @@ A real npm audience spans old and new Angular majors. One codebase cannot idioma
 [1] Branch policy brief provided by the maintainer, 2026-07-06 (no linkable artifact; this concept is its canonical home).
 
 [2] Version-line strategy detailed by the maintainer during the Angular 20 upgrade sessions, 2026-07-05 — see also [Angular 20 Upgrade Pitfalls](../lessons/angular-20-upgrade.md).
+
+[3] Per-line TypeScript dialect floors verified against the [official Angular compatibility table](https://angular.dev/reference/versions) and npm's published `typescript` release history, 2026-07-06 — see also [`refactor-core-adapter-architecture`](../../openspec/changes/refactor-core-adapter-architecture/design.md).
