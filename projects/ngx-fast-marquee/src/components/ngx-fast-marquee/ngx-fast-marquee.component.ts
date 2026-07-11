@@ -6,18 +6,19 @@ import {
   Renderer2,
   NgZone,
   HostListener,
-  OnChanges,
-  SimpleChanges,
   AfterContentChecked,
   inject,
   input,
   output,
   viewChild,
+  effect,
+  untracked,
 } from '@angular/core';
 import { Direction, Speed } from '../../types';
 import { MarqueeService } from '../../services/marquee.service';
 import { MarqueeModel } from '../../models/marquee.model';
 import { MarqueeDuplicationService } from '../../services/marquee-duplication.service';
+import { ReducedMotionService } from '../../services/reduced-motion.service';
 import { ensureIdleCallbackFallback } from '../../utils/idle-callback-compat.util';
 
 @Component({
@@ -25,14 +26,21 @@ import { ensureIdleCallbackFallback } from '../../utils/idle-callback-compat.uti
   templateUrl: './ngx-fast-marquee.component.html',
   styleUrls: ['./ngx-fast-marquee.component.scss'],
   providers: [MarqueeService, MarqueeDuplicationService],
+  host: {
+    // Pure-CSS `@media (prefers-reduced-motion: reduce)` fallback (see the component stylesheet):
+    // a template-level host binding renders in the initial (including SSR) markup, unlike the
+    // renderer-driven attributes the service sets later in the update cycle.
+    '[attr.data-use-system-reduced-motion]': 'useSystemReducedMotion()',
+  },
   // eslint-disable-next-line @angular-eslint/prefer-standalone -- declared in NgxFastMarqueeModule for NgModule-based consumers
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NgxFastMarqueeComponent implements OnChanges, AfterContentInit, AfterContentChecked, MarqueeModel {
+export class NgxFastMarqueeComponent implements AfterContentInit, AfterContentChecked, MarqueeModel {
   private readonly _hostRef = inject<ElementRef<HTMLElement>>(ElementRef);
   readonly renderer = inject(Renderer2);
   private readonly _marqueeService = inject(MarqueeService);
+  private readonly _reducedMotionService = inject(ReducedMotionService);
   private readonly _ngZone = inject(NgZone);
 
   /**
@@ -160,10 +168,106 @@ export class NgxFastMarqueeComponent implements OnChanges, AfterContentInit, Aft
     // Defensive guard for non-`@defer` instantiation paths only; `@defer (on idle)` crashes
     // before this constructor can run, so that case requires `provideFastMarquee()` at bootstrap.
     ensureIdleCallbackFallback();
+    this._bridgePostInitInputChanges();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this._marqueeService.updateOnInputChanges(changes);
+  /**
+   * Bridge the signal inputs to the existing renderer-driven update path for changes applied
+   * after initialization. Each `effect` skips its own first (subscription) run so only genuine
+   * post-init changes reach the marquee service; direct DOM writes stay `OnPush`/zoneless-safe.
+   * "Layout-affecting" changes (direction, autoFill/useSystemReducedMotion, a numeric speed
+   * value, and a live system reduced-motion toggle while opted in) go through `_updateMarqueee`
+   * so `updated` emits once per change; purely-visual changes (play, mask*, pauseOnHover,
+   * pauseOnClick, a qualitative speed) update the DOM directly without emitting.
+   */
+  private _bridgePostInitInputChanges(): void {
+    let isFirstDirectionRun = true;
+    effect(() => {
+      this.direction();
+      if (isFirstDirectionRun) {
+        isFirstDirectionRun = false;
+        return;
+      }
+      this._updateMarqueee();
+    });
+
+    let isFirstSpeedRun = true;
+    effect(() => {
+      const speedValue = this.speed();
+      if (isFirstSpeedRun) {
+        isFirstSpeedRun = false;
+        return;
+      }
+      if (typeof speedValue === 'number') {
+        this._updateMarqueee();
+      } else {
+        this._marqueeService.updateSpeed();
+      }
+    });
+
+    let isFirstPlayRun = true;
+    effect(() => {
+      this.play();
+      if (isFirstPlayRun) {
+        isFirstPlayRun = false;
+        return;
+      }
+      this._marqueeService.updatePlayState();
+    });
+
+    let isFirstMaskRun = true;
+    effect(() => {
+      this.maskPercentage();
+      this.maskStartPercentage();
+      this.maskEndPercentage();
+      if (isFirstMaskRun) {
+        isFirstMaskRun = false;
+        return;
+      }
+      this._marqueeService.updateMask();
+    });
+
+    let isFirstFillRun = true;
+    effect(() => {
+      this.autoFill();
+      this.useSystemReducedMotion();
+      if (isFirstFillRun) {
+        isFirstFillRun = false;
+        return;
+      }
+      this._updateMarqueee();
+    });
+
+    let isFirstPauseOnHoverRun = true;
+    effect(() => {
+      this.pauseOnHover();
+      if (isFirstPauseOnHoverRun) {
+        isFirstPauseOnHoverRun = false;
+        return;
+      }
+      this._marqueeService.updatePauseOnHover();
+    });
+
+    let isFirstPauseOnClickRun = true;
+    effect(() => {
+      this.pauseOnClick();
+      if (isFirstPauseOnClickRun) {
+        isFirstPauseOnClickRun = false;
+        return;
+      }
+      this._marqueeService.updatePauseOnClick();
+    });
+
+    let isFirstReducedMotionRun = true;
+    effect(() => {
+      this._reducedMotionService.hasSystemReducedMotion();
+      if (isFirstReducedMotionRun) {
+        isFirstReducedMotionRun = false;
+        return;
+      }
+      if (!untracked(this.useSystemReducedMotion)) return;
+      this._updateMarqueee();
+    });
   }
 
   ngAfterContentInit(): void {

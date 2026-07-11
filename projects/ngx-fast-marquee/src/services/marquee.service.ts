@@ -1,4 +1,4 @@
-import { inject, Injectable, RendererStyleFlags2, SimpleChanges } from '@angular/core';
+import { inject, Injectable, RendererStyleFlags2 } from '@angular/core';
 import { MarqueeModel } from '../models/marquee.model';
 import { ReducedMotionService } from './reduced-motion.service';
 import { MarqueeDuplicationService } from './marquee-duplication.service';
@@ -17,50 +17,6 @@ export class MarqueeService {
   }
 
   /**
-   * Update the marquee on input changes.
-   * @param changes - Input Changes
-   */
-  updateOnInputChanges(changes: SimpleChanges): void {
-    if (!this._marqueeComponent) return;
-
-    if (this._hasInputChange(changes, 'direction')) {
-      this.updateDirection();
-    }
-
-    if (this._hasInputChange(changes, 'speed')) {
-      this.updateSpeed();
-    }
-
-    if (this._hasInputChange(changes, 'play')) {
-      this.updatePlayState();
-    }
-
-    if (this._hasInputChange(changes, 'maskPercentage')) {
-      this.updateMask();
-    }
-
-    if (this._hasInputChange(changes, 'maskStartPercentage')) {
-      this.updateMask();
-    }
-
-    if (this._hasInputChange(changes, 'maskEndPercentage')) {
-      this.updateMask();
-    }
-
-    if (this._hasInputChange(changes, 'autoFill') || this._hasInputChange(changes, 'useSystemReducedMotion')) {
-      this.update();
-    }
-
-    if (this._hasInputChange(changes, 'pauseOnHover')) {
-      this.updatePauseOnHover();
-    }
-
-    if (this._hasInputChange(changes, 'pauseOnClick')) {
-      this.updatePauseOnClick();
-    }
-  }
-
-  /**
    * Check if the marquee need to be updated.
    * @returns True if the marquee need to be updated.
    */
@@ -70,24 +26,27 @@ export class MarqueeService {
 
   /**
    * Update the DOM and the CSS of the marquee.
+   * The mask and the direction attribute are updated regardless of the animated state, so the
+   * edge fade and the mask axis stay correct even while paused or while reduced motion is honored.
    */
   update(): void {
     const { useSystemReducedMotion, autoFill } = this._marqueeComponent;
-    if (useSystemReducedMotion() && this._reducedMotionService.hasSystemReducedMotion()) {
-      this._setAsAnimated(false);
+    const shouldAnimate = !(useSystemReducedMotion() && this._reducedMotionService.hasSystemReducedMotion());
+
+    this._setAsAnimated(shouldAnimate);
+    this.updateDirection();
+    this.updateMask();
+
+    if (!shouldAnimate) {
       return;
     }
-
-    this._setAsAnimated(true);
 
     if (autoFill()) {
       this._marqueeDuplicationService.duplicateItems();
       this._updateNumberOfMarqueeItems();
     }
 
-    this.updateMask();
     this.updateMovePercentage();
-    this.updateDirection();
     this.updateSpeed();
     this.updatePauseOnHover();
     this.updatePauseOnClick();
@@ -95,22 +54,29 @@ export class MarqueeService {
   }
 
   /**
-   *  Update the speed of the marquee. setting the CSS property '--_animation-duration'.
+   *  Update the speed of the marquee, setting the CSS property '--_animation-duration'.
+   * A numeric speed of `0` or negative produces no motion: the marquee is frozen regardless
+   * of `play`, until a positive numeric speed or a qualitative speed is set again.
    */
   updateSpeed(): void {
     const { speed, marqueeInnerElement, renderer } = this._marqueeComponent;
     const speedValue = speed();
     if (typeof speedValue === 'number') {
-      const middleSizeInPx = this._getMiddleMarqueeSizeInPx();
-      renderer.setStyle(
-        marqueeInnerElement,
-        '--_animation-duration',
-        `${middleSizeInPx / speedValue}s`,
-        RendererStyleFlags2.DashCase
-      );
-      return;
+      this._isSpeedFrozen = speedValue <= 0;
+      if (!this._isSpeedFrozen) {
+        const middleSizeInPx = this._getMiddleMarqueeSizeInPx();
+        renderer.setStyle(
+          marqueeInnerElement,
+          '--_animation-duration',
+          `${middleSizeInPx / speedValue}s`,
+          RendererStyleFlags2.DashCase
+        );
+      }
+    } else {
+      this._isSpeedFrozen = false;
+      renderer.setAttribute(marqueeInnerElement, 'data-speed', speedValue);
     }
-    renderer.setAttribute(marqueeInnerElement, 'data-speed', speedValue);
+    this.updatePlayState();
   }
 
   private _getMiddleMarqueeSizeInPx(): number {
@@ -148,28 +114,28 @@ export class MarqueeService {
   }
 
   /**
-   * Update the mask of the marquee
+   * Update the mask of the marquee. `maskPercentage` is a symmetric shorthand fading both edges;
+   * an explicitly-set (greater than `0`) `maskStartPercentage`/`maskEndPercentage` overrides the
+   * shorthand for its own edge. All inputs default to `0` (opaque edges).
    */
   updateMask(): void {
-    const { maskEndPercentage, maskStartPercentage, maskPercentage } = this._marqueeComponent;
-    if (maskStartPercentage() != null || maskEndPercentage() != null) {
-      this._updateMaskFromStartToEndPercentage();
-    }
-
-    if (maskPercentage() != null) {
-      this._updateMaskFromPercentage();
-    }
+    const { maskStartPercentage, maskEndPercentage, maskPercentage } = this._marqueeComponent;
+    const shorthandPercentage = maskPercentage();
+    const startPercentage = maskStartPercentage() > 0 ? maskStartPercentage() : shorthandPercentage;
+    const endPercentage = maskEndPercentage() > 0 ? maskEndPercentage() : shorthandPercentage;
+    this._updateMaskPercentages(startPercentage, endPercentage);
   }
 
   /**
    * Update the play state of the marquee animation setting the CSS property '--_animation-play-state'.
+   * A `0`/negative numeric speed freezes the marquee regardless of `play`.
    */
   updatePlayState(): void {
     const { play, marqueeInnerElement, renderer } = this._marqueeComponent;
     renderer.setStyle(
       marqueeInnerElement,
       '--_animation-play-state',
-      play() ? 'running' : 'paused',
+      play() && !this._isSpeedFrozen ? 'running' : 'paused',
       RendererStyleFlags2.DashCase
     );
   }
@@ -198,6 +164,11 @@ export class MarqueeService {
   private _currentNumberOfMarqueeItems = 0;
 
   /**
+   * True when a numeric `speed` of `0` or negative should freeze the marquee regardless of `play`.
+   */
+  private _isSpeedFrozen = false;
+
+  /**
    * Update the percentage of the marquee translation setting the CSS property '--_move-percentage'.
    * @param value - The value of the percentage.
    * @param sign - The sign of the percentage.
@@ -223,46 +194,15 @@ export class MarqueeService {
   }
 
   /**
-   * Update the mask of the marquee from start to end percentages.
+   * Set the resolved start/end mask percentages as the CSS custom properties consumed by the
+   * mask gradient.
+   * @param startPercentage - The resolved start-edge fade percentage.
+   * @param endPercentage - The resolved end-edge fade percentage.
    */
-  private _updateMaskFromStartToEndPercentage(): void {
-    const { maskStartPercentage, maskEndPercentage, marqueeElement, renderer } = this._marqueeComponent;
-    renderer.setStyle(
-      marqueeElement,
-      '--_mask-start-percentage',
-      `${maskStartPercentage()}%`,
-      RendererStyleFlags2.DashCase
-    );
-    renderer.setStyle(
-      marqueeElement,
-      '--_mask-end-percentage',
-      `${maskEndPercentage()}%`,
-      RendererStyleFlags2.DashCase
-    );
-  }
-
-  /**
-   * Update the mask of the marquee from percentage.
-   */
-  private _updateMaskFromPercentage(): void {
-    const { maskPercentage, marqueeElement, renderer } = this._marqueeComponent;
-    const maskPercentageValue = maskPercentage();
-    renderer.setStyle(
-      marqueeElement,
-      '--_mask-start-percentage',
-      `${maskPercentageValue}%`,
-      RendererStyleFlags2.DashCase
-    );
-    renderer.setStyle(
-      marqueeElement,
-      '--_mask-end-percentage',
-      `${maskPercentageValue}%`,
-      RendererStyleFlags2.DashCase
-    );
-  }
-
-  private _hasInputChange(changes: SimpleChanges, key: string): boolean {
-    return changes[key] && !changes[key].firstChange && changes[key].currentValue !== changes[key].previousValue;
+  private _updateMaskPercentages(startPercentage: number, endPercentage: number): void {
+    const { marqueeElement, renderer } = this._marqueeComponent;
+    renderer.setStyle(marqueeElement, '--_mask-start-percentage', `${startPercentage}%`, RendererStyleFlags2.DashCase);
+    renderer.setStyle(marqueeElement, '--_mask-end-percentage', `${endPercentage}%`, RendererStyleFlags2.DashCase);
   }
 
   /**

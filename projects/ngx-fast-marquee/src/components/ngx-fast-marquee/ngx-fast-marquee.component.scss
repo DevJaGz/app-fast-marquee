@@ -5,27 +5,48 @@
   --_mask-start-percentage: 0%;
   --_mask-end-percentage: 0%;
   --_mask-direction: 90deg;
+  // The mask applies whenever a mask input is > 0, independent of the animated/play state.
+  --_linear-gradient: linear-gradient(
+    var(--_mask-direction),
+    transparent,
+    white calc(var(--_mask-start-percentage) * 0.5),
+    white calc(100% - var(--_mask-end-percentage) * 0.5),
+    transparent
+  );
+  -webkit-mask: var(--_linear-gradient);
+  mask: var(--_linear-gradient);
 
   .ngx-fast-marquee__inner {
     display: flex;
     flex-wrap: wrap;
   }
 
+  // The mask axis follows the scroll direction regardless of whether the marquee is animating.
+  &[data-direction='left'],
+  &[data-direction='right'] {
+    --_mask-direction: 90deg;
+  }
+
+  &[data-direction='up'],
+  &[data-direction='down'] {
+    --_mask-direction: 180deg;
+  }
+
+  // Pure-CSS fallback: honors `prefers-reduced-motion` live, independent of the renderer-driven
+  // `data-animated`/`--_animation-play-state` timing (see `ReducedMotionService`/component effect).
+  @media (prefers-reduced-motion: reduce) {
+    &[data-use-system-reduced-motion='true'] {
+      .ngx-fast-marquee__inner {
+        animation-play-state: paused !important;
+      }
+    }
+  }
+
   &[data-animated='true'] {
     overflow: hidden;
-    --_linear-gradient: linear-gradient(
-      var(--_mask-direction),
-      transparent,
-      white calc(var(--_mask-start-percentage) * 0.5),
-      white calc(100% - var(--_mask-end-percentage) * 0.5),
-      transparent
-    );
-    -webkit-mask: var(--_linear-gradient);
-    mask: var(--_linear-gradient);
 
     &[data-direction='left'],
     &[data-direction='right'] {
-      --_mask-direction: 90deg;
       width: 100%;
       height: auto;
 
@@ -37,7 +58,6 @@
 
     &[data-direction='up'],
     &[data-direction='down'] {
-      --_mask-direction: 180deg;
       width: auto;
       height: 100%;
 

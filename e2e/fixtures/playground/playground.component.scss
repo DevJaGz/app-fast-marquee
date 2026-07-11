@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  font-family: sans-serif;
+}
+
+.playground-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+.playground-container {
+  max-width: 100%;
+  border: 1px solid #ccc;
+  overflow: hidden;
+}
+
+.playground-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 1px solid #999;
+}
+
+.playground-status {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem;
+}

@@ -92,6 +92,17 @@
                   "with": "e2e/fixtures/app.config.no-idle-guard.ts"
                 }
               ]
+            },
+            "playground": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/app/app.config.ts",
+                  "with": "e2e/fixtures/app.config.playground.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -108,6 +119,10 @@
             "no-idle-guard": {
               "buildTarget": "app-fast-marquee:build:no-idle-guard",
               "port": 4201
+            },
+            "playground": {
+              "buildTarget": "app-fast-marquee:build:playground",
+              "port": 4202
             }
           },
           "defaultConfiguration": "development"
