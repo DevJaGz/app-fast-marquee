@@ -63,7 +63,9 @@ test.describe('marquee lifecycle outputs (F9, F10)', () => {
   });
 
   test('updated increments after a settled viewport resize', async ({ page }) => {
-    await gotoPlayground(page, { speed: 100, ...GEOMETRY });
+    // containerWidth exceeds the viewport so max-width: 100% clamps the host — shrinking the
+    // viewport genuinely resizes the marquee and triggers the host ResizeObserver.
+    await gotoPlayground(page, { speed: 100, itemCount: 3, itemWidth: 100, itemHeight: 60, containerWidth: 3000 });
     const baseline = await getUpdatedCount(page);
 
     const viewport = page.viewportSize();

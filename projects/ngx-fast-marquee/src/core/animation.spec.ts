@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
+  isMaskEnabled,
   isSpeedFrozen,
   resolveAnimated,
   resolveMask,
-  resolveMovePercentage,
   resolveNumericDurationSeconds,
   resolvePlayState,
   resolveQualitativeSpeed,
@@ -59,13 +59,6 @@ describe('resolvePlayState', () => {
   });
 });
 
-describe('resolveMovePercentage', () => {
-  it('returns -50% when autoFill is true and -100% when false', () => {
-    expect(resolveMovePercentage(true)).toBe('-50%');
-    expect(resolveMovePercentage(false)).toBe('-100%');
-  });
-});
-
 describe('resolveMask', () => {
   // Mask resolution is axis-independent; CSS applies the axis from direction.
 
@@ -91,6 +84,24 @@ describe('resolveMask', () => {
 
   it('lets explicit end override shorthand', () => {
     expect(resolveMask(40, 0, 60)).toEqual({ startPercentage: 40, endPercentage: 60 });
+  });
+});
+
+describe('isMaskEnabled', () => {
+  it('returns false when both edges are zero', () => {
+    expect(isMaskEnabled({ startPercentage: 0, endPercentage: 0 })).toBe(false);
+  });
+
+  it('returns true when only the start percentage is greater than zero', () => {
+    expect(isMaskEnabled({ startPercentage: 20, endPercentage: 0 })).toBe(true);
+  });
+
+  it('returns true when only the end percentage is greater than zero', () => {
+    expect(isMaskEnabled({ startPercentage: 0, endPercentage: 20 })).toBe(true);
+  });
+
+  it('returns true when both edges are greater than zero', () => {
+    expect(isMaskEnabled({ startPercentage: 20, endPercentage: 40 })).toBe(true);
   });
 });
 

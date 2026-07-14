@@ -5,16 +5,6 @@
   --_mask-start-percentage: 0%;
   --_mask-end-percentage: 0%;
   --_mask-direction: 90deg;
-  // The mask applies whenever a mask input is > 0, independent of the animated/play state.
-  --_linear-gradient: linear-gradient(
-    var(--_mask-direction),
-    transparent,
-    white calc(var(--_mask-start-percentage) * 0.5),
-    white calc(100% - var(--_mask-end-percentage) * 0.5),
-    transparent
-  );
-  -webkit-mask: var(--_linear-gradient);
-  mask: var(--_linear-gradient);
 
   .ngx-fast-marquee__inner {
     display: flex;
@@ -32,6 +22,19 @@
     --_mask-direction: 180deg;
   }
 
+  // The mask applies whenever data-masked is set, independent of the animated/play state.
+  &[data-masked='true'] {
+    --_linear-gradient: linear-gradient(
+      var(--_mask-direction),
+      transparent,
+      white calc(var(--_mask-start-percentage) * 0.5),
+      white calc(100% - var(--_mask-end-percentage) * 0.5),
+      transparent
+    );
+    -webkit-mask: var(--_linear-gradient);
+    mask: var(--_linear-gradient);
+  }
+
   // Pure-CSS fallback: honors `prefers-reduced-motion` live, independent of the signal-driven
   // `data-animated` binding timing (see `core/reduced-motion.ts`).
   @media (prefers-reduced-motion: reduce) {
@@ -44,6 +47,8 @@
 
   &[data-animated='true'] {
     overflow: hidden;
+    // Isolates clone append/prune relayouts (engine duplication) to the marquee subtree.
+    contain: layout paint style;
 
     &[data-direction='left'],
     &[data-direction='right'] {
@@ -52,7 +57,11 @@
 
       .ngx-fast-marquee__inner {
         flex-direction: row;
-        --_translation: translateX(var(--_move-percentage));
+        animation-name: move-x-full;
+      }
+
+      &[data-auto-fill='true'] .ngx-fast-marquee__inner {
+        animation-name: move-x-half;
       }
     }
 
@@ -63,7 +72,11 @@
 
       .ngx-fast-marquee__inner {
         flex-direction: column;
-        --_translation: translateY(var(--_move-percentage));
+        animation-name: move-y-full;
+      }
+
+      &[data-auto-fill='true'] .ngx-fast-marquee__inner {
+        animation-name: move-y-half;
       }
     }
 
@@ -78,7 +91,6 @@
     }
 
     .ngx-fast-marquee__inner {
-      --_move-percentage: -50%;
       --_number-of-marquee-items: 0;
       --_animation-duration: 0s;
       --_animation-iteration-count: infinite;
@@ -86,7 +98,6 @@
 
       width: max-content;
       flex-wrap: nowrap;
-      animation-name: move;
       animation-duration: var(--_animation-duration);
       animation-direction: var(--_animation-direction);
       animation-fill-mode: forwards;
@@ -117,8 +128,38 @@
   }
 }
 
-@keyframes move {
+@keyframes move-x-half {
+  from {
+    transform: translateX(0);
+  }
   to {
-    transform: var(--_translation);
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes move-x-full {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes move-y-half {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes move-y-full {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
   }
 }

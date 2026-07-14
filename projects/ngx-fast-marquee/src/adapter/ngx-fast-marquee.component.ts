@@ -20,9 +20,9 @@ import {
   Speed,
   createReducedMotionSource,
   ensureIdleCallbackFallback,
+  isMaskEnabled,
   resolveAnimated,
   resolveMask,
-  resolveMovePercentage,
   resolveNumericDurationSeconds,
   resolvePlayState,
   resolveQualitativeSpeed,
@@ -37,7 +37,9 @@ import {
   host: {
     '[attr.data-direction]': 'direction()',
     '[attr.data-animated]': 'animated()',
+    '[attr.data-auto-fill]': 'autoFill()',
     '[attr.data-use-system-reduced-motion]': 'useSystemReducedMotion()',
+    '[attr.data-masked]': 'maskEnabled()',
     '[style.--_mask-start-percentage]': 'maskStartCss()',
     '[style.--_mask-end-percentage]': 'maskEndCss()',
   },
@@ -154,12 +156,12 @@ export class NgxFastMarqueeComponent {
     return seconds === null ? null : `${seconds}s`;
   });
   protected readonly animationPlayState = computed(() => resolvePlayState(this.play(), this.speed()));
-  protected readonly movePercentageCss = computed(() => resolveMovePercentage(this.autoFill()));
   private readonly _resolvedMask = computed(() =>
     resolveMask(this.maskPercentage(), this.maskStartPercentage(), this.maskEndPercentage())
   );
   protected readonly maskStartCss = computed(() => `${this._resolvedMask().startPercentage}%`);
   protected readonly maskEndCss = computed(() => `${this._resolvedMask().endPercentage}%`);
+  protected readonly maskEnabled = computed(() => isMaskEnabled(this._resolvedMask()));
 
   constructor() {
     // Defensive guard for non-`@defer` instantiation paths only; `@defer (on idle)` crashes
@@ -195,19 +197,7 @@ export class NgxFastMarqueeComponent {
     });
     this._engine = engine;
 
-    let windowResizeDebounce: ReturnType<typeof setTimeout> | null = null;
-    const onWindowResize = (): void => {
-      if (windowResizeDebounce !== null) clearTimeout(windowResizeDebounce);
-      windowResizeDebounce = setTimeout(() => {
-        windowResizeDebounce = null;
-        engine.requestReplan({ forceUpdated: true });
-      }, 50);
-    };
-    window.addEventListener('resize', onWindowResize);
-
     this._destroyRef.onDestroy(() => {
-      window.removeEventListener('resize', onWindowResize);
-      if (windowResizeDebounce !== null) clearTimeout(windowResizeDebounce);
       engine.destroy();
       reducedMotionSource.dispose();
     });

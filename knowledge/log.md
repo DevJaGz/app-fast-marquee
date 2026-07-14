@@ -1,5 +1,9 @@
 # Knowledge Base Update Log
 
+## 2026-07-14
+
+- **Creation**: Added [CSS Custom Properties in Keyframes Block Compositor Acceleration](lessons/css-var-keyframes-not-composited.md), documenting why var() in CSS keyframe bodies disqualifies compositor acceleration in Chromium and the pattern to refactor with static keyframe variants. Indexed in [lessons/index.md](lessons/index.md).
+
 ## 2026-07-13
 
 - **Update**: Added convention **#14** (production-first testing — no test seams in runtime code) to [conventions.md](conventions.md). Removed the `scheduleFlush` test seam and unused `resizeDebounceMs` option from [`marquee-engine.ts`](../projects/ngx-fast-marquee/src/core/marquee-engine.ts); engine specs now use Vitest fake timers. Privatized `marqueeInnerRef` on the adapter component. New lesson: [Production-First Testing](lessons/production-first-testing.md), indexed in [lessons/index.md](lessons/index.md).

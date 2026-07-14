@@ -6,8 +6,9 @@
  * | direction | `data-direction` (host) |
  * | qualitative speed | `data-speed` (inner) |
  * | numeric speed | `--_animation-duration` (inner) |
- * | autoFill travel | `--_move-percentage` (inner) |
+ * | autoFill travel | `data-auto-fill` (host) |
  * | masks | `--_mask-start-percentage` / `--_mask-end-percentage` (host) |
+ * | mask gate | `data-masked` (host) |
  * | play | `--_animation-play-state` (inner) |
  * | pauseOnHover / pauseOnClick | `data-pause-on-hover` / `data-pause-on-click` (inner) |
  * | animated | `data-animated` (host) |
@@ -38,11 +39,6 @@ export function resolvePlayState(play: boolean, speed: Speed): 'running' | 'paus
   return play && !isSpeedFrozen(speed) ? 'running' : 'paused';
 }
 
-/** 50% travel when auto-filled (duplicated track), 100% when showing intrinsic content only. */
-export function resolveMovePercentage(autoFill: boolean): '-50%' | '-100%' {
-  return autoFill ? '-50%' : '-100%';
-}
-
 /** An explicitly-set (greater than 0) edge percentage overrides the symmetric shorthand for its own edge. */
 export function resolveMask(
   maskPercentage: number,
@@ -53,6 +49,11 @@ export function resolveMask(
     startPercentage: maskStartPercentage > 0 ? maskStartPercentage : maskPercentage,
     endPercentage: maskEndPercentage > 0 ? maskEndPercentage : maskPercentage,
   };
+}
+
+/** The mask only applies when at least one edge has a non-zero fade. */
+export function isMaskEnabled(mask: ResolvedMask): boolean {
+  return mask.startPercentage > 0 || mask.endPercentage > 0;
 }
 
 /** Animated unless the consumer opted into system reduced motion AND the system prefers it. */

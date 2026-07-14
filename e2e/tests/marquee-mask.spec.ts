@@ -12,13 +12,11 @@ const GEOMETRY = { itemCount: 3, itemWidth: 100, itemHeight: 60, containerWidth:
 const TOLERANCE = 0;
 
 test.describe('marquee mask (F5)', () => {
-  test('no mask input resolves to fully-opaque edges (no fade)', async ({ page }) => {
+  test('no mask input resolves to no mask at all', async ({ page }) => {
     await gotoPlayground(page, { direction: 'left', ...GEOMETRY });
     const maskImage = await getMaskImage(marqueeHost(page));
 
-    const [start, end] = extractMaskStopPercentages(maskImage);
-    expect(start).toBeCloseTo(0, 1);
-    expect(end).toBeCloseTo(100, 1);
+    expect(maskImage).toBe('none');
   });
 
   test('resolved mask is transparent at the faded edges and opaque at the center', async ({ page }) => {

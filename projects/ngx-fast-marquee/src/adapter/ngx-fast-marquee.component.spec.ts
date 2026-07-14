@@ -86,6 +86,7 @@ describe('NgxFastMarqueeComponent', () => {
     expect(marqueeHost(fixture)).toBeTruthy();
     expect(marqueeInner(fixture)).toBeTruthy();
     expect(fixture.nativeElement.querySelectorAll('.item')).toHaveLength(2);
+    expect(marqueeHost(fixture).getAttribute('data-masked')).toBe('false');
   });
 
   it('NgxFastMarqueeModule import renders the marquee', async () => {
@@ -130,12 +131,13 @@ describe('NgxFastMarqueeComponent', () => {
     expect(marqueeHostEl.getAttribute('data-use-system-reduced-motion')).toBe('false');
     expect(marqueeHostEl.style.getPropertyValue('--_mask-start-percentage')).toBe('10%');
     expect(marqueeHostEl.style.getPropertyValue('--_mask-end-percentage')).toBe('40%');
+    expect(marqueeHostEl.getAttribute('data-masked')).toBe('true');
 
     expect(marqueeInnerEl.getAttribute('data-speed')).toBe('fast');
     expect(marqueeInnerEl.getAttribute('data-pause-on-hover')).toBe('true');
     expect(marqueeInnerEl.getAttribute('data-pause-on-click')).toBe('true');
     expect(marqueeInnerEl.style.getPropertyValue('--_animation-play-state')).toBe('paused');
-    expect(marqueeInnerEl.style.getPropertyValue('--_move-percentage')).toBe('-100%');
+    expect(marqueeHostEl.getAttribute('data-auto-fill')).toBe('false');
   });
 
   it('numeric speed removes the qualitative data-speed attribute', async () => {
@@ -178,6 +180,7 @@ describe('NgxFastMarqueeComponent', () => {
 
     expect(marqueeHost(fixture).getAttribute('data-direction')).toBe('up');
     expect(marqueeHost(fixture).style.getPropertyValue('--_mask-start-percentage')).toBe('30%');
+    expect(marqueeHost(fixture).getAttribute('data-masked')).toBe('true');
   });
 
   it('mounted emits exactly once', async () => {
