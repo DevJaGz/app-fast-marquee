@@ -5,6 +5,7 @@
     "start": "ng serve",
     "build:app": "ng build app-fast-marquee",
     "build:lib": "ng build ngx-fast-marquee",
+    "check:core-dialect": "node node_modules/typescript-20x-floor/lib/tsc.js -p tsconfig.core-dialect.json",
     "test:app": "ng test app-fast-marquee --watch=false",
     "test:lib": "ng test ngx-fast-marquee --watch=false",
     "lint": "ng lint",
@@ -85,6 +86,7 @@
     "prettier-eslint": "^15.0.1",
     "tailwindcss": "^3.3.5",
     "typescript": "~5.9.3",
+    "typescript-20x-floor": "npm:typescript@5.8.2",
     "vitest": "^4.1.9"
   }
 }

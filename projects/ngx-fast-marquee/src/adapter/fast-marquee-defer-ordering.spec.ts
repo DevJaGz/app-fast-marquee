@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, NgModule, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { DeferBlockBehavior, TestBed } from '@angular/core/testing';
-import { NgxFastMarqueeComponent } from '../components/ngx-fast-marquee/ngx-fast-marquee.component';
+import { NgxFastMarqueeComponent } from './ngx-fast-marquee.component';
 import { provideFastMarquee } from './fast-marquee.providers';
 
 /**
@@ -19,22 +19,10 @@ import { provideFastMarquee } from './fast-marquee.providers';
       <div class="defer-placeholder">placeholder</div>
     }
   `,
-  // eslint-disable-next-line @angular-eslint/prefer-standalone -- declared via TestBed to mirror an NgModule host
-  standalone: false,
+  imports: [NgxFastMarqueeComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 class DeferOnIdleHostComponent {}
-
-/**
- * Statically declares both components together so the AOT template compiler can resolve
- * `<ngx-fast-marquee>` inside `DeferOnIdleHostComponent`'s template. `TestBed`'s own ad hoc
- * `declarations` array (the previous approach) is only resolved by the JIT compiler at runtime,
- * which the Vitest/esbuild build pipeline does not fall back to.
- */
-@NgModule({
-  declarations: [DeferOnIdleHostComponent, NgxFastMarqueeComponent],
-})
-class DeferOnIdleHostModule {}
 
 /**
  * View of `window` where the idle-callback APIs are optional and writable, so the test can
@@ -75,14 +63,15 @@ describe('provideFastMarquee ordering with @defer (on idle)', () => {
     expect(typeof idleWindow.requestIdleCallback).toBe('function');
     expect(idleWindow.cancelIdleCallback).toBeUndefined();
 
-    // The component is declared directly (no NgxFastMarqueeModule import), so the only
+    // The component is imported directly (no NgxFastMarqueeModule), so the only
     // protection in play is `provideFastMarquee()` — mirroring a standalone consumer's
     // `bootstrapApplication()` wiring.
     TestBed.configureTestingModule({
-      imports: [DeferOnIdleHostModule],
+      imports: [DeferOnIdleHostComponent],
       providers: [provideFastMarquee(), provideZonelessChangeDetection()],
       deferBlockBehavior: DeferBlockBehavior.Playthrough,
     });
+    await TestBed.compileComponents();
 
     // `createComponent` runs the APP_INITIALIZER guard; the first change detection pass then
     // schedules the on-idle trigger — the exact point that throws without the guard.

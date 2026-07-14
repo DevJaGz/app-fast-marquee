@@ -7,7 +7,7 @@ tags:
   - safari
   - defer
 status: implemented
-timestamp: 2026-07-06T00:00:00Z
+timestamp: 2026-07-12T16:00:00Z
 ---
 
 # What was decided
@@ -27,7 +27,7 @@ The crash happens while _scheduling_ the deferred block — before the library's
 
 # What it affects
 
-- Library providers/utils (see [providers AGENTS.md](../../projects/ngx-fast-marquee/src/providers/AGENTS.md) and [utils AGENTS.md](../../projects/ngx-fast-marquee/src/utils/AGENTS.md)), the library README, and the behavioral spec [library.spec.md](../../openspec/specs/library/library.spec.md).
+- Library adapter/core (see [`fast-marquee.providers.ts`](../../projects/ngx-fast-marquee/src/adapter/fast-marquee.providers.ts) and [`idle-callback-compat.ts`](../../projects/ngx-fast-marquee/src/core/idle-callback-compat.ts)), the library README, and the behavioral spec [library.spec.md](../../openspec/specs/library/library.spec.md).
 - Verified by the e2e suite's two-server scenario setup (guarded vs `no-idle-guard`), simulating the Safari asymmetry via Playwright `addInitScript` — see [e2e/AGENTS.md](../../e2e/AGENTS.md).
 - The guarantee carries over to **both** planned version lines ([branch-model decision](branch-model-version-lines.md)) and stays as API even if the upstream bug is eventually fixed.
 

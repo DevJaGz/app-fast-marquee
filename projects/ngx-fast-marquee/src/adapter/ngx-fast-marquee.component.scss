@@ -32,8 +32,8 @@
     --_mask-direction: 180deg;
   }
 
-  // Pure-CSS fallback: honors `prefers-reduced-motion` live, independent of the renderer-driven
-  // `data-animated`/`--_animation-play-state` timing (see `ReducedMotionService`/component effect).
+  // Pure-CSS fallback: honors `prefers-reduced-motion` live, independent of the signal-driven
+  // `data-animated` binding timing (see `core/reduced-motion.ts`).
   @media (prefers-reduced-motion: reduce) {
     &[data-use-system-reduced-motion='true'] {
       .ngx-fast-marquee__inner {
@@ -104,14 +104,6 @@
 
       &[data-speed='slow'] {
         --_animation-duration: calc(var(--_number-of-marquee-items) * 10s);
-      }
-
-      &[data-state='running'] {
-        --_animation-play-state: running;
-      }
-
-      &[data-state='paused'] {
-        --_animation-play-state: paused;
       }
 
       &[data-pause-on-hover='true']:hover {

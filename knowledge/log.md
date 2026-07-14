@@ -1,5 +1,14 @@
 # Knowledge Base Update Log
 
+## 2026-07-13
+
+- **Update**: Added convention **#14** (production-first testing — no test seams in runtime code) to [conventions.md](conventions.md). Removed the `scheduleFlush` test seam and unused `resizeDebounceMs` option from [`marquee-engine.ts`](../projects/ngx-fast-marquee/src/core/marquee-engine.ts); engine specs now use Vitest fake timers. Privatized `marqueeInnerRef` on the adapter component. New lesson: [Production-First Testing](lessons/production-first-testing.md), indexed in [lessons/index.md](lessons/index.md).
+
+## 2026-07-12
+
+- **Creation**: Added [Core/Adapter Library Architecture](decisions/core-adapter-architecture.md), recording the pure-TypeScript `core/` engine and thin Angular `adapter/` shell split (rules A1–A6, goals G1–G3, per-feature primitive selection, mechanical enforcement, and per-line TypeScript dialect floors) adopted by the [refactor-core-adapter-architecture](../openspec/changes/refactor-core-adapter-architecture/) change. Cross-linked from [Branch Model and Two-Version-Line Publishing Strategy](decisions/branch-model-version-lines.md); indexed in [decisions/index.md](decisions/index.md) and the root [index.md](index.md).
+- **Update**: AGENTS.md tree restructured for the core/adapter layout (new [`core/AGENTS.md`](../projects/ngx-fast-marquee/src/core/AGENTS.md) + [`adapter/AGENTS.md`](../projects/ngx-fast-marquee/src/adapter/AGENTS.md), removed the six legacy child nodes with their folders) and dead source links retargeted in the affected concepts — [`core-adapter-architecture.md`](decisions/core-adapter-architecture.md), [`idle-callback-guard.md`](decisions/idle-callback-guard.md), [`marquee-behavior-contract.md`](decisions/marquee-behavior-contract.md).
+
 ## 2026-07-06
 
 - **Creation**: Added [Marquee Behavior Contract (corrected, black-box-locked)](decisions/marquee-behavior-contract.md), documenting the six maintainer-approved corrections (mask precedence, mask-independent-of-motion, numeric speed floor, post-init input reactivity, `mounted`/`updated` semantics, live reduced motion) made in the [specify-marquee-behavior](../openspec/changes/specify-marquee-behavior/design.md) change, and the black-box e2e suite (`playground` scenario + `e2e/tests/marquee-*.spec.ts`) that locks the corrected contract in ahead of the from-scratch refactor. Linked from [decisions/index.md](decisions/index.md) and the root [index.md](index.md); the new `playground` scenario is documented in [e2e/AGENTS.md](../e2e/AGENTS.md).

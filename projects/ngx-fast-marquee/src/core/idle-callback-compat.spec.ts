@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import { ensureIdleCallbackFallback } from './idle-callback-compat.util';
+import { ensureIdleCallbackFallback } from './idle-callback-compat';
 
 /**
  * View of `window` where the idle-callback APIs are optional and writable, so tests can

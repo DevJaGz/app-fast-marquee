@@ -7,7 +7,7 @@ tags:
   - branching
   - library
 status: planned
-timestamp: 2026-07-06T04:00:00Z
+timestamp: 2026-07-12T15:00:00Z
 ---
 
 **Status: planned — none of this is implemented yet.** The repository should evolve toward this model; agents must not partially apply it (e.g. bump versions or create branches) without explicit direction.
@@ -29,7 +29,7 @@ The [idle-callback guard](idle-callback-guard.md) requirement applies to both li
 
 ## Core dialect floors (per line, not shared)
 
-Each version line hosts its own `core/` copy (the framework-agnostic engine — see the core/adapter architecture established by the [`refactor-core-adapter-architecture`](../../openspec/changes/refactor-core-adapter-architecture/) change), and each line's `core/` is dialected to **that line's own Angular-floor minimum TypeScript** — not a single floor shared across both lines. This lets each line's `core/` take advantage of the best language features its own floor allows, alongside that line's own Angular capabilities.
+Each version line hosts its own `core/` copy (the framework-agnostic engine — see the core/adapter architecture established by the [`refactor-core-adapter-architecture`](../../openspec/changes/refactor-core-adapter-architecture/) change and recorded in [Core/Adapter Library Architecture](core-adapter-architecture.md)), and each line's `core/` is dialected to **that line's own Angular-floor minimum TypeScript** — not a single floor shared across both lines. This lets each line's `core/` take advantage of the best language features its own floor allows, alongside that line's own Angular capabilities.
 
 Verified against the [official Angular compatibility table](https://angular.dev/reference/versions) (2026-07-06):
 

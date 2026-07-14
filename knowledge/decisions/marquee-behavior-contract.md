@@ -27,9 +27,9 @@ The current implementation predates signal inputs and had accumulated undefined 
 
 # What it affects
 
-- [marquee.service.ts](../../projects/ngx-fast-marquee/src/services/marquee.service.ts) — mask precedence (correction 1), mask-independent-of-motion CSS relocation (correction 2, in [ngx-fast-marquee.component.scss](../../projects/ngx-fast-marquee/src/components/ngx-fast-marquee/ngx-fast-marquee.component.scss)), numeric speed floor (correction 3).
-- [ngx-fast-marquee.component.ts](../../projects/ngx-fast-marquee/src/components/ngx-fast-marquee/ngx-fast-marquee.component.ts) — the post-init `effect()` bridge (correction 4) and its `updated`/`mounted` emission rules (correction 5).
-- [reduced-motion.service.ts](../../projects/ngx-fast-marquee/src/services/reduced-motion.service.ts) — the live `matchMedia` signal (correction 6).
+- [`animation.ts`](../../projects/ngx-fast-marquee/src/core/animation.ts) — mask precedence (correction 1) and numeric speed floor (correction 3); mask-independent-of-motion CSS (correction 2) in [`ngx-fast-marquee.component.scss`](../../projects/ngx-fast-marquee/src/adapter/ngx-fast-marquee.component.scss).
+- [`ngx-fast-marquee.component.ts`](../../projects/ngx-fast-marquee/src/adapter/ngx-fast-marquee.component.ts) — the post-init `effect()` bridge (correction 4) and its `updated`/`mounted` emission rules (correction 5).
+- [`reduced-motion.ts`](../../projects/ngx-fast-marquee/src/core/reduced-motion.ts) — the live `matchMedia` signal (correction 6).
 - A new `playground` e2e scenario ([e2e/AGENTS.md](../../e2e/AGENTS.md)) binds every marquee input to URL query params over fixed content, so the black-box suite (`e2e/tests/marquee-*.spec.ts`) can drive and assert every feature and edge case without adding test hooks to [src/](../../src/).
 - This behavior contract is the durable asset for the in-flight from-scratch refactor: its e2e suite is the acceptance bar the refactor must keep passing unchanged.
 

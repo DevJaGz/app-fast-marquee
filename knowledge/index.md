@@ -15,7 +15,7 @@ okf_version: '0.1'
 
 # Decisions
 
-- [Decisions](decisions/index.md) - Architectural and process decisions with rationale: the planned branch model and two-version-line publishing strategy, the Angular 20 full-idiom-adoption upgrade, the idle-callback guard, and the corrected marquee behavior contract.
+- [Decisions](decisions/index.md) - Architectural and process decisions with rationale: the planned branch model and two-version-line publishing strategy, the Angular 20 full-idiom-adoption upgrade, the idle-callback guard, the corrected marquee behavior contract, and the core/adapter library architecture.
 
 # Lessons
 
