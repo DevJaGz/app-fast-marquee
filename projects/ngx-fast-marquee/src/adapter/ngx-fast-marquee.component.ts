@@ -9,6 +9,7 @@ import {
   HostBinding,
   Inject,
   Input,
+  NgZone,
   OnChanges,
   OnDestroy,
   Output,
@@ -142,6 +143,7 @@ export class NgxFastMarqueeComponent implements OnChanges, AfterViewInit, OnDest
   constructor(
     private readonly _hostRef: ElementRef<HTMLElement>,
     private readonly _cdr: ChangeDetectorRef,
+    private readonly _ngZone: NgZone,
     // eslint-disable-next-line @typescript-eslint/ban-types -- PLATFORM_ID's declared Angular type is exactly `Object`
     @Inject(PLATFORM_ID) private readonly _platformId: Object
   ) {
@@ -232,10 +234,17 @@ export class NgxFastMarqueeComponent implements OnChanges, AfterViewInit, OnDest
   }
 
   private _bootEngine(): void {
+    // core/'s engine drives these callbacks from requestAnimationFrame/MutationObserver/
+    // ResizeObserver — zone.js (0.11.4) doesn't reliably patch all of these, so a callback can run
+    // outside the Angular zone: markForCheck() alone then marks the view dirty without anything
+    // triggering the next tick to actually flush it. NgZone.run() guarantees a tick regardless of
+    // which zone invoked the callback.
     const reducedMotionSource = createReducedMotionSource(matches => {
-      this._prefersReducedMotion = matches;
-      this._engine?.requestReplan();
-      this._cdr.markForCheck();
+      this._ngZone.run(() => {
+        this._prefersReducedMotion = matches;
+        this._engine?.requestReplan();
+        this._cdr.markForCheck();
+      });
     });
     this._reducedMotionSource = reducedMotionSource;
     this._prefersReducedMotion = reducedMotionSource.matches();
@@ -245,12 +254,16 @@ export class NgxFastMarqueeComponent implements OnChanges, AfterViewInit, OnDest
       inner: this._marqueeInnerRef.nativeElement,
       getConfig: () => ({ direction: this.direction, autoFill: this.autoFill, animated: this.animated }),
       onMeasured: sizeInPx => {
-        this._measuredSize = sizeInPx;
-        this._cdr.markForCheck();
+        this._ngZone.run(() => {
+          this._measuredSize = sizeInPx;
+          this._cdr.markForCheck();
+        });
       },
       onUpdated: () => {
-        this.updated.emit();
-        this._cdr.markForCheck();
+        this._ngZone.run(() => {
+          this.updated.emit();
+          this._cdr.markForCheck();
+        });
       },
     });
     this._engine = engine;

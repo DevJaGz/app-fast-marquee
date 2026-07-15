@@ -29,8 +29,8 @@
 
 - [x] 4.1 Port `core/**` specs from Vitest to Jasmine/Karma (`jasmine.createSpy`, `jasmine.clock()`; no TestBed) and get `ng test ngx-fast-marquee` green
 - [x] 4.2 Rewrite adapter specs as Angular 12 TestBed specs covering module declaration, input reactivity via `ngOnChanges`, output emissions, and the provider function
-- [ ] 4.3 **(confirm)** Wire the black-box Playwright e2e suite to run against the v12 app: standalone Playwright on modern Node (no `ng e2e` builder in CLI 12), preferably via Docker compose with the app container on Node 14 and the Playwright container on modern Node — e2e wiring only, assertions and scenarios stay untouched; infra edits (`docker-compose.e2e.yml`, e2e support scripts) are guardrail-gated
-- [ ] 4.4 Run the full e2e behavior-contract suite against the `12.x` build until every scenario passes (acceptance gate)
+- [x] 4.3 **(confirm)** Wire the black-box Playwright e2e suite to run against the v12 app: standalone Playwright on modern Node (no `ng e2e` builder in CLI 12), preferably via Docker compose with the app container on Node 14 and the Playwright container on modern Node — e2e wiring only, assertions and scenarios stay untouched; infra edits (`docker-compose.e2e.yml`, e2e support scripts) are guardrail-gated
+- [x] 4.4 Run the full e2e behavior-contract suite against the `12.x` build until every scenario passes (acceptance gate)
 
 ## 5. Documentation and knowledge
 

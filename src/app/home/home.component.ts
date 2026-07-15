@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 
 /**
  * Renders `<ngx-fast-marquee>` only after an idle callback fires, mirroring the 20.x line's
@@ -16,18 +16,27 @@ export class HomeComponent implements OnInit, OnDestroy {
   showMarquee = false;
   private _idleHandle: number | undefined;
 
-  constructor(private readonly _cdr: ChangeDetectorRef) {}
+  constructor(private readonly _cdr: ChangeDetectorRef, private readonly _ngZone: NgZone) {}
 
   ngOnInit(): void {
     const idleWindow = window as unknown as {
-      requestIdleCallback: (callback: () => void) => number;
+      requestIdleCallback: (callback: () => void, options?: { timeout: number }) => number;
       cancelIdleCallback: (handle: number) => void;
     };
     idleWindow.cancelIdleCallback(0);
-    this._idleHandle = idleWindow.requestIdleCallback(() => {
-      this.showMarquee = true;
-      this._cdr.markForCheck();
-    });
+    // An explicit timeout guarantees the callback fires even if the page never reports a true
+    // idle period (e.g. under automated-test load) — real browsers don't bound requestIdleCallback
+    // otherwise. zone.js doesn't reliably patch requestIdleCallback, so the callback can run
+    // outside the Angular zone — NgZone.run() guarantees the state change actually reaches the DOM.
+    this._idleHandle = idleWindow.requestIdleCallback(
+      () => {
+        this._ngZone.run(() => {
+          this.showMarquee = true;
+          this._cdr.markForCheck();
+        });
+      },
+      { timeout: 2000 }
+    );
   }
 
   ngOnDestroy(): void {

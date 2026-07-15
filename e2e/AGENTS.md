@@ -1,6 +1,6 @@
 # e2e — End-to-End Suite
 
-Playwright suite for the whole application. There is **one** entry point — the [`e2e` target](../angular.json) — and every test runs inside that single invocation; issue-specific checks are just test cases within the suite.
+Playwright suite for the whole application. There is **one** entry point — [`npm run e2e`](../package.json) — and every test runs inside that single invocation; issue-specific checks are just test cases within the suite.
 
 ## Overview
 
@@ -12,11 +12,14 @@ Playwright suite for the whole application. There is **one** entry point — the
 | Playwright config                              | [`playwright.config.ts`](../playwright.config.ts)     |
 | Docker runner                                  | [`docker-compose.e2e.yml`](../docker-compose.e2e.yml) |
 
-## How it runs
+## How it runs (12.x branch)
 
-- [`pnpm e2e`](../package.json) — the full suite in Docker: [`support/e2e-docker.mjs`](support/e2e-docker.mjs) derives `PLAYWRIGHT_VERSION` from the installed [`@playwright/test`](../package.json) and runs [`docker compose run --rm`](../docker-compose.e2e.yml); the official Playwright image hosts the servers, browsers, and test run in one disposable container, and nothing is published to host ports.
-- [`pnpm e2e:local`](../package.json) — the same suite without Docker (`ng e2e`); requires a one-time `pnpm exec playwright install chromium webkit`.
-- Flow: `ng e2e` → the [`playwright-ng-schematics`](https://github.com/jfgreffier/playwright-ng-schematics) builder runs `playwright test` → Playwright's [`webServer`](../playwright.config.ts) boots the untouched app in **production configuration** (`ng serve --configuration production`, port 4200 — optimized, SSR/hydration-enabled, so the suite tests what ships) plus the [`no-idle-guard`](../angular.json) scenario app (`ng serve --configuration no-idle-guard`, port 4201) and the [`playground`](../angular.json) scenario app (`ng serve --configuration playground`, port 4202) → all tests execute against Chromium and WebKit in one run.
+Angular CLI 12 has no Playwright builder (`playwright-ng-schematics` targets modern Angular), and this branch's toolchain is pinned to Node 14 while Playwright needs modern Node — the two can't share one container. [`npm run e2e`](../package.json) → [`support/e2e-docker.mjs`](support/e2e-docker.mjs) derives `PLAYWRIGHT_VERSION` from the installed [`@playwright/test`](../package.json) and runs [`docker compose up`](../docker-compose.e2e.yml) with two services:
+
+- **`app`** (Node 14): `npm ci`, builds both compositions — default (`--configuration production`) and [`playground`](../angular.json) — to separate static output directories, then serves each with `http-server` on ports 4200/4202.
+- **`playwright`** (official Playwright image, modern Node): `npm ci`, waits for both `app` ports to answer (Docker Compose's internal DNS resolves `http://app:<port>`), then runs `playwright test` with [`E2E_EXTERNAL_SERVERS=1`](../playwright.config.ts) so it never tries to spawn its own `ng serve`.
+
+Nothing is published to host ports; `e2e-docker.mjs` tears both services down (`docker compose down`) after the run, whatever the outcome. There is no local (non-Docker) variant on this branch — running two incompatible Node floors side by side outside containers isn't practical.
 
 ## Scenarios
 
@@ -36,7 +39,7 @@ Before proceeding, read and follow the repository conventions in [`knowledge/con
 
 - **Version derivation**: the Docker image tag in [`docker-compose.e2e.yml`](../docker-compose.e2e.yml) is interpolated from `PLAYWRIGHT_VERSION`, which [`support/e2e-docker.mjs`](support/e2e-docker.mjs) sets from the installed [`@playwright/test`](../package.json) — never hardcode the tag; upgrading the package is all that's needed.
 - **Decision ladder for new tests** (prefer the earliest rung that works): (1) a plain spec in [`tests/`](tests/) against the default app; (2) Playwright-side simulation — `addInitScript`, `page.route`, clock control — like the Safari simulation in [`tests/idle-callback-guard.spec.ts`](tests/idle-callback-guard.spec.ts); (3) a new scenario, only when the app's provider/DI composition itself must differ.
-- **Scenario budget**: each scenario costs a dev-server instance. When a **third** scenario is added, migrate scenario serving from per-scenario `ng serve` to per-scenario `ng build` outputs hosted by a single static file server, and update [`playwright.config.ts`](../playwright.config.ts) accordingly.
-- **One suite**: new tests go in [`tests/`](tests/) and must pass within the single [`pnpm e2e`](../package.json) invocation; do not add separately-run test targets.
+- **Scenario budget**: each scenario costs a build + a static-server port in the `app` service. When adding one, mirror the `playground` composition's pattern in [`docker-compose.e2e.yml`](../docker-compose.e2e.yml), [`playwright.config.ts`](../playwright.config.ts), and [`e2e/support/servers.ts`](support/servers.ts).
+- **One suite**: new tests go in [`tests/`](tests/) and must pass within the single [`npm run e2e`](../package.json) invocation; do not add separately-run test targets.
 - **No test hooks in app code**: follow convention **#14** in [`knowledge/conventions.md`](../knowledge/conventions.md) — add a scenario instead of modifying runtime source.
 - **Fixture sync**: a fixture that replaces a [`src/`](../src/) file must keep its exports in sync with the file it replaces.

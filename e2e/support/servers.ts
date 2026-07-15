@@ -12,8 +12,16 @@
  * `e2e/tests/idle-callback-guard.spec.ts` and `knowledge/decisions/idle-callback-guard.md`.
  */
 
-/** The untouched application, exactly as `pnpm start` serves it. */
-export const APP_URL = 'http://localhost:4200';
+/**
+ * `docker-compose.e2e.yml` runs the app on Node 14 in its own `app` service and Playwright on
+ * modern Node in a separate `playwright` service (`ng e2e`'s Playwright builder doesn't exist in
+ * CLI 12, and both Node floors can't coexist in one container) — the `playwright` service sets
+ * these to `http://app:<port>` (Docker Compose's internal DNS) to reach it. Falls back to
+ * localhost for running the suite outside Docker against manually-served builds.
+ */
+
+/** The untouched application, exactly as `npm run start` serves it. */
+export const APP_URL = process.env['APP_URL'] ?? 'http://localhost:4200';
 
 /** The `playground` scenario: one `<ngx-fast-marquee>` driven entirely by URL query params. */
-export const PLAYGROUND_APP_URL = 'http://localhost:4202';
+export const PLAYGROUND_APP_URL = process.env['PLAYGROUND_APP_URL'] ?? 'http://localhost:4202';

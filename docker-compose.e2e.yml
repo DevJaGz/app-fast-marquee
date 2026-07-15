@@ -1,25 +1,54 @@
-# Self-contained e2e runner: browsers, the Angular dev servers, and the Playwright
-# suite all live in one disposable container — nothing is published to host ports.
+# Two-runtime e2e runner for the 12.x line: `ng e2e`'s Playwright builder doesn't exist in
+# Angular CLI 12, and this branch's Node-14-only toolchain can't share a container with the
+# modern Node Playwright needs — so the app (Node 14) and Playwright (modern Node) run as
+# separate services. `app` builds both compositions (default, playground) and serves the static
+# output; `playwright` shares `app`'s network namespace (`network_mode: service:app`) and reaches
+# it via `localhost` — Chromium's HTTPS-Upgrades feature forcibly upgrades http:// navigation to
+# https:// for regular hostnames (failing with net::ERR_SSL_PROTOCOL_ERROR against these
+# plain-HTTP servers), but exempts `localhost`/loopback by design, and this also avoids relying on
+# Docker Compose's DNS alias resolving in time. Nothing is published to host ports.
 # The image tag is interpolated from the installed @playwright/test version by
-# e2e/support/e2e-docker.mjs, the `pnpm e2e` entry point — never hardcode it here.
+# e2e/support/e2e-docker.mjs, the `npm run e2e` entry point — never hardcode it here.
 services:
-  e2e:
-    image: 'mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION:?run via pnpm e2e (set by e2e/support/e2e-docker.mjs)}-noble'
+  app:
+    image: 'node:14-bullseye'
     working_dir: /work
-    ipc: host
     environment:
-      CI: '1'
       NG_CLI_ANALYTICS: 'false'
     volumes:
       - .:/work
-      # Overlay volumes keep the Linux install and caches apart from the host's
-      # Windows-native node_modules (esbuild, @parcel/watcher, lmdb binaries).
-      - e2e-node-modules:/work/node_modules
-      - e2e-angular-cache:/work/.angular
-      - e2e-pnpm-store:/pnpm-store
-    command: bash -c "npm i -g pnpm@11 && pnpm install --frozen-lockfile --store-dir /pnpm-store && pnpm exec ng e2e"
+      # Overlay volume keeps the Linux install apart from the host's Windows-native node_modules.
+      - e2e-app-node-modules:/work/node_modules
+    command: >
+      bash -c "npm ci &&
+        npx ng build app-fast-marquee --configuration production --output-path dist/e2e-default &&
+        npx ng build app-fast-marquee --configuration playground --output-path dist/e2e-playground &&
+        npx http-server dist/e2e-default -p 4200 -a 0.0.0.0 --silent &
+        npx http-server dist/e2e-playground -p 4202 -a 0.0.0.0 --silent &
+        wait"
+
+  playwright:
+    image: 'mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION:?run via npm run e2e (set by e2e/support/e2e-docker.mjs)}-noble'
+    working_dir: /work
+    network_mode: 'service:app'
+    depends_on:
+      - app
+    environment:
+      CI: '1'
+      E2E_EXTERNAL_SERVERS: '1'
+      APP_URL: 'http://localhost:4200'
+      PLAYGROUND_APP_URL: 'http://localhost:4202'
+    volumes:
+      - .:/work
+      - e2e-playwright-node-modules:/work/node_modules
+    command: >
+      bash -c "npm ci &&
+        for url in http://localhost:4200 http://localhost:4202; do
+          echo \"waiting for $$url\";
+          until curl -fs \"$$url\" > /dev/null; do sleep 2; done;
+        done &&
+        npx playwright test"
 
 volumes:
-  e2e-node-modules:
-  e2e-angular-cache:
-  e2e-pnpm-store:
+  e2e-app-node-modules:
+  e2e-playwright-node-modules:

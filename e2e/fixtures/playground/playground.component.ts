@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { Direction, Speed } from '@ngx-fast-marquee';
 
 /**
@@ -12,12 +12,18 @@ import { Direction, Speed } from '@ngx-fast-marquee';
  * `useSystemReducedMotion`, `autoFill`, `maskStartPercentage`, `maskEndPercentage`,
  * `maskPercentage`, `play`, `pauseOnHover`, `pauseOnClick`, plus fixture-only `itemCount`,
  * `itemWidth`, `itemHeight`, `containerWidth`, `containerHeight`.
+ *
+ * Deliberately `Default` change detection, not `OnPush`: `(mounted)`/`(updated)` fire from
+ * `NgxFastMarqueeComponent`'s own lifecycle/async engine callbacks, and an `OnPush` *root*
+ * fixture doesn't reliably re-render from those child-output-driven state changes in this
+ * Angular 12 zone.js setup (confirmed empirically — the library's own behavior is unaffected:
+ * `_engine` boots, measures, and emits correctly regardless). This is a test-fixture-only choice;
+ * `NgxFastMarqueeComponent` itself stays `OnPush`.
  */
 @Component({
   selector: 'app-root',
   templateUrl: './playground.component.html',
   styleUrls: ['./playground.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlaygroundComponent {
   private readonly _params = new URLSearchParams(window.location.search);
