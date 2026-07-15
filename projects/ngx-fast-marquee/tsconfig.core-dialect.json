@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": [],
+    "lib": ["ES2017", "DOM"]
+  },
+  "include": ["src/core/**/*.ts"],
+  "exclude": ["src/core/**/*.spec.ts"]
+}

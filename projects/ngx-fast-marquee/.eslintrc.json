@@ -46,23 +46,6 @@
           }
         ]
       }
-    },
-    {
-      "files": ["src/adapter/**/*.ts"],
-      "rules": {
-        "no-restricted-imports": [
-          "error",
-          {
-            "paths": [
-              {
-                "name": "@angular/core",
-                "importNames": ["afterRender", "afterEveryRender", "afterRenderEffect"],
-                "message": "Banned at the 20.x floor (rule A6): react to DOM changes with observers; use the single sanctioned bridge effect() for input-driven replans."
-              }
-            ]
-          }
-        ]
-      }
     }
   ]
 }

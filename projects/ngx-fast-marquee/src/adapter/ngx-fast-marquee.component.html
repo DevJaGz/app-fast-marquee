@@ -1,10 +1,10 @@
 <div
   #marqueeInner
   class="ngx-fast-marquee__inner"
-  [attr.data-speed]="qualitativeSpeed()"
-  [attr.data-pause-on-hover]="pauseOnHover()"
-  [attr.data-pause-on-click]="pauseOnClick()"
-  [style.--_animation-play-state]="animationPlayState()"
-  [style.--_animation-duration]="animationDurationCss()">
-  <ng-content />
+  [attr.data-speed]="qualitativeSpeed"
+  [attr.data-pause-on-hover]="pauseOnHover"
+  [attr.data-pause-on-click]="pauseOnClick"
+  [style.--_animation-play-state]="animationPlayState"
+  [style.--_animation-duration]="animationDurationCss">
+  <ng-content></ng-content>
 </div>

@@ -11,12 +11,12 @@ import { provideFastMarquee } from './fast-marquee.providers';
 @Component({
   template: `
     @defer (on idle) {
-      <ngx-fast-marquee>
-        <div>Item 1</div>
-        <div>Item 2</div>
-      </ngx-fast-marquee>
+    <ngx-fast-marquee>
+      <div>Item 1</div>
+      <div>Item 2</div>
+    </ngx-fast-marquee>
     } @placeholder {
-      <div class="defer-placeholder">placeholder</div>
+    <div class="defer-placeholder">placeholder</div>
     }
   `,
   imports: [NgxFastMarqueeComponent],

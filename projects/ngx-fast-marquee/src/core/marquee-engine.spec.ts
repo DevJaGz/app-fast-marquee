@@ -20,7 +20,7 @@ function createHarness(options?: { direction?: Direction; autoFill?: boolean; an
       right: 400,
       bottom: 60,
       toJSON: () => ({}),
-    }) as DOMRect;
+    } as DOMRect);
   inner.getBoundingClientRect = () =>
     ({
       width: 100,
@@ -32,7 +32,7 @@ function createHarness(options?: { direction?: Direction; autoFill?: boolean; an
       right: 100,
       bottom: 60,
       toJSON: () => ({}),
-    }) as DOMRect;
+    } as DOMRect);
   const config = {
     direction: options?.direction ?? 'left',
     autoFill: options?.autoFill ?? true,

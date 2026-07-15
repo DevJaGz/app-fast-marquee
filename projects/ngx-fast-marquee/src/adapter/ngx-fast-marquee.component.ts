@@ -1,22 +1,26 @@
 import { isPlatformBrowser } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
-  DestroyRef,
   ElementRef,
+  EventEmitter,
+  HostBinding,
+  Inject,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
   PLATFORM_ID,
-  afterNextRender,
-  computed,
-  effect,
-  inject,
-  input,
-  output,
-  signal,
-  viewChild,
+  SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import {
   Direction,
   MarqueeEngine,
+  QualitativeSpeed,
+  ReducedMotionSource,
   Speed,
   createReducedMotionSource,
   ensureIdleCallbackFallback,
@@ -30,32 +34,19 @@ import {
 
 @Component({
   selector: 'ngx-fast-marquee',
-  standalone: true,
   templateUrl: './ngx-fast-marquee.component.html',
-  styleUrl: './ngx-fast-marquee.component.scss',
+  styleUrls: ['./ngx-fast-marquee.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    '[attr.data-direction]': 'direction()',
-    '[attr.data-animated]': 'animated()',
-    '[attr.data-auto-fill]': 'autoFill()',
-    '[attr.data-use-system-reduced-motion]': 'useSystemReducedMotion()',
-    '[attr.data-masked]': 'maskEnabled()',
-    '[style.--_mask-start-percentage]': 'maskStartCss()',
-    '[style.--_mask-end-percentage]': 'maskEndCss()',
-  },
 })
-export class NgxFastMarqueeComponent {
-  private readonly _hostRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly _destroyRef = inject(DestroyRef);
-  private readonly _platformId = inject(PLATFORM_ID);
-
-  private readonly _marqueeInnerRef = viewChild.required<ElementRef<HTMLElement>>('marqueeInner');
+export class NgxFastMarqueeComponent implements OnChanges, AfterViewInit, OnDestroy {
+  @ViewChild('marqueeInner', { static: true })
+  private readonly _marqueeInnerRef!: ElementRef<HTMLElement>;
 
   /**
    * Direction of the marquee.
    * @default 'left'
    */
-  readonly direction = input<Direction>('left');
+  @Input() direction: Direction = 'left';
 
   /**
    * Speed of the marquee.
@@ -63,21 +54,21 @@ export class NgxFastMarqueeComponent {
    * The quantitative speed is calculated based on the number of the marquee items.
    * @default 'medium'
    */
-  readonly speed = input<Speed>('medium');
+  @Input() speed: Speed = 'medium';
 
   /**
    * Whether to have into account the system reduced motion.
    * If true, the marquee will not be animated when the system has reduced motion.
    * @default false
    */
-  readonly useSystemReducedMotion = input(false);
+  @Input() useSystemReducedMotion = false;
 
   /**
    * Whether to fill the marquee with duplicated items.
    * If true, the marquee will be filled with duplicated items.
    * @default true
    */
-  readonly autoFill = input(true);
+  @Input() autoFill = true;
 
   /**
    * Start percentage of the mask.
@@ -88,7 +79,7 @@ export class NgxFastMarqueeComponent {
    * - 0 is the top side of the marquee and 100 is the center of the marquee.
    * @default 0
    */
-  readonly maskStartPercentage = input(0);
+  @Input() maskStartPercentage = 0;
 
   /**
    * End percentage of the mask.
@@ -99,7 +90,7 @@ export class NgxFastMarqueeComponent {
    * - 0 is the bottom side of the marquee and 100 is the center of the marquee.
    * @default 0
    */
-  readonly maskEndPercentage = input(0);
+  @Input() maskEndPercentage = 0;
 
   /**
    * Percentage of the mask.
@@ -107,100 +98,162 @@ export class NgxFastMarqueeComponent {
    * start to center and end to the center.
    * @default 0
    */
-  readonly maskPercentage = input(0);
+  @Input() maskPercentage = 0;
 
   /**
    * Whether to play the marquee.
    * True to play the marquee animation, false to pause the marquee animation.
    * @default true
    */
-  readonly play = input(true);
+  @Input() play = true;
 
   /**
    * Whether to pause the marquee when the mouse is over the marquee.
    * @default false
    */
-  readonly pauseOnHover = input(false);
+  @Input() pauseOnHover = false;
 
   /**
    * Whether to pause the marquee when the mouse is clicked over the marquee.
    */
-  readonly pauseOnClick = input(false);
+  @Input() pauseOnClick = false;
 
   /**
    * Event emitted when the marquee is mounted in the view.
    * Emitted once.
    */
-  readonly mounted = output<void>();
+  @Output() readonly mounted = new EventEmitter<void>();
 
   /**
    * Event emitted when the marquee is mounted updated.
    * Emitted each time the marquee is updated.
    */
-  readonly updated = output<void>();
+  @Output() readonly updated = new EventEmitter<void>();
 
   /** Live system reduced-motion preference, fed by the core matchMedia source once the engine boots. */
-  private readonly _prefersReducedMotion = signal(false);
+  private _prefersReducedMotion = false;
 
   /** Track size along the scroll axis, set by the engine after each committed cycle (design D3). */
-  private readonly _measuredSize = signal(0);
+  private _measuredSize = 0;
 
   private _engine: MarqueeEngine | null = null;
+  private _reducedMotionSource: ReducedMotionSource | null = null;
 
-  protected readonly animated = computed(() =>
-    resolveAnimated(this.useSystemReducedMotion(), this._prefersReducedMotion())
-  );
-  protected readonly qualitativeSpeed = computed(() => resolveQualitativeSpeed(this.speed()));
-  protected readonly animationDurationCss = computed(() => {
-    const seconds = resolveNumericDurationSeconds(this.speed(), this._measuredSize());
-    return seconds === null ? null : `${seconds}s`;
-  });
-  protected readonly animationPlayState = computed(() => resolvePlayState(this.play(), this.speed()));
-  private readonly _resolvedMask = computed(() =>
-    resolveMask(this.maskPercentage(), this.maskStartPercentage(), this.maskEndPercentage())
-  );
-  protected readonly maskStartCss = computed(() => `${this._resolvedMask().startPercentage}%`);
-  protected readonly maskEndCss = computed(() => `${this._resolvedMask().endPercentage}%`);
-  protected readonly maskEnabled = computed(() => isMaskEnabled(this._resolvedMask()));
-
-  constructor() {
-    // Defensive guard for non-`@defer` instantiation paths only; `@defer (on idle)` crashes
-    // before this constructor can run, so that case requires `provideFastMarquee()` at bootstrap.
-    // Documented A5 exemption: touches only globals (never the DOM), idempotent, no-op on the server.
+  constructor(
+    private readonly _hostRef: ElementRef<HTMLElement>,
+    private readonly _cdr: ChangeDetectorRef,
+    // eslint-disable-next-line @typescript-eslint/ban-types -- PLATFORM_ID's declared Angular type is exactly `Object`
+    @Inject(PLATFORM_ID) private readonly _platformId: Object
+  ) {
+    // Defensive guard for non-eager instantiation paths only; consumers rendering this component
+    // behind their own idle-deferred trigger require `provideFastMarquee()`/`NgxFastMarqueeModule`
+    // registered at bootstrap — see `fast-marquee.providers.ts`.
     ensureIdleCallbackFallback();
+  }
 
-    // The single sanctioned bridge effect (design D-effect): duplication-affecting inputs mark the
-    // engine dirty. It sets no signal and reads no DOM — the engine measures after render commits.
-    effect(() => {
-      this.autoFill();
-      this.direction();
-      this.animated();
+  @HostBinding('attr.data-direction') protected get _dataDirection(): Direction {
+    return this.direction;
+  }
+
+  @HostBinding('attr.data-animated') protected get _dataAnimated(): boolean {
+    return this.animated;
+  }
+
+  @HostBinding('attr.data-auto-fill') protected get _dataAutoFill(): boolean {
+    return this.autoFill;
+  }
+
+  @HostBinding('attr.data-use-system-reduced-motion') protected get _dataUseSystemReducedMotion(): boolean {
+    return this.useSystemReducedMotion;
+  }
+
+  @HostBinding('attr.data-masked') protected get _dataMasked(): boolean {
+    return this.maskEnabled;
+  }
+
+  @HostBinding('style.--_mask-start-percentage') protected get _maskStartCssProperty(): string {
+    return this.maskStartCss;
+  }
+
+  @HostBinding('style.--_mask-end-percentage') protected get _maskEndCssProperty(): string {
+    return this.maskEndCss;
+  }
+
+  get animated(): boolean {
+    return resolveAnimated(this.useSystemReducedMotion, this._prefersReducedMotion);
+  }
+
+  get qualitativeSpeed(): QualitativeSpeed | null {
+    return resolveQualitativeSpeed(this.speed);
+  }
+
+  get animationDurationCss(): string | null {
+    const seconds = resolveNumericDurationSeconds(this.speed, this._measuredSize);
+    return seconds === null ? null : `${seconds}s`;
+  }
+
+  get animationPlayState(): 'running' | 'paused' {
+    return resolvePlayState(this.play, this.speed);
+  }
+
+  private get _resolvedMask() {
+    return resolveMask(this.maskPercentage, this.maskStartPercentage, this.maskEndPercentage);
+  }
+
+  get maskStartCss(): string {
+    return `${this._resolvedMask.startPercentage}%`;
+  }
+
+  get maskEndCss(): string {
+    return `${this._resolvedMask.endPercentage}%`;
+  }
+
+  get maskEnabled(): boolean {
+    return isMaskEnabled(this._resolvedMask);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Mirrors the 20.x adapter's single bridge effect: only duplication-affecting inputs mark the
+    // engine dirty. Masks/speed/play are read fresh by the getters above on every CD pass.
+    if (changes['autoFill'] || changes['direction'] || changes['useSystemReducedMotion']) {
       this._engine?.requestReplan();
-    });
+    }
+  }
 
-    afterNextRender(() => {
-      if (!isPlatformBrowser(this._platformId)) return;
-      this._bootEngine();
-      this.mounted.emit();
-    });
+  ngAfterViewInit(): void {
+    if (!isPlatformBrowser(this._platformId)) return;
+    this._bootEngine();
+    this.mounted.emit();
+  }
+
+  ngOnDestroy(): void {
+    this._engine?.destroy();
+    this._reducedMotionSource?.dispose();
   }
 
   private _bootEngine(): void {
-    const reducedMotionSource = createReducedMotionSource(matches => this._prefersReducedMotion.set(matches));
-    this._prefersReducedMotion.set(reducedMotionSource.matches());
+    const reducedMotionSource = createReducedMotionSource(matches => {
+      this._prefersReducedMotion = matches;
+      this._engine?.requestReplan();
+      this._cdr.markForCheck();
+    });
+    this._reducedMotionSource = reducedMotionSource;
+    this._prefersReducedMotion = reducedMotionSource.matches();
+
     const engine = new MarqueeEngine({
       host: this._hostRef.nativeElement,
-      inner: this._marqueeInnerRef().nativeElement,
-      getConfig: () => ({ direction: this.direction(), autoFill: this.autoFill(), animated: this.animated() }),
-      onMeasured: sizeInPx => this._measuredSize.set(sizeInPx),
-      onUpdated: () => this.updated.emit(),
+      inner: this._marqueeInnerRef.nativeElement,
+      getConfig: () => ({ direction: this.direction, autoFill: this.autoFill, animated: this.animated }),
+      onMeasured: sizeInPx => {
+        this._measuredSize = sizeInPx;
+        this._cdr.markForCheck();
+      },
+      onUpdated: () => {
+        this.updated.emit();
+        this._cdr.markForCheck();
+      },
     });
     this._engine = engine;
-
-    this._destroyRef.onDestroy(() => {
-      engine.destroy();
-      reducedMotionSource.dispose();
-    });
     engine.start();
   }
 }

@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference -- ambient global .d.ts (no exports) can't be pulled in via `import`
+/// <reference path="./idle-callback.types.d.ts" />
 /**
  * Ensures `window.requestIdleCallback`/`window.cancelIdleCallback` are always both present
  * and mutually consistent (both native, or both `setTimeout`/`clearTimeout`-backed fallbacks).

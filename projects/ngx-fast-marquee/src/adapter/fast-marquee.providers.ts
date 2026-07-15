@@ -1,15 +1,21 @@
-import { EnvironmentProviders, provideAppInitializer } from '@angular/core';
+import { APP_INITIALIZER, Provider } from '@angular/core';
 import { ensureIdleCallbackFallback } from '../core';
 
 /**
- * Registers the idle-callback compatibility guard as an application initializer, so it runs during
+ * Registers the idle-callback compatibility guard as an `APP_INITIALIZER`, so it runs during
  * application bootstrap — before the first change detection pass, and therefore before any
- * `@defer (on idle)` block can construct Angular's `IdleScheduler` (see `angular/angular#53721`).
+ * consumer-driven idle-deferred rendering can hit `angular/angular#53721`'s asymmetry.
  *
- * Standalone-component consumers must add this to their `bootstrapApplication()` providers when
- * rendering `<ngx-fast-marquee>` inside a `@defer` block. `NgModule` consumers get it automatically
- * through `NgxFastMarqueeModule`.
+ * `NgModule` consumers get this automatically through `NgxFastMarqueeModule`'s own `providers`;
+ * consumers who declare `NgxFastMarqueeComponent` directly (bypassing the module) must add this
+ * to their root module's `providers` themselves.
  */
-export function provideFastMarquee(): EnvironmentProviders {
-  return provideAppInitializer(ensureIdleCallbackFallback);
+export function provideFastMarquee(): Provider[] {
+  return [
+    {
+      provide: APP_INITIALIZER,
+      useValue: ensureIdleCallbackFallback,
+      multi: true,
+    },
+  ];
 }
