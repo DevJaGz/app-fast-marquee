@@ -19,9 +19,10 @@ Demo application and publishable Angular library in a single monorepo.
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `pnpm start`        | Serve the application in development mode                                                                                                          |
 | `pnpm build:app`    | Build the application                                                                                                                              |
-| `pnpm build:lib`    | Build the publishable library                                                                                                                      |
+| `pnpm build:lib`    | Build the publishable library, including compiling and packaging its `ng add`/`ng update` schematics                                              |
 | `pnpm test:app`     | Run the application's unit tests (Vitest)                                                                                                          |
 | `pnpm test:lib`     | Run the library's unit tests (Vitest)                                                                                                              |
+| `pnpm test:schematics` | Run the library's schematics tests (plain Vitest, node environment)                                                                             |
 | `pnpm lint`         | Run ESLint across the workspace                                                                                                                    |
 | `pnpm lint:fix`     | Run ESLint and auto-fix violations                                                                                                                 |
 | `pnpm format`       | Format code with Prettier (rewrites files)                                                                                                         |

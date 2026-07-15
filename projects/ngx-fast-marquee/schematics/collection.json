@@ -1,0 +1,9 @@
+{
+  "schematics": {
+    "ng-add": {
+      "factory": "./ng-add/index",
+      "schema": "./ng-add/schema.json",
+      "description": "Installs ngx-fast-marquee and registers provideFastMarquee() in the project's root providers."
+    }
+  }
+}

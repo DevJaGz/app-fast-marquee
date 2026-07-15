@@ -20,7 +20,17 @@ See **Ngx Fast Marquee** in action!
 
 ## 🛠️ Installation
 
-Install the library using your favorite package manager:
+### Quick install (recommended)
+
+Run `ng add ngx-fast-marquee` in your Angular workspace. This installs the package as a dependency and automatically registers `provideFastMarquee()` in your app's root providers — the guard required for `@defer` usage (see the Safari/iOS note below).
+
+```bash
+ng add ngx-fast-marquee
+```
+
+### Manual install
+
+If you'd rather install manually (or `ng add` can't detect your workspace shape), install the package with your favorite package manager and follow the Getting Started section below to register `provideFastMarquee()` yourself.
 
 - npm
 

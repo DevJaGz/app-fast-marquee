@@ -4,10 +4,11 @@
   "scripts": {
     "start": "ng serve",
     "build:app": "ng build app-fast-marquee",
-    "build:lib": "ng build ngx-fast-marquee",
+    "build:lib": "ng build ngx-fast-marquee && tsc -p projects/ngx-fast-marquee/schematics/tsconfig.schematics.json && node projects/ngx-fast-marquee/schematics/copy-schematics-assets.mjs",
     "check:core-dialect": "node node_modules/typescript-20x-floor/lib/tsc.js -p tsconfig.core-dialect.json",
     "test:app": "ng test app-fast-marquee --watch=false",
     "test:lib": "ng test ngx-fast-marquee --watch=false",
+    "test:schematics": "tsc -p projects/ngx-fast-marquee/schematics/tsconfig.schematics.json && node projects/ngx-fast-marquee/schematics/copy-schematics-assets.mjs && tsc --noEmit -p projects/ngx-fast-marquee/schematics/tsconfig.spec.json && vitest run --config projects/ngx-fast-marquee/schematics/vitest.config.ts",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "e2e": "node e2e/support/e2e-docker.mjs",
@@ -58,6 +59,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^20.3.31",
+    "@angular-devkit/schematics": "^20.3.31",
     "@angular-eslint/builder": "^20.7.0",
     "@angular-eslint/eslint-plugin": "^20.7.0",
     "@angular-eslint/eslint-plugin-template": "^20.7.0",
@@ -68,6 +70,7 @@
     "@commitlint/cli": "^17.8.1",
     "@commitlint/config-conventional": "^17.8.1",
     "@playwright/test": "^1.61.1",
+    "@schematics/angular": "^20.3.31",
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
     "@typescript-eslint/eslint-plugin": "^8.62.1",

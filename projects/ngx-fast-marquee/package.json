@@ -29,5 +29,12 @@
     "tslib": "^2.6.2"
   },
   "license": "MIT",
-  "sideEffects": false
+  "sideEffects": false,
+  "schematics": "./schematics/collection.json",
+  "ng-add": {
+    "save": "dependencies"
+  },
+  "ng-update": {
+    "migrations": "./schematics/migrations.json"
+  }
 }

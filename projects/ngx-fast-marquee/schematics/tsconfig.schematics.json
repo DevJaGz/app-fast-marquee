@@ -1,0 +1,15 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../../dist/ngx-fast-marquee/schematics",
+    "rootDir": ".",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "ES2022",
+    "types": ["node"],
+    "declaration": false,
+    "importHelpers": false
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["**/*.spec.ts", "vitest.config.ts"]
+}
