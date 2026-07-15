@@ -4,8 +4,8 @@
 
 ## 1. Branch hygiene
 
-- [ ] 1.1 On `12.x`: commit this change's artifacts (`openspec/changes/adapt-12x-line/`) — they arrive untracked in the working tree
-- [ ] 1.2 Delete the inherited in-progress copy of `openspec/changes/adopt-two-line-branch-model/` (its authoritative home is `develop`)
+- [x] 1.1 On `12.x`: commit this change's artifacts (`openspec/changes/adapt-12x-line/`) — they arrive untracked in the working tree
+- [x] 1.2 Delete the inherited in-progress copy of `openspec/changes/adopt-two-line-branch-model/` (its authoritative home is `develop`)
 
 ## 2. Workspace conversion
 
