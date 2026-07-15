@@ -5,7 +5,7 @@ description: How to structure, link, and maintain this OKF bundle — OKF frontm
 tags:
   - meta
   - okf
-timestamp: 2026-07-06T03:00:00Z
+timestamp: 2026-07-15T12:00:00Z
 ---
 
 # Knowledge Base Maintenance
@@ -59,7 +59,7 @@ OKF does not register types centrally; this bundle deliberately uses a small fix
 - **This bundle uses relative links (§5.2), not the §5.1-recommended bundle-absolute `/…` form.** Documented deviation: the bundle root is `knowledge/`, not the repo root, so `/`-prefixed links would resolve against the repository root and render broken on GitHub and in an Obsidian vault opened at the repo root. §5.1 is a recommendation; relative links are fully conformant.
 - Do not use `[[wikilinks]]` — not OKF, and broken outside Obsidian. Relative links also satisfy the repo-wide Markdown-link rule ([conventions.md](conventions.md) convention 3).
 - Broken links are tolerated by consumers (§5.3) but are lint findings here — fix or remove them.
-- Never link into `node_modules/` — it is gitignored and absent before `npm install`/`pnpm install`, so the link is broken on GitHub and in any fresh clone. Link to the upstream package's own documentation instead.
+- Never link into `node_modules/` — it is gitignored and absent before `pnpm install`, so the link is broken on GitHub and in any fresh clone. Link to the upstream package's own documentation instead.
 
 ## Ownership boundaries — what lives where
 
@@ -88,7 +88,7 @@ Whenever a change to the repo makes, alters, or invalidates a decision, policy, 
 2. Update the concept's entry in the parent [index.md](index.md) if title or description changed.
 3. Append an entry under today's date in [log.md](log.md).
 
-All bundle markdown is covered by the repository Prettier gate (`npm run format` and lint-staged include `knowledge/**/*.md`).
+All bundle markdown is covered by the repository Prettier gate (`pnpm format` and lint-staged include `knowledge/**/*.md`).
 
 ## Lint checklist (periodic)
 

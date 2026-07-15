@@ -26,6 +26,6 @@ Pure TypeScript marquee engine for the `ngx-fast-marquee` library.
 Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../../../../knowledge/conventions.md) — they are the mandatory single source of truth.
 
 - **No Angular/RxJS** (rule A1): zero `@angular/*` or `rxjs` imports in `core/` — ESLint-enforced via [`.eslintrc.json`](../../../../.eslintrc.json).
-- **TypeScript dialect floor** (rule A2): grammar must stay within the 20.x line's 5.8.2 floor, checked by [`npm run check:core-dialect`](../../../../package.json).
-- **Tests**: co-located pure [`*.spec.ts`](marquee-engine.spec.ts) files (no TestBed); run with [`npm run test:lib`](../../../../package.json). Follow convention **#14** in [`knowledge/conventions.md`](../../../../knowledge/conventions.md) — no test seams in production code; use fake timers, spies, and mocks in specs.
+- **TypeScript dialect floor** (rule A2): grammar must stay within the 20.x line's 5.8.2 floor, checked by [`pnpm check:core-dialect`](../../../../package.json).
+- **Tests**: co-located pure [`*.spec.ts`](marquee-engine.spec.ts) files (no TestBed); run with [`pnpm test:lib`](../../../../package.json). Follow convention **#14** in [`knowledge/conventions.md`](../../../../knowledge/conventions.md) — no test seams in production code; use fake timers, spies, and mocks in specs.
 - Full architecture rules: [Core/Adapter Library Architecture](../../../../knowledge/decisions/core-adapter-architecture.md).

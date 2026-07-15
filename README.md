@@ -8,7 +8,7 @@
 This repository contains two deliverables:
 
 - **[`ngx-fast-marquee`](projects/ngx-fast-marquee/)** — a publishable Angular component library that adds fast, lightweight marquee animations to any Angular application.
-- **[`app-fast-marquee`](src/)** — a live demo application built with Angular 18.2 that showcases the library in action.
+- **[`app-fast-marquee`](src/)** — a live demo application built with Angular 20 that showcases the library in action.
 
 For library-specific installation, usage, and API docs, see [`projects/ngx-fast-marquee/README.md`](projects/ngx-fast-marquee/README.md).
 
@@ -26,14 +26,14 @@ For library-specific installation, usage, and API docs, see [`projects/ngx-fast-
 pnpm install
 ```
 
-`npm install` also works if pnpm is not available.
+[pnpm](https://pnpm.io/) is the repository's package manager ([`pnpm-lock.yaml`](pnpm-lock.yaml) is the only lockfile) — use `pnpm` for all repo commands, not `npm`.
 
 ## Development
 
 Start the dev server:
 
 ```bash
-npm run start
+pnpm start
 ```
 
 Then open [http://localhost:4200](http://localhost:4200) in your browser.
@@ -43,13 +43,13 @@ Then open [http://localhost:4200](http://localhost:4200) in your browser.
 Build the demo application:
 
 ```bash
-npm run build:app
+pnpm build:app
 ```
 
 Build and package the library:
 
 ```bash
-npm run build:lib
+pnpm build:lib
 ```
 
 ## Testing
@@ -57,10 +57,11 @@ npm run build:lib
 ### Unit tests
 
 ```bash
-ng test
+pnpm test:app
+pnpm test:lib
 ```
 
-Runs unit tests via [Karma](https://karma-runner.github.io/) / [Jasmine](https://jasmine.github.io/).
+Runs unit tests via [Vitest](https://vitest.dev/) (the `@angular/build:unit-test` builder).
 
 ### End-to-end tests
 
@@ -86,10 +87,10 @@ The suite verifies the Safari/iOS idle-callback guard ([issue #5](https://github
 
 | Command | Description |
 |---------|-------------|
-| `npm run lint` | ESLint check |
-| `npm run lint:fix` | ESLint auto-fix |
-| `npm run format` | Prettier write |
-| `npm run prettier:fix` | Prettier + ESLint fix |
+| `pnpm lint` | ESLint check |
+| `pnpm lint:fix` | ESLint auto-fix |
+| `pnpm format` | Prettier write |
+| `pnpm prettier:fix` | Prettier + ESLint fix |
 
 ## Repo Structure
 

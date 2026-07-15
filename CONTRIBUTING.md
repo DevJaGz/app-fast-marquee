@@ -29,9 +29,9 @@ pnpm install
 1. Branch off `master` with a descriptive name:
    - `feat/my-feature`
    - `fix/the-bug`
-2. Start the dev server: [`npm run start`](package.json)
-3. Build the demo app: [`npm run build:app`](package.json)
-4. Build the library: [`npm run build:lib`](package.json)
+2. Start the dev server: [`pnpm start`](package.json)
+3. Build the demo app: [`pnpm build:app`](package.json)
+4. Build the library: [`pnpm build:lib`](package.json)
 
 ---
 
@@ -41,9 +41,9 @@ Lint and formatting are mandatory and enforced by the [Husky](https://typicode.g
 
 | Check | Command |
 |-------|---------|
-| ESLint (check / fix) | [`npm run lint`](package.json) / [`npm run lint:fix`](package.json) |
-| Prettier (write / fix) | [`npm run format`](package.json) / [`npm run prettier:fix`](package.json) |
-| Unit tests ([Vitest](https://vitest.dev/), see convention 7) | [`npm run test:app`](package.json) / [`npm run test:lib`](package.json) |
+| ESLint (check / fix) | [`pnpm lint`](package.json) / [`pnpm lint:fix`](package.json) |
+| Prettier (write / fix) | [`pnpm format`](package.json) / [`pnpm prettier:fix`](package.json) |
+| Unit tests ([Vitest](https://vitest.dev/), see convention 7) | [`pnpm test:app`](package.json) / [`pnpm test:lib`](package.json) |
 | E2E ([Playwright](https://playwright.dev/) in Docker) | [`pnpm e2e`](package.json) |
 
 All tests must pass before opening a PR.

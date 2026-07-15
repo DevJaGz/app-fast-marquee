@@ -15,19 +15,19 @@ Demo application and publishable Angular library in a single monorepo.
 
 ## Key Commands
 
-| Command                | Description                                                                                                                                        |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm run start`        | Serve the application in development mode                                                                                                          |
-| `npm run build:app`    | Build the application                                                                                                                              |
-| `npm run build:lib`    | Build the publishable library                                                                                                                      |
-| `npm run test:app`     | Run the application's unit tests (Vitest)                                                                                                          |
-| `npm run test:lib`     | Run the library's unit tests (Vitest)                                                                                                              |
-| `npm run lint`         | Run ESLint across the workspace                                                                                                                    |
-| `npm run lint:fix`     | Run ESLint and auto-fix violations                                                                                                                 |
-| `npm run format`       | Format code with Prettier (rewrites files)                                                                                                         |
-| `npm run prettier:fix` | Auto-fix formatting with Prettier                                                                                                                  |
-| `pnpm e2e`             | Run the full e2e suite in Docker ([`e2e/support/e2e-docker.mjs`](e2e/support/e2e-docker.mjs) → [`docker-compose.e2e.yml`](docker-compose.e2e.yml)) |
-| `pnpm e2e:local`       | Run the full e2e suite without Docker (`ng e2e`; needs local Playwright browsers)                                                                  |
+| Command             | Description                                                                                                                                        |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm start`        | Serve the application in development mode                                                                                                          |
+| `pnpm build:app`    | Build the application                                                                                                                              |
+| `pnpm build:lib`    | Build the publishable library                                                                                                                      |
+| `pnpm test:app`     | Run the application's unit tests (Vitest)                                                                                                          |
+| `pnpm test:lib`     | Run the library's unit tests (Vitest)                                                                                                              |
+| `pnpm lint`         | Run ESLint across the workspace                                                                                                                    |
+| `pnpm lint:fix`     | Run ESLint and auto-fix violations                                                                                                                 |
+| `pnpm format`       | Format code with Prettier (rewrites files)                                                                                                         |
+| `pnpm prettier:fix` | Auto-fix formatting with Prettier                                                                                                                  |
+| `pnpm e2e`          | Run the full e2e suite in Docker ([`e2e/support/e2e-docker.mjs`](e2e/support/e2e-docker.mjs) → [`docker-compose.e2e.yml`](docker-compose.e2e.yml)) |
+| `pnpm e2e:local`    | Run the full e2e suite without Docker (`ng e2e`; needs local Playwright browsers)                                                                  |
 
 ## Branches
 

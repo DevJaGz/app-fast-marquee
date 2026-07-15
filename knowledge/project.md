@@ -5,7 +5,7 @@ description: Monorepo hosting the publishable ngx-fast-marquee Angular library a
 tags:
   - overview
   - status
-timestamp: 2026-07-06T02:00:00Z
+timestamp: 2026-07-15T12:00:00Z
 ---
 
 # What it is
@@ -28,7 +28,8 @@ A single Angular workspace containing:
 # Current state (verified 2026-07-06)
 
 - Workspace: Angular `^20.3.25`, zoneless, signal-based APIs, OnPush enforced by ESLint (see the [Angular 20 idiom-adoption decision](decisions/angular-20-idiom-adoption.md)).
-- Unit tests: Vitest via the experimental `@angular/build:unit-test` builder (both projects). The app currently has zero `*.spec.ts` files, so `npm run test:app` reports "No tests found" — known, not a regression.
+- Package manager: **pnpm** on this line (`develop`, later `master`) — [pnpm-lock.yaml](../pnpm-lock.yaml) is the only lockfile; run all repo commands with `pnpm`, never `npm` (verified 2026-07-15).
+- Unit tests: Vitest via the experimental `@angular/build:unit-test` builder (both projects). The app currently has zero `*.spec.ts` files, so `pnpm test:app` reports "No tests found" — known, not a regression.
 - Lint: ESLint `^8.57.0` with `@angular-eslint` `^20.7.0` and `@typescript-eslint` `^8.62.1`.
 - Library: version `0.3.0`, peers `@angular/common`/`@angular/core` `>=19.0.0`. Version and peers are frozen pending the version-line plan — do not bump them without confirmation (see [guardrails](guardrails.md)).
 - Branches: only `master` and `develop` exist as long-lived branches; the planned branch model is **not implemented yet**. One release tag exists: `v0.1.7`.
