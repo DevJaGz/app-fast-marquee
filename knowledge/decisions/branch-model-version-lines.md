@@ -57,7 +57,7 @@ Every long-lived branch hosts exactly one version line and inherits its lifecycl
 
 ## Branch-local OpenSpec workflow
 
-Adopted by the [adopt-two-line-branch-model](../../openspec/changes/archive/adopt-two-line-branch-model/design.md) change (decision D1):
+Adopted by the [adopt-two-line-branch-model](../../openspec/changes/archive/2026-07-15-adopt-two-line-branch-model/design.md) change (decision D1):
 
 1. `openspec/specs/` on each version-line branch describes only that line's own behavior.
 2. An OpenSpec change lives and archives on the branch where its tasks execute — there is no combined change spanning both line branches.
