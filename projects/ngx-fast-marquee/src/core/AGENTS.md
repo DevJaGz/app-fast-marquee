@@ -17,7 +17,7 @@ Pure TypeScript marquee engine for the `ngx-fast-marquee` library.
 | Duplication | [`duplication.ts`](duplication.ts) — clone/prune math and DOM writes |
 | Animation | [`animation.ts`](animation.ts) — CSS custom-property and data-attribute value resolution |
 | Reduced motion | [`reduced-motion.ts`](reduced-motion.ts) — [`matchMedia`](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia) source with live change listener |
-| Idle-callback guard | [`idle-callback-compat.ts`](idle-callback-compat.ts) — Safari/iOS idle-callback compatibility guard ([angular/angular#53721](https://github.com/angular/angular/issues/53721)); [`idle-callback.types.d.ts`](idle-callback.types.d.ts) — ambient `requestIdleCallback`/`cancelIdleCallback` DOM typings, absent from TypeScript 4.2.3's lib (added ~4.4) |
+| Idle-callback guard | [`idle-callback-compat.ts`](idle-callback-compat.ts) — Safari/iOS idle-callback compatibility guard ([angular/angular#53721](https://github.com/angular/angular/issues/53721)); also declares the ambient `requestIdleCallback`/`cancelIdleCallback` DOM typings inline (`declare global`), absent from TypeScript 4.2.3's lib (added ~4.4) |
 | Engine orchestrator | [`marquee-engine.ts`](marquee-engine.ts) — `requestReplan()` → batched read → compute → write |
 | Barrel | [`index.ts`](index.ts) — re-exports all core modules |
 

@@ -1,5 +1,29 @@
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference -- ambient global .d.ts (no exports) can't be pulled in via `import`
-/// <reference path="./idle-callback.types.d.ts" />
+/**
+ * TypeScript 4.2.3 (this line's core-dialect floor, see `tsconfig.core-dialect.json`) predates the
+ * standard-library `requestIdleCallback`/`cancelIdleCallback` DOM typings (added ~TS 4.4). Declared
+ * here as a global augmentation so `core/` type-checks under the pinned compiler without widening
+ * to `any`, and so the published package's rolled-up `.d.ts` stays self-contained (a separate
+ * ambient `.d.ts` file pulled in via `/// <reference path>` doesn't survive ng-packagr's
+ * declaration bundling — see `knowledge/decisions/idle-callback-guard.md`).
+ */
+declare global {
+  interface IdleRequestOptions {
+    timeout?: number;
+  }
+
+  interface IdleDeadline {
+    readonly didTimeout: boolean;
+    timeRemaining(): number;
+  }
+
+  type IdleRequestCallback = (deadline: IdleDeadline) => void;
+
+  interface Window {
+    requestIdleCallback(callback: IdleRequestCallback, options?: IdleRequestOptions): number;
+    cancelIdleCallback(handle: number): void;
+  }
+}
+
 /**
  * Ensures `window.requestIdleCallback`/`window.cancelIdleCallback` are always both present
  * and mutually consistent (both native, or both `setTimeout`/`clearTimeout`-backed fallbacks).
