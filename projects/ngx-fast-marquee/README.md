@@ -58,10 +58,13 @@ bun add ngx-fast-marquee
 
 ### Angular Compatibility
 
-| Angular Version | Library Version                     |
-| --------------- | ----------------------------------- |
-| `>=20`          | `latest` (`20.x` line)              |
-| `12 - 19`       | `ngx-fast-marquee@12` (`12.x` line) |
+| Angular Version | Install                     | Status                                                                      |
+| --------------- | --------------------------- | --------------------------------------------------------------------------- |
+| `20 – 22`       | `npm i ngx-fast-marquee`    | **Active** (`20.x` line, this build) — recommended, new features land here |
+| `12 – 19`       | `npm i ngx-fast-marquee@12` | **Maintenance** (`12.x` line) — stable, critical fixes only                 |
+| any             | `0.x` releases              | **Deprecated** — do not use                                                  |
+
+Each line's major version equals its Angular floor. Both lines expose the identical template-level binding surface (selector, inputs, outputs, `NgxFastMarqueeModule`, `provideFastMarquee()`) — a template written against one compiles unmodified against the other. The **class instance surface is out of contract**: this build (`20.x` line) uses signal `input()`/`output()` and zoneless change detection; the `12.x` line uses `@Input()`/`@Output()` decorators and zone-based change detection. Code that only binds the component through its template is unaffected; code that reaches into the component instance directly (e.g. via `viewChild`) is not portable between lines.
 
 ## 🚀 Getting Started
 

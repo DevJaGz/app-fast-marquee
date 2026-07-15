@@ -1,6 +1,8 @@
 # Knowledge Base Update Log
 
-## 2026-07-15
+## 2026-07-16
+
+- **Update**: Executed the version-bump step of the [Branch Model and Two-Version-Line Publishing Strategy](decisions/branch-model-version-lines.md) with maintainer confirmation: the library [package.json](../projects/ngx-fast-marquee/package.json) on this branch moved from `0.3.0` / peers `>=19.0.0` to **`20.0.0`** / peers `>=20.0.0 <23.0.0` (floor rule: major = Angular floor). The library [README.md](../projects/ngx-fast-marquee/README.md) compatibility table was rebuilt with real install commands and three tiers — `20.x` **Active** (recommended), `12.x` **Maintenance** (stable, critical fixes only), `0.x` **Deprecated** (do not use) — and now publishes the template-level API parity contract required by the decision before first publish. Added the MIT [LICENSE](../projects/ngx-fast-marquee/LICENSE) file so the packaged tarball ships license text. Release tags (`v20.0.0`) and npm publishing/deprecation remain deliberately deferred to publish time. Synced [project.md](project.md) current state and the decision's "Current state vs plan". The sibling `12.x`-branch commit adds that line's `publishConfig` dist-tag `v12` guard and mirrors the README table.
 
 - **Creation**: Added [A Standalone Vitest Root Can Create a Nested node_modules Git Silently Tracks](lessons/vitest-nested-node-modules.md), documenting how [`schematics/vitest.config.ts`](../projects/ngx-fast-marquee/schematics/vitest.config.ts)'s custom `root` produced a `schematics/node_modules/.vite` cache folder that the root-anchored `.gitignore` didn't catch, wrongly committing a Vitest results-cache file in `fff26d0`. Fixed: `.gitignore`'s `node_modules` rule unanchored to match at any depth, the config given an explicit `cacheDir` under `.angular/cache/vitest-schematics/`, and the tracked file plus stray directory removed. Indexed in [lessons/index.md](lessons/index.md).
 

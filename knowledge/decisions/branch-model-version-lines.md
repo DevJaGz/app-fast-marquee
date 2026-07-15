@@ -7,10 +7,10 @@ tags:
   - branching
   - library
 status: planned
-timestamp: 2026-07-15T00:00:00Z
+timestamp: 2026-07-16T00:00:00Z
 ---
 
-**Status: planned — branch cutover has started, publishing has not.** The `12.x` line branch now exists and the branch-local OpenSpec workflow is adopted (see "Current state vs plan" below); version bumps, publishing, and the `develop` → `master` merge remain future work requiring explicit direction.
+**Status: planned — branch cutover and version bumps are done, publishing has not started.** The `12.x` line branch exists, the branch-local OpenSpec workflow is adopted, and both lines' library versions/peers are set per the floor rule with maintainer confirmation (2026-07-16, see "Current state vs plan" below); publishing, release tags, and the `develop` → `master` merge remain future work requiring explicit direction.
 
 # What was decided
 
@@ -77,16 +77,16 @@ A real npm audience spans old and new Angular majors. One codebase cannot idioma
 
 # What it affects
 
-- [projects/ngx-fast-marquee/package.json](../../projects/ngx-fast-marquee/package.json) `version`/`peerDependencies` and the library README compatibility table — **frozen until this plan executes; changing them requires explicit confirmation** (see [guardrails](../guardrails.md)).
+- [projects/ngx-fast-marquee/package.json](../../projects/ngx-fast-marquee/package.json) `version`/`peerDependencies` and the library README compatibility table — set 2026-07-16 with maintainer confirmation; **any further change still requires explicit confirmation** (see [guardrails](../guardrails.md)).
 - Future CI/CD workflows, repository rulesets, and docs deployment.
 - The `12.x` line implies a future independently-dialected `core/` restructuring of the library source (each line hosts its own copy, per the [core dialect floors](#core-dialect-floors-per-line-not-shared) above — not a single shared `core/`).
 
-# Current state vs plan (verified 2026-07-15)
+# Current state vs plan (verified 2026-07-16)
 
 - Long-lived branches today: `master`, `develop`, and `12.x`. `develop` is the **interim trunk**: it carries the complete `20.x` modernization and stands in for `master` until both version lines work; the final `develop` → `master` merge is a deliberate future release milestone, not automatic. `master` stays frozen until that merge. `12.x` was cut from `develop` (commit `6ae63f8`) to host the Patchable line's Angular 12 conversion — see the sibling `adapt-12x-line` change, which lives exclusively on `12.x` per the branch-local OpenSpec workflow above.
 - `refactor/build-12` was verified fully merged into `develop` and deleted (safe `git branch -d`; no remote counterpart existed). The stale `build12/` toolchain-reference snapshot was deleted from `develop` after `12.x` was cut.
-- Library is at `0.3.0` with peers `>=19.0.0` — pre-plan values.
-- One tag exists (`v0.1.7`); no repository ruleset or retirement machinery exists yet.
+- **Version bumps executed (2026-07-16, maintainer-confirmed)**: this branch's library is at `20.0.0` with peers `>=20.0.0 <23.0.0`; the `12.x` branch is at `12.0.0` with peers `>=12.0.0 <20.0.0` plus a `publishConfig` npm dist-tag `v12` guard (so a plain `npm publish` from the Patchable line can never take `latest`, per the invariants above). Both branches' README compatibility tables now list all three tiers — `20.x` Active, `12.x` Maintenance, `0.x` **deprecated** — with real install commands, and publish the template-level API parity contract. A `LICENSE` file (MIT) now ships in the package on both lines.
+- One tag exists (`v0.1.7`); the `v20.0.0`/`v12.0.0` tags are deliberately deferred to the exact publish commits (per the "Git tags" rule above). Deprecating the `0.x` releases on the npm registry (`npm deprecate`) is a registry write reserved for publish time. No repository ruleset or retirement machinery exists yet.
 
 # Citations
 

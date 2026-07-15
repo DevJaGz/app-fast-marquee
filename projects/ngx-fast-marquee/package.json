@@ -1,6 +1,6 @@
 {
   "name": "ngx-fast-marquee",
-  "version": "0.3.0",
+  "version": "20.0.0",
   "author": {
     "name": "Julian Andres Gomez Gomez",
     "email": "jgomezpersonal7@gmail.com",
@@ -22,8 +22,8 @@
     "ngx fast marquee"
   ],
   "peerDependencies": {
-    "@angular/common": ">=19.0.0",
-    "@angular/core": ">=19.0.0"
+    "@angular/common": ">=20.0.0 <23.0.0",
+    "@angular/core": ">=20.0.0 <23.0.0"
   },
   "dependencies": {
     "tslib": "^2.6.2"
