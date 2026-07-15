@@ -1,5 +1,9 @@
 # Knowledge Base Update Log
 
+## 2026-07-15
+
+- **Update**: Started executing the [Branch Model and Two-Version-Line Publishing Strategy](decisions/branch-model-version-lines.md) via the [adopt-two-line-branch-model](../openspec/changes/archive/adopt-two-line-branch-model/design.md) change: `refactor/build-12` deleted (verified fully merged), the `12.x` line branch cut from `develop`, and the stale `build12/` toolchain-reference snapshot removed from `develop`. Added the branch-local OpenSpec workflow rule (branch-local specs; a change lives and archives on the branch where its tasks execute; cross-line contracts mirrored verbatim into both branches' specs) to the decision concept, and updated its "Current state vs plan" section to record `develop`'s interim-trunk role. Root [AGENTS.md](../AGENTS.md) drops its `build12/` row and gains a "Branches" section summarizing each branch's role. The trunk (`library`) spec gains the Two-Version-Line Template API Parity requirement, mirrored on `12.x` by the sibling `adapt-12x-line` change.
+
 ## 2026-07-14
 
 - **Creation**: Added [CSS Custom Properties in Keyframes Block Compositor Acceleration](lessons/css-var-keyframes-not-composited.md), documenting why var() in CSS keyframe bodies disqualifies compositor acceleration in Chromium and the pattern to refactor with static keyframe variants. Indexed in [lessons/index.md](lessons/index.md).

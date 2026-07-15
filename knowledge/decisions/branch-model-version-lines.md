@@ -7,10 +7,10 @@ tags:
   - branching
   - library
 status: planned
-timestamp: 2026-07-12T15:00:00Z
+timestamp: 2026-07-15T00:00:00Z
 ---
 
-**Status: planned — none of this is implemented yet.** The repository should evolve toward this model; agents must not partially apply it (e.g. bump versions or create branches) without explicit direction.
+**Status: planned — branch cutover has started, publishing has not.** The `12.x` line branch now exists and the branch-local OpenSpec workflow is adopted (see "Current state vs plan" below); version bumps, publishing, and the `develop` → `master` merge remain future work requiring explicit direction.
 
 # What was decided
 
@@ -55,6 +55,14 @@ Every long-lived branch hosts exactly one version line and inherits its lifecycl
 
 **Branch protection** — one repository ruleset targeting `master` and `*.x`, so new version branches are protected automatically and retirement needs no manual protection steps. Each branch only executes the workflows it contains.
 
+## Branch-local OpenSpec workflow
+
+Adopted by the [adopt-two-line-branch-model](../../openspec/changes/archive/adopt-two-line-branch-model/design.md) change (decision D1):
+
+1. `openspec/specs/` on each version-line branch describes only that line's own behavior.
+2. An OpenSpec change lives and archives on the branch where its tasks execute — there is no combined change spanning both line branches.
+3. Cross-line contracts (today, only API parity) are mirrored verbatim into both branches' specs, so each branch's spec states the identical contract text independently.
+
 ## Required invariants
 
 - Exactly one Active branch exists.
@@ -73,9 +81,10 @@ A real npm audience spans old and new Angular majors. One codebase cannot idioma
 - Future CI/CD workflows, repository rulesets, and docs deployment.
 - The `12.x` line implies a future independently-dialected `core/` restructuring of the library source (each line hosts its own copy, per the [core dialect floors](#core-dialect-floors-per-line-not-shared) above — not a single shared `core/`).
 
-# Current state vs plan (verified 2026-07-06)
+# Current state vs plan (verified 2026-07-15)
 
-- Long-lived branches today: `master` and `develop`. A `develop` branch is not part of the target model; its fate is **undecided** (open question).
+- Long-lived branches today: `master`, `develop`, and `12.x`. `develop` is the **interim trunk**: it carries the complete `20.x` modernization and stands in for `master` until both version lines work; the final `develop` → `master` merge is a deliberate future release milestone, not automatic. `master` stays frozen until that merge. `12.x` was cut from `develop` (commit `6ae63f8`) to host the Patchable line's Angular 12 conversion — see the sibling `adapt-12x-line` change, which lives exclusively on `12.x` per the branch-local OpenSpec workflow above.
+- `refactor/build-12` was verified fully merged into `develop` and deleted (safe `git branch -d`; no remote counterpart existed). The stale `build12/` toolchain-reference snapshot was deleted from `develop` after `12.x` was cut.
 - Library is at `0.3.0` with peers `>=19.0.0` — pre-plan values.
 - One tag exists (`v0.1.7`); no repository ruleset or retirement machinery exists yet.
 

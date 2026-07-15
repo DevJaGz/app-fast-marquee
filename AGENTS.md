@@ -4,15 +4,14 @@ Demo application and publishable Angular library in a single monorepo.
 
 ## Overview
 
-| Node                          | Path                                                       |
-| ----------------------------- | ---------------------------------------------------------- |
-| Application                   | [`src/`](src/)                                             |
-| Library                       | [`projects/ngx-fast-marquee/`](projects/ngx-fast-marquee/) |
-| E2E suite                     | [`e2e/`](e2e/)                                             |
-| OpenSpec workflow             | [`openspec/`](openspec/)                                   |
-| Knowledge base (OKF)          | [`knowledge/`](knowledge/)                                 |
-| Angular skills                | [`.agents/skills/`](.agents/skills/)                       |
-| Stale snapshot (out of scope) | [`build12/`](build12/)                                     |
+| Node                 | Path                                                       |
+| -------------------- | ---------------------------------------------------------- |
+| Application          | [`src/`](src/)                                             |
+| Library              | [`projects/ngx-fast-marquee/`](projects/ngx-fast-marquee/) |
+| E2E suite            | [`e2e/`](e2e/)                                             |
+| OpenSpec workflow    | [`openspec/`](openspec/)                                   |
+| Knowledge base (OKF) | [`knowledge/`](knowledge/)                                 |
+| Angular skills       | [`.agents/skills/`](.agents/skills/)                       |
 
 ## Key Commands
 
@@ -29,6 +28,16 @@ Demo application and publishable Angular library in a single monorepo.
 | `npm run prettier:fix` | Auto-fix formatting with Prettier                                                                                                                  |
 | `pnpm e2e`             | Run the full e2e suite in Docker ([`e2e/support/e2e-docker.mjs`](e2e/support/e2e-docker.mjs) → [`docker-compose.e2e.yml`](docker-compose.e2e.yml)) |
 | `pnpm e2e:local`       | Run the full e2e suite without Docker (`ng e2e`; needs local Playwright browsers)                                                                  |
+
+## Branches
+
+| Branch    | Role                                                                                    |
+| --------- | --------------------------------------------------------------------------------------- |
+| `develop` | Interim trunk for the `20.x` Active line (stands in for `master` until both lines work) |
+| `12.x`    | Patchable line (self-contained Angular 12 workspace, critical fixes only)               |
+| `master`  | Frozen until the final `develop` → `master` merge (out of scope for now)                |
+
+Full policy: [Branch Model and Two-Version-Line Publishing Strategy](knowledge/decisions/branch-model-version-lines.md).
 
 ## Navigation
 
