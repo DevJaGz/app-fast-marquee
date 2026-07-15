@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, signal, WritableSignal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NgxFastMarqueeModule, Direction, Speed } from '@ngx-fast-marquee';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Direction, Speed } from '@ngx-fast-marquee';
 
 /**
  * The `playground` e2e scenario fixture: a single `<ngx-fast-marquee>` with every input bound
  * from URL query params over fixed, known content, plus `(mounted)`/`(updated)` DOM counters and
  * runtime controls for exercising post-init input changes. Lives outside `src/` so the demo app
- * and the library ship no test hooks — see `e2e/AGENTS.md`.
+ * and the library ship no test hooks — see `e2e/AGENTS.md`. Selector is `app-root` since this
+ * component is bootstrapped directly by `app.module.playground.ts`, matching `src/index.html`.
  *
  * Query params (all optional, matching each input's own default): `direction`, `speed`,
  * `useSystemReducedMotion`, `autoFill`, `maskStartPercentage`, `maskEndPercentage`,
@@ -14,90 +14,87 @@ import { NgxFastMarqueeModule, Direction, Speed } from '@ngx-fast-marquee';
  * `itemWidth`, `itemHeight`, `containerWidth`, `containerHeight`.
  */
 @Component({
-  selector: 'app-playground',
-  imports: [NgxFastMarqueeModule],
+  selector: 'app-root',
   templateUrl: './playground.component.html',
-  styleUrl: './playground.component.scss',
+  styleUrls: ['./playground.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlaygroundComponent {
-  private readonly _queryParamMap = inject(ActivatedRoute).snapshot.queryParamMap;
+  private readonly _params = new URLSearchParams(window.location.search);
 
-  readonly direction: WritableSignal<Direction> = signal(this._readDirectionParam());
-  readonly speed: WritableSignal<Speed> = signal(this._readSpeedParam());
-  readonly useSystemReducedMotion = signal(this._readBoolParam('useSystemReducedMotion', false));
-  readonly autoFill = signal(this._readBoolParam('autoFill', true));
-  readonly maskStartPercentage = signal(this._readNumberParam('maskStartPercentage', 0));
-  readonly maskEndPercentage = signal(this._readNumberParam('maskEndPercentage', 0));
-  readonly maskPercentage = signal(this._readNumberParam('maskPercentage', 0));
-  readonly play = signal(this._readBoolParam('play', true));
-  readonly pauseOnHover = signal(this._readBoolParam('pauseOnHover', false));
-  readonly pauseOnClick = signal(this._readBoolParam('pauseOnClick', false));
+  direction: Direction = this._readDirectionParam();
+  speed: Speed = this._readSpeedParam();
+  useSystemReducedMotion = this._readBoolParam('useSystemReducedMotion', false);
+  autoFill = this._readBoolParam('autoFill', true);
+  maskStartPercentage = this._readNumberParam('maskStartPercentage', 0);
+  maskEndPercentage = this._readNumberParam('maskEndPercentage', 0);
+  maskPercentage = this._readNumberParam('maskPercentage', 0);
+  play = this._readBoolParam('play', true);
+  pauseOnHover = this._readBoolParam('pauseOnHover', false);
+  pauseOnClick = this._readBoolParam('pauseOnClick', false);
 
-  readonly containerWidth = signal(this._readNumberParam('containerWidth', 400));
-  readonly containerHeight = signal(this._readNumberParam('containerHeight', 200));
-  readonly itemWidth = signal(this._readNumberParam('itemWidth', 120));
-  readonly itemHeight = signal(this._readNumberParam('itemHeight', 60));
-  readonly items: WritableSignal<number[]> = signal(
-    Array.from({ length: this._readNumberParam('itemCount', 5) }, (_unused, index) => index)
-  );
+  containerWidth = this._readNumberParam('containerWidth', 400);
+  containerHeight = this._readNumberParam('containerHeight', 200);
+  itemWidth = this._readNumberParam('itemWidth', 120);
+  itemHeight = this._readNumberParam('itemHeight', 60);
+  items: number[] = Array.from({ length: this._readNumberParam('itemCount', 5) }, (_unused, index) => index);
 
-  readonly mountedCount = signal(0);
-  readonly updatedCount = signal(0);
+  mountedCount = 0;
+  updatedCount = 0;
 
   onMounted(): void {
-    this.mountedCount.update(count => count + 1);
+    this.mountedCount++;
   }
 
   onUpdated(): void {
-    this.updatedCount.update(count => count + 1);
+    this.updatedCount++;
   }
 
   setDirection(value: string): void {
     if (value === 'left' || value === 'right' || value === 'up' || value === 'down') {
-      this.direction.set(value);
+      this.direction = value;
     }
   }
 
   setSpeed(value: string): void {
     const trimmed = value.trim();
     if (trimmed === 'slow' || trimmed === 'medium' || trimmed === 'fast') {
-      this.speed.set(trimmed);
+      this.speed = trimmed;
       return;
     }
     const numeric = Number(trimmed);
     if (!Number.isNaN(numeric)) {
-      this.speed.set(numeric);
+      this.speed = numeric;
     }
   }
 
   setMaskPercentage(value: string): void {
-    this.maskPercentage.set(this._parseNumberOrZero(value));
+    this.maskPercentage = this._parseNumberOrZero(value);
   }
 
   setMaskStartPercentage(value: string): void {
-    this.maskStartPercentage.set(this._parseNumberOrZero(value));
+    this.maskStartPercentage = this._parseNumberOrZero(value);
   }
 
   setMaskEndPercentage(value: string): void {
-    this.maskEndPercentage.set(this._parseNumberOrZero(value));
+    this.maskEndPercentage = this._parseNumberOrZero(value);
   }
 
   addItem(): void {
-    this.items.update(current => [...current, current.length ? Math.max(...current) + 1 : 0]);
+    this.items = [...this.items, this.items.length ? Math.max(...this.items) + 1 : 0];
   }
 
   removeItem(): void {
-    this.items.update(current => current.slice(0, -1));
+    this.items = this.items.slice(0, -1);
   }
 
   private _readDirectionParam(): Direction {
-    const value = this._queryParamMap.get('direction');
+    const value = this._params.get('direction');
     return value === 'left' || value === 'right' || value === 'up' || value === 'down' ? value : 'left';
   }
 
   private _readSpeedParam(): Speed {
-    const value = this._queryParamMap.get('speed');
+    const value = this._params.get('speed');
     if (value === 'slow' || value === 'medium' || value === 'fast') return value;
     if (value == null) return 'medium';
     const numeric = Number(value);
@@ -105,12 +102,12 @@ export class PlaygroundComponent {
   }
 
   private _readBoolParam(name: string, fallback: boolean): boolean {
-    const value = this._queryParamMap.get(name);
+    const value = this._params.get(name);
     return value == null ? fallback : value === 'true';
   }
 
   private _readNumberParam(name: string, fallback: number): number {
-    const value = this._queryParamMap.get(name);
+    const value = this._params.get(name);
     if (value == null) return fallback;
     const numeric = Number(value);
     return Number.isNaN(numeric) ? fallback : numeric;

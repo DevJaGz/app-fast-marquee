@@ -12,7 +12,6 @@ Demo application and publishable Angular library in a single monorepo.
 | OpenSpec workflow             | [`openspec/`](openspec/)                                   |
 | Knowledge base (OKF)          | [`knowledge/`](knowledge/)                                 |
 | Angular skills                | [`.agents/skills/`](.agents/skills/)                       |
-| Stale snapshot (out of scope) | [`build12/`](build12/)                                     |
 
 ## Key Commands
 

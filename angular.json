@@ -7,31 +7,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss",
-          "skipTests": true,
-          "inlineStyle": true,
-          "changeDetection": "OnPush"
-        },
-        "@schematics/angular:class": {
-          "skipTests": true
-        },
-        "@schematics/angular:directive": {
-          "skipTests": true
-        },
-        "@schematics/angular:guard": {
-          "skipTests": true
-        },
-        "@schematics/angular:interceptor": {
-          "skipTests": true
-        },
-        "@schematics/angular:pipe": {
-          "skipTests": true
-        },
-        "@schematics/angular:resolver": {
-          "skipTests": true
-        },
-        "@schematics/angular:service": {
-          "skipTests": true
+          "style": "scss"
         }
       },
       "root": "",
@@ -39,27 +15,17 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/app-fast-marquee",
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
-            "stylePreprocessorOptions": {
-              "includePaths": ["src/styles"]
-            },
-            "scripts": [],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "server.ts"
-            },
-            "security": {
-              "allowedHosts": []
-            }
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -71,36 +37,29 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "3kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "4kb",
+                  "maximumError": "6kb"
                 }
               ],
               "outputHashing": "all"
             },
             "development": {
+              "buildOptimizer": false,
               "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true
-            },
-            "no-idle-guard": {
-              "optimization": false,
+              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/app/app.config.ts",
-                  "with": "e2e/fixtures/app.config.no-idle-guard.ts"
-                }
-              ]
+              "namedChunks": true
             },
             "playground": {
+              "buildOptimizer": false,
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
               "fileReplacements": [
                 {
-                  "replace": "src/app/app.config.ts",
-                  "with": "e2e/fixtures/app.config.playground.ts"
+                  "replace": "src/app/app.module.ts",
+                  "with": "e2e/fixtures/app.module.playground.ts"
                 }
               ]
             }
@@ -111,38 +70,29 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "app-fast-marquee:build:production"
+              "browserTarget": "app-fast-marquee:build:production"
             },
             "development": {
-              "buildTarget": "app-fast-marquee:build:development"
-            },
-            "no-idle-guard": {
-              "buildTarget": "app-fast-marquee:build:no-idle-guard",
-              "port": 4201
+              "browserTarget": "app-fast-marquee:build:development"
             },
             "playground": {
-              "buildTarget": "app-fast-marquee:build:playground",
+              "browserTarget": "app-fast-marquee:build:playground",
               "port": 4202
             }
           },
           "defaultConfiguration": "development"
         },
-        "e2e": {
-          "builder": "playwright-ng-schematics:playwright",
-          "options": {}
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "buildTarget": "app-fast-marquee:build"
-          }
-        },
         "test": {
-          "builder": "@angular/build:unit-test",
+          "builder": "@angular-devkit/build-angular:karma",
           "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
-            "buildTarget": "::development",
-            "runner": "vitest"
+            "karmaConfig": "karma.conf.js",
+            "inlineStyleLanguage": "scss",
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
+            "scripts": []
           }
         },
         "lint": {
@@ -158,33 +108,6 @@
       "root": "projects/ngx-fast-marquee",
       "sourceRoot": "projects/ngx-fast-marquee/src",
       "prefix": "ngx-fast-marquee",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss",
-          "skipTests": true
-        },
-        "@schematics/angular:class": {
-          "skipTests": true
-        },
-        "@schematics/angular:directive": {
-          "skipTests": true
-        },
-        "@schematics/angular:guard": {
-          "skipTests": true
-        },
-        "@schematics/angular:interceptor": {
-          "skipTests": true
-        },
-        "@schematics/angular:pipe": {
-          "skipTests": true
-        },
-        "@schematics/angular:resolver": {
-          "skipTests": true
-        },
-        "@schematics/angular:service": {
-          "skipTests": true
-        }
-      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -201,20 +124,12 @@
           },
           "defaultConfiguration": "production"
         },
-        "test-build": {
-          "builder": "@angular/build:application",
-          "options": {
-            "tsConfig": "projects/ngx-fast-marquee/tsconfig.spec.json",
-            "outputPath": "dist/ngx-fast-marquee-test"
-          }
-        },
         "test": {
-          "builder": "@angular/build:unit-test",
+          "builder": "@angular-devkit/build-angular:karma",
           "options": {
+            "main": "projects/ngx-fast-marquee/src/test.ts",
             "tsConfig": "projects/ngx-fast-marquee/tsconfig.spec.json",
-            "buildTarget": "ngx-fast-marquee:test-build",
-            "runner": "vitest",
-            "setupFiles": ["projects/ngx-fast-marquee/src/test-setup.ts"]
+            "karmaConfig": "projects/ngx-fast-marquee/karma.conf.js"
           }
         },
         "lint": {
@@ -239,19 +154,7 @@
     "@schematics/angular:service": {
       "type": "service"
     },
-    "@schematics/angular:guard": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:interceptor": {
-      "typeSeparator": "."
-    },
     "@schematics/angular:module": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:pipe": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:resolver": {
       "typeSeparator": "."
     }
   }

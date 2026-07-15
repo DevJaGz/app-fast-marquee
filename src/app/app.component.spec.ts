@@ -1,23 +1,19 @@
-﻿import { provideZonelessChangeDetection } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { TestBed } from '@angular/core/testing';
+import { NgxFastMarqueeModule } from '@ngx-fast-marquee';
+
 import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
 
 describe('AppComponent', () => {
-  let fixture: ComponentFixture<AppComponent>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
-      providers: [provideZonelessChangeDetection(), provideRouter([])],
+      imports: [NgxFastMarqueeModule],
+      declarations: [AppComponent, HomeComponent],
     }).compileComponents();
-
-    fixture = TestBed.createComponent(AppComponent);
   });
 
-  it('should create', async () => {
-    fixture.detectChanges();
-    await fixture.whenStable();
+  it('should create the app', () => {
+    const fixture = TestBed.createComponent(AppComponent);
     expect(fixture.componentInstance).toBeTruthy();
   });
 });

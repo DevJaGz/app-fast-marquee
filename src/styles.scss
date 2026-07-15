@@ -1,20 +1,9 @@
-@use 'fonts';
-@use 'animations';
-@use 'buttons';
-@use 'loader';
-@use 'marquees';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 html,
 body {
   height: 100%;
 }
 body {
-  font-family: 'ubuntu-mono', sans-serif;
-  font-size: 16px;
+  font-family: sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;

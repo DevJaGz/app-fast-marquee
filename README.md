@@ -100,8 +100,7 @@ app-fast-marquee/
 ├── e2e/                          # Playwright end-to-end suite
 ├── openspec/                     # OpenSpec specs and changes
 ├── .agents/skills/               # Angular agent skills
-├── .cursor/commands/             # OpenSpec Cursor commands
-└── build12/                      # Stale snapshot (out of scope)
+└── .cursor/commands/             # OpenSpec Cursor commands
 ```
 
 | Path | Description |
@@ -112,7 +111,6 @@ app-fast-marquee/
 | [`openspec/`](openspec/) | OpenSpec specs and changes |
 | [`.agents/skills/`](.agents/skills/) | Angular agent skills |
 | [`.cursor/commands/`](.cursor/commands/) | OpenSpec Cursor commands |
-| [`build12/`](build12/) | Stale snapshot (out of scope) |
 
 ## AI Agent Harness
 

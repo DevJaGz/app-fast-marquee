@@ -32,7 +32,8 @@ A single Angular workspace containing:
 - Lint: ESLint `^8.57.0` with `@angular-eslint` `^20.7.0` and `@typescript-eslint` `^8.62.1`.
 - Library: version `0.3.0`, peers `@angular/common`/`@angular/core` `>=19.0.0`. Version and peers are frozen pending the version-line plan — do not bump them without confirmation (see [guardrails](guardrails.md)).
 - Branches: only `master` and `develop` exist as long-lived branches; the planned branch model is **not implemented yet**. One release tag exists: `v0.1.7`.
-- Stale snapshot [build12/](../build12/) is out of scope for normal work.
+
+> **12.x branch note**: the section above describes the Active `20.x` line on `develop`/`master`. This branch hosts the Patchable `12.x` line — see [branch-model-version-lines.md](decisions/branch-model-version-lines.md) for its own toolchain/version state.
 
 # Where to look next
 

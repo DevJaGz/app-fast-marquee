@@ -1,7 +1,7 @@
 <section class="playground-controls">
   <label>
     Direction
-    <select data-testid="control-direction" [value]="direction()" (change)="setDirection($any($event.target).value)">
+    <select data-testid="control-direction" [value]="direction" (change)="setDirection($any($event.target).value)">
       <option value="left">left</option>
       <option value="right">right</option>
       <option value="up">up</option>
@@ -11,15 +11,11 @@
 
   <label>
     Speed
-    <input type="text" data-testid="control-speed" [value]="speed()" (change)="setSpeed($any($event.target).value)" />
+    <input type="text" data-testid="control-speed" [value]="speed" (change)="setSpeed($any($event.target).value)" />
   </label>
 
   <label>
-    <input
-      type="checkbox"
-      data-testid="control-play"
-      [checked]="play()"
-      (change)="play.set($any($event.target).checked)" />
+    <input type="checkbox" data-testid="control-play" [checked]="play" (change)="play = $any($event.target).checked" />
     Play
   </label>
 
@@ -27,8 +23,8 @@
     <input
       type="checkbox"
       data-testid="control-auto-fill"
-      [checked]="autoFill()"
-      (change)="autoFill.set($any($event.target).checked)" />
+      [checked]="autoFill"
+      (change)="autoFill = $any($event.target).checked" />
     Auto-fill
   </label>
 
@@ -36,8 +32,8 @@
     <input
       type="checkbox"
       data-testid="control-use-system-reduced-motion"
-      [checked]="useSystemReducedMotion()"
-      (change)="useSystemReducedMotion.set($any($event.target).checked)" />
+      [checked]="useSystemReducedMotion"
+      (change)="useSystemReducedMotion = $any($event.target).checked" />
     Use system reduced motion
   </label>
 
@@ -45,8 +41,8 @@
     <input
       type="checkbox"
       data-testid="control-pause-on-hover"
-      [checked]="pauseOnHover()"
-      (change)="pauseOnHover.set($any($event.target).checked)" />
+      [checked]="pauseOnHover"
+      (change)="pauseOnHover = $any($event.target).checked" />
     Pause on hover
   </label>
 
@@ -54,8 +50,8 @@
     <input
       type="checkbox"
       data-testid="control-pause-on-click"
-      [checked]="pauseOnClick()"
-      (change)="pauseOnClick.set($any($event.target).checked)" />
+      [checked]="pauseOnClick"
+      (change)="pauseOnClick = $any($event.target).checked" />
     Pause on click
   </label>
 
@@ -64,7 +60,7 @@
     <input
       type="number"
       data-testid="control-mask-percentage"
-      [value]="maskPercentage()"
+      [value]="maskPercentage"
       (change)="setMaskPercentage($any($event.target).value)" />
   </label>
 
@@ -73,7 +69,7 @@
     <input
       type="number"
       data-testid="control-mask-start-percentage"
-      [value]="maskStartPercentage()"
+      [value]="maskStartPercentage"
       (change)="setMaskStartPercentage($any($event.target).value)" />
   </label>
 
@@ -82,7 +78,7 @@
     <input
       type="number"
       data-testid="control-mask-end-percentage"
-      [value]="maskEndPercentage()"
+      [value]="maskEndPercentage"
       (change)="setMaskEndPercentage($any($event.target).value)" />
   </label>
 
@@ -93,37 +89,36 @@
 <div
   class="playground-container"
   data-testid="playground-container"
-  [style.width.px]="containerWidth()"
-  [style.height.px]="containerHeight()">
+  [style.width.px]="containerWidth"
+  [style.height.px]="containerHeight">
   <ngx-fast-marquee
     class="playground-marquee"
-    [direction]="direction()"
-    [speed]="speed()"
-    [useSystemReducedMotion]="useSystemReducedMotion()"
-    [autoFill]="autoFill()"
-    [maskStartPercentage]="maskStartPercentage()"
-    [maskEndPercentage]="maskEndPercentage()"
-    [maskPercentage]="maskPercentage()"
-    [play]="play()"
-    [pauseOnHover]="pauseOnHover()"
-    [pauseOnClick]="pauseOnClick()"
+    [direction]="direction"
+    [speed]="speed"
+    [useSystemReducedMotion]="useSystemReducedMotion"
+    [autoFill]="autoFill"
+    [maskStartPercentage]="maskStartPercentage"
+    [maskEndPercentage]="maskEndPercentage"
+    [maskPercentage]="maskPercentage"
+    [play]="play"
+    [pauseOnHover]="pauseOnHover"
+    [pauseOnClick]="pauseOnClick"
     (mounted)="onMounted()"
     (updated)="onUpdated()">
-    @for (item of items(); track item) {
-      <div
-        class="playground-item"
-        data-testid="marquee-item"
-        [style.width.px]="itemWidth()"
-        [style.height.px]="itemHeight()">
-        Item {{ item }}
-      </div>
-    }
+    <div
+      *ngFor="let item of items"
+      class="playground-item"
+      data-testid="marquee-item"
+      [style.width.px]="itemWidth"
+      [style.height.px]="itemHeight">
+      Item {{ item }}
+    </div>
   </ngx-fast-marquee>
 </div>
 
 <section class="playground-status">
   <span>mounted:</span>
-  <span data-testid="mounted-count">{{ mountedCount() }}</span>
+  <span data-testid="mounted-count">{{ mountedCount }}</span>
   <span>updated:</span>
-  <span data-testid="updated-count">{{ updatedCount() }}</span>
+  <span data-testid="updated-count">{{ updatedCount }}</span>
 </section>

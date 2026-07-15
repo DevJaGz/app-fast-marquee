@@ -1,8 +1,16 @@
-import { expect, test, type Page } from '@playwright/test';
-
-import { NO_IDLE_GUARD_APP_URL } from '../support/servers';
+import { expect, test, Page } from '@playwright/test';
 
 const DEFERRED_IDLE_MARQUEE = 'ngx-fast-marquee.deferred-idle-marquee';
+
+/**
+ * 12.x branch note: this line has no `no-idle-guard` scenario/server (see
+ * `e2e/support/servers.ts`) — `NgxFastMarqueeModule` always bundles `provideFastMarquee()`, and
+ * under Ivy a component's declaring `NgModule` is fixed at compile time, so a "guard absent" build
+ * isn't constructible. The upstream bug this sub-test reproduces (`angular/angular#53721`) is
+ * specific to Angular's own `@defer (on idle)` `IdleScheduler`, absent from Angular 12. The guarded
+ * sub-test below (default app, guard active) still applies and runs unmodified.
+ */
+const NO_IDLE_GUARD_SCENARIO_UNAVAILABLE = true;
 
 /**
  * Simulates the Safari/iOS builds behind issue #5: `requestIdleCallback` exists
@@ -38,20 +46,15 @@ function collectPageErrors(page: Page): string[] {
 }
 
 test.describe('idle-callback guard (issue #5)', () => {
-  test('without provideFastMarquee() the upstream crash reproduces (no-idle-guard scenario)', async ({ page }) => {
-    await simulateSafariIdleCallbackAsymmetry(page);
-    const errors = collectPageErrors(page);
+  test.describe('no-idle-guard scenario', () => {
+    test.skip(
+      NO_IDLE_GUARD_SCENARIO_UNAVAILABLE,
+      'no-idle-guard scenario is not constructible on the 12.x line — see the comment above'
+    );
 
-    await page.goto(`${NO_IDLE_GUARD_APP_URL}/`);
-
-    await expect
-      .poll(() => errors.find(message => message.includes('cancelIdleCallback')), {
-        message: 'expected the cancelIdleCallback ReferenceError from angular/angular#53721 to surface',
-        timeout: 15_000,
-      })
-      .toBeTruthy();
-    expect(await page.evaluate(() => typeof window.cancelIdleCallback)).toBe('undefined');
-    await expect(page.locator(DEFERRED_IDLE_MARQUEE)).toHaveCount(0);
+    test('without provideFastMarquee() the upstream crash reproduces (no-idle-guard scenario)', async () => {
+      throw new Error('unreachable on 12.x — see NO_IDLE_GUARD_SCENARIO_UNAVAILABLE');
+    });
   });
 
   test('with provideFastMarquee() the @defer (on idle) marquee loads without errors', async ({ page }) => {
