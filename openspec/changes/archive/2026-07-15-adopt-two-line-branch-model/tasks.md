@@ -22,4 +22,4 @@ Tasks marked **(confirm)** are confirmation-gated per [guardrails](../../../know
 ## 4. Verification and closure
 
 - [x] 4.1 On `develop`: build, lint, unit tests, and the e2e suite pass after the cleanup; no orphaned dev-server processes/ports left (convention 6)
-- [ ] 4.2 Validate with `openspec validate adopt-two-line-branch-model`, sync the parity requirement into `openspec/specs/library/library.spec.md`, and archive this change on `develop` via `/opsx:archive`
+- [x] 4.2 Validate with `openspec validate adopt-two-line-branch-model`, sync the parity requirement into `openspec/specs/library/library.spec.md`, and archive this change on `develop` via `/opsx:archive`
