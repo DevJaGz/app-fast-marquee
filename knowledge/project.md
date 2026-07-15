@@ -5,7 +5,7 @@ description: Monorepo hosting the publishable ngx-fast-marquee Angular library a
 tags:
   - overview
   - status
-timestamp: 2026-07-06T02:00:00Z
+timestamp: 2026-07-16T00:00:00Z
 ---
 
 # What it is
@@ -30,8 +30,8 @@ A single Angular workspace containing:
 - Workspace: Angular `^20.3.25`, zoneless, signal-based APIs, OnPush enforced by ESLint (see the [Angular 20 idiom-adoption decision](decisions/angular-20-idiom-adoption.md)).
 - Unit tests: Vitest via the experimental `@angular/build:unit-test` builder (both projects). The app currently has zero `*.spec.ts` files, so `npm run test:app` reports "No tests found" — known, not a regression.
 - Lint: ESLint `^8.57.0` with `@angular-eslint` `^20.7.0` and `@typescript-eslint` `^8.62.1`.
-- Library: version `0.3.0`, peers `@angular/common`/`@angular/core` `>=19.0.0`. Version and peers are frozen pending the version-line plan — do not bump them without confirmation (see [guardrails](guardrails.md)).
-- Branches: only `master` and `develop` exist as long-lived branches; the planned branch model is **not implemented yet**. One release tag exists: `v0.1.7`.
+- Library (this branch, `12.x` Maintenance line): version `12.0.0`, peers `@angular/common`/`@angular/core` `>=12.0.0 <20.0.0`, npm `publishConfig` dist-tag `v12` (never publishes `latest`). The `20.x` Active line on `develop` is at `20.0.0` with peers `>=20.0.0 <23.0.0`. Both set 2026-07-16 per the [branch-model and version-line plan](decisions/branch-model-version-lines.md) with maintainer confirmation; **not published yet**. Any further change to version/peers requires explicit confirmation (see [guardrails](guardrails.md)).
+- Branches: `develop` (interim trunk, `20.x` Active line), `12.x` (this branch, Maintenance/Patchable line), `master` (frozen until the final `develop` → `master` merge). One release tag exists: `v0.1.7`; `v20.0.0`/`v12.0.0` tags are deferred to the actual publish commits.
 
 > **12.x branch note**: the section above describes the Active `20.x` line on `develop`/`master`. This branch hosts the Patchable `12.x` line — see [branch-model-version-lines.md](decisions/branch-model-version-lines.md) for its own toolchain/version state.
 

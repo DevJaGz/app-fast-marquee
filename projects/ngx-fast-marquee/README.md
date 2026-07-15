@@ -11,7 +11,7 @@ Look no further! The ✨ **Ngx Fast Marquee** ✨ is a lightweight component tha
 
 See the Demo section below for a live example!
 
-> 📦 **This package is built from the `12.x` branch** (Patchable line, Angular 12–19). For Angular 20+, install from the `master`/`develop` branch build instead. Both lines expose the identical template-level API documented below — see [Angular Compatibility](#angular-compatibility).
+> 📦 **This package is built from the `12.x` branch** (Maintenance line, Angular 12–19: stable, critical fixes only). For Angular 20+, install the latest `ngx-fast-marquee` instead. Both lines expose the identical template-level API documented below — see [Angular Compatibility](#angular-compatibility).
 
 ## 🖥️ Demo
 
@@ -50,10 +50,11 @@ bun add ngx-fast-marquee
 
 ### Angular Compatibility
 
-| Angular Version    | Library Version | Line               |
-| ------------------- | ---------------- | ------------------- |
-| `>=20.0.0 <23.0.0`  | `20.x`           | Active               |
-| `>=12.0.0 <20.0.0`  | `12.0.0`         | Patchable (this build) |
+| Angular Version | Install                     | Status                                                                   |
+| --------------- | --------------------------- | ------------------------------------------------------------------------ |
+| `20 – 22`       | `npm i ngx-fast-marquee`    | **Active** (`20.x` line) — recommended, new features land here           |
+| `12 – 19`       | `npm i ngx-fast-marquee@12` | **Maintenance** (`12.x` line, this build) — stable, critical fixes only  |
+| any             | `0.x` releases              | **Deprecated** — do not use                                               |
 
 Each line's major version equals its Angular floor. Both lines expose the identical template-level binding surface (selector, inputs, outputs, `NgxFastMarqueeModule`, `provideFastMarquee()`) — a template written against one compiles unmodified against the other. The **class instance surface is out of contract**: this build's `NgxFastMarqueeComponent` uses `@Input()`/`@Output()` decorators and zone-based change detection (Angular 12 has no standalone components or signals); the `20.x` line uses signal `input()`/`output()` and is zoneless. Code that only binds the component through its template is unaffected; code that reaches into the component instance directly (e.g. via `@ViewChild`) is not portable between lines.
 
