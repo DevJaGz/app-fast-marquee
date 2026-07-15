@@ -8,25 +8,24 @@
 This repository contains two deliverables:
 
 - **[`ngx-fast-marquee`](projects/ngx-fast-marquee/)** — a publishable Angular component library that adds fast, lightweight marquee animations to any Angular application.
-- **[`app-fast-marquee`](src/)** — a live demo application built with Angular 18.2 that showcases the library in action.
+- **[`app-fast-marquee`](src/)** — a demo application exercising the library's e2e behavior-contract surface.
 
 For library-specific installation, usage, and API docs, see [`projects/ngx-fast-marquee/README.md`](projects/ngx-fast-marquee/README.md).
+
+**12.x branch**: this branch hosts the Patchable Angular 12 line — a self-contained workspace on Node `^14.15.0`, npm-based (not pnpm). See [`AGENTS.md`](AGENTS.md) and [branch-model-version-lines.md](knowledge/decisions/branch-model-version-lines.md).
 
 ## Prerequisites
 
 | Tool | Minimum version |
 |------|----------------|
-| [Node.js](https://nodejs.org/) | 18.16.0 |
-| [npm](https://www.npmjs.com/) | 9.5.1 |
-| [pnpm](https://pnpm.io/) | 8.6.12 |
+| [Node.js](https://nodejs.org/) | `^14.15.0` (see [`.node-version`](.node-version)) |
+| [npm](https://www.npmjs.com/) | `>=6.14.8` |
 
 ## Installation
 
 ```bash
-pnpm install
+npm install
 ```
-
-`npm install` also works if pnpm is not available.
 
 ## Development
 
@@ -57,28 +56,19 @@ npm run build:lib
 ### Unit tests
 
 ```bash
-ng test
+npm run test:app
+npm run test:lib
 ```
 
-Runs unit tests via [Karma](https://karma-runner.github.io/) / [Jasmine](https://jasmine.github.io/).
+Runs unit tests via [Karma](https://karma-runner.github.io/) / [Jasmine](https://jasmine.github.io/) in `ChromeHeadless`.
 
 ### End-to-end tests
 
 ```bash
-pnpm e2e
+npm run e2e
 ```
 
-Runs the full Playwright suite in Docker ([`e2e/support/e2e-docker.mjs`](e2e/support/e2e-docker.mjs) → [`docker-compose.e2e.yml`](docker-compose.e2e.yml)). Requires Docker.
-
-```bash
-pnpm e2e:local
-```
-
-Runs the same suite locally (`ng e2e`). Requires a one-time browser install:
-
-```bash
-pnpm exec playwright install chromium webkit
-```
+Runs the full Playwright suite in Docker, two services — app (Node 14) + Playwright (modern Node), since Angular CLI 12 has no Playwright builder and this branch's toolchain can't share a container with modern Node ([`e2e/support/e2e-docker.mjs`](e2e/support/e2e-docker.mjs) → [`docker-compose.e2e.yml`](docker-compose.e2e.yml)). Requires Docker. There is no local (non-Docker) variant on this branch.
 
 The suite verifies the Safari/iOS idle-callback guard ([issue #5](https://github.com/DevJaGz/app-fast-marquee/issues/5)) in Chromium and WebKit. See [`e2e/AGENTS.md`](e2e/AGENTS.md) for architecture and conventions.
 

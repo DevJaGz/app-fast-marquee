@@ -8,15 +8,14 @@ Application source root for `app-fast-marquee`.
 |------|------|
 | App module | [`src/app/AGENTS.md`](app/AGENTS.md) |
 | Static assets | [`src/assets/AGENTS.md`](assets/AGENTS.md) |
-| Global SCSS | [`src/styles/AGENTS.md`](styles/AGENTS.md) |
 
 ## Conventions
 
 Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../knowledge/conventions.md) — they are the mandatory single source of truth.
 
+- **12.x branch**: this demo app is scoped to the e2e behavior-contract surface only (task 4.4's acceptance gate), not full visual parity with the `20.x` line's showcase homepage — that's an explicit non-goal (see [`openspec/changes/adapt-12x-line/design.md`](../openspec/changes/adapt-12x-line/design.md)). There is no `src/app/features/`, `src/app/shared/`, or `src/styles/` here.
 - Selector prefix for all application components: `app` (configured in [`angular.json`](../angular.json)).
-- All new components use inline SCSS (`inlineStyle: true`), `changeDetection: OnPush`. These are Angular CLI schematics defaults — do not override.
-- SCSS partials in [`src/styles/`](styles/) are importable without relative paths (`includePaths` is set). Import them with `@use 'filename'` (without path prefix).
-- Build target: `npm run build:app`. Dev server: `npm run start`. Unit tests (Vitest): `npm run test:app`.
-- The home feature renders `<ngx-fast-marquee>` inside `@defer (on idle)` with `provideFastMarquee()` in bootstrap — see [`src/app/AGENTS.md`](app/AGENTS.md). E2e coverage lives in [`e2e/AGENTS.md`](../e2e/AGENTS.md).
-- SSR uses the current `@angular/ssr` application-builder API: [`server.ts`](../server.ts) is a plain Express app wired through `AngularNodeAppEngine`/`createNodeRequestHandler`/`writeResponseToNodeResponse` from `@angular/ssr/node` (no `CommonEngine`). [`src/main.server.ts`](main.server.ts) bootstraps via `BootstrapContext`, and [`src/app/app.config.server.ts`](app/app.config.server.ts) registers per-route rendering modes with `provideServerRendering(withRoutes(serverRoutes))` — see [`src/app/AGENTS.md`](app/AGENTS.md) for `app.routes.server.ts`. The [`angular.json`](../angular.json) build target sets `outputMode: "server"` (server bundle + build-time prerendering derived from route config, not a standalone `prerender` flag) and `security.allowedHosts` (SSRF guard for the `Host` header, empty = unrestricted).
+- Angular 12 NgModule/decorator idioms — see [`src/app/AGENTS.md`](app/AGENTS.md). No standalone components, no signals, no `@defer`/`@if`/`@for` control flow (all Angular 14+/17+ features, absent from Angular 12): use `*ngIf`/`*ngFor` and zone-based change detection.
+- Build target: `npm run build:app`. Dev server: `npm run start`. Unit tests (Jasmine/Karma via `ChromeHeadless`): `npm run test:app`.
+- The home feature renders `<ngx-fast-marquee>` behind a manual idle-callback gate (mirroring the `20.x` line's `@defer (on idle)` usage, which doesn't exist in Angular 12) — see [`src/app/AGENTS.md`](app/AGENTS.md). E2e coverage lives in [`e2e/AGENTS.md`](../e2e/AGENTS.md).
+- No SSR on this branch — the `20.x` line's `@angular/ssr` setup (`server.ts`, `main.server.ts`, `app.config.server.ts`) doesn't carry over; this is a plain client-rendered Angular 12 app.

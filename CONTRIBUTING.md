@@ -8,18 +8,17 @@ This repository contains two deliverables: the demo application [`app-fast-marqu
 
 ## 1. Getting Started
 
-**Prerequisites** (from [`package.json`](package.json) `engines`)
+**Prerequisites** (from [`package.json`](package.json) `engines`; this branch hosts the Patchable `12.x` line, see [branch-model-version-lines.md](knowledge/decisions/branch-model-version-lines.md))
 
 | Tool | Supported versions |
 |------|--------------------|
-| [Node.js](https://nodejs.org/) | `^20.19.0 \|\| ^22.12.0 \|\| >=24.0.0` |
-| [npm](https://docs.npmjs.com/) | `>=9.5.1` |
-| [pnpm](https://pnpm.io/) | `>=8.6.12` |
+| [Node.js](https://nodejs.org/) | `^14.15.0` |
+| [npm](https://docs.npmjs.com/) | `>=6.14.8` |
 
 ```bash
 git clone <repo-url>
 cd app-fast-marquee
-pnpm install
+npm install
 ```
 
 ---
@@ -43,8 +42,9 @@ Lint and formatting are mandatory and enforced by the [Husky](https://typicode.g
 |-------|---------|
 | ESLint (check / fix) | [`npm run lint`](package.json) / [`npm run lint:fix`](package.json) |
 | Prettier (write / fix) | [`npm run format`](package.json) / [`npm run prettier:fix`](package.json) |
-| Unit tests ([Vitest](https://vitest.dev/), see convention 7) | [`npm run test:app`](package.json) / [`npm run test:lib`](package.json) |
-| E2E ([Playwright](https://playwright.dev/) in Docker) | [`pnpm e2e`](package.json) |
+| Unit tests ([Karma](https://karma-runner.github.io/)/[Jasmine](https://jasmine.github.io/), see convention 7) | [`npm run test:app`](package.json) / [`npm run test:lib`](package.json) |
+| Core dialect floor (TypeScript `4.2.3`) | [`npm run check:core-dialect`](package.json) |
+| E2E ([Playwright](https://playwright.dev/) in Docker, two services — see [`e2e/AGENTS.md`](e2e/AGENTS.md)) | [`npm run e2e`](package.json) |
 
 All tests must pass before opening a PR.
 

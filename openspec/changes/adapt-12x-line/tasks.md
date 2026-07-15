@@ -34,9 +34,9 @@
 
 ## 5. Documentation and knowledge
 
-- [ ] 5.1 **(confirm)** Update the library README on this branch: Angular-compatibility table (both lines), NgModule + `provideFastMarquee()` usage for Angular 12, template-parity note (class surface out of contract)
-- [ ] 5.2 Update `AGENTS.md` files (root, `src/`, library, `e2e/`) for the v12 toolchain, commands, and branch role; adjust `knowledge/` conventions references that are 20.x-specific (Angular idioms convention applies per-branch)
-- [ ] 5.3 Append the `12.x`-side entry to `knowledge/log.md` and sync `knowledge/decisions/branch-model-version-lines.md` current-state on this branch
+- [x] 5.1 **(confirm)** Update the library README on this branch: Angular-compatibility table (both lines), NgModule + `provideFastMarquee()` usage for Angular 12, template-parity note (class surface out of contract)
+- [x] 5.2 Update `AGENTS.md` files (root, `src/`, library, `e2e/`) for the v12 toolchain, commands, and branch role; adjust `knowledge/` conventions references that are 20.x-specific (Angular idioms convention applies per-branch)
+- [x] 5.3 Append the `12.x`-side entry to `knowledge/log.md` and sync `knowledge/decisions/branch-model-version-lines.md` current-state on this branch
 
 ## 6. Final verification
 

@@ -7,7 +7,7 @@ tags:
   - safari
   - defer
 status: implemented
-timestamp: 2026-07-12T16:00:00Z
+timestamp: 2026-07-15T12:00:00Z
 ---
 
 # What was decided
@@ -28,7 +28,7 @@ The crash happens while _scheduling_ the deferred block — before the library's
 # What it affects
 
 - Library adapter/core (see [`fast-marquee.providers.ts`](../../projects/ngx-fast-marquee/src/adapter/fast-marquee.providers.ts) and [`idle-callback-compat.ts`](../../projects/ngx-fast-marquee/src/core/idle-callback-compat.ts)), the library README, and the behavioral spec [library.spec.md](../../openspec/specs/library/library.spec.md).
-- Verified by the e2e suite's two-server scenario setup (guarded vs `no-idle-guard`), simulating the Safari asymmetry via Playwright `addInitScript` — see [e2e/AGENTS.md](../../e2e/AGENTS.md).
+- Verified by the e2e suite's two-server scenario setup (guarded vs `no-idle-guard`), simulating the Safari asymmetry via Playwright `addInitScript` — see [e2e/AGENTS.md](../../e2e/AGENTS.md). **`12.x` branch**: no `no-idle-guard` scenario exists there — under Ivy a component's declaring `NgModule` is fixed at compile time, so `NgxFastMarqueeModule` (which always bundles the guard on that line) can't be imported without it, and the crash this scenario reproduces is specific to Angular's own `@defer`, absent from Angular 12 anyway. Only the guarded sub-test applies on that branch.
 - The guarantee carries over to **both** planned version lines ([branch-model decision](branch-model-version-lines.md)) and stays as API even if the upstream bug is eventually fixed.
 
 # Citations

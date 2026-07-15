@@ -12,6 +12,5 @@ Static assets served with the application.
 
 Before proceeding, read and follow the repository conventions in [`knowledge/conventions.md`](../../knowledge/conventions.md) — they are the mandatory single source of truth.
 
-- All static assets (fonts, images, icons) live here and are referenced via the `assets` array in [`angular.json`](../../angular.json).
-- Fonts are under `src/assets/fonts/` and loaded via SCSS in [`src/styles/fonts.scss`](../styles/fonts.scss).
-- Do not add binaries or generated files here without updating [`angular.json`](../../angular.json) assets config.
+- **12.x branch**: empty except for [`.gitkeep`](.gitkeep) — the `20.x` line's fonts/images belonged to the showcase homepage, which this branch doesn't port (scoped to the e2e behavior-contract surface only, see [`src/AGENTS.md`](../AGENTS.md)).
+- Any static assets (fonts, images, icons) added here must be referenced via the `assets` array in [`angular.json`](../../angular.json).

@@ -7,7 +7,7 @@ tags:
   - branching
   - library
 status: planned
-timestamp: 2026-07-12T15:00:00Z
+timestamp: 2026-07-15T12:00:00Z
 ---
 
 **Status: planned — none of this is implemented yet.** The repository should evolve toward this model; agents must not partially apply it (e.g. bump versions or create branches) without explicit direction.
@@ -78,6 +78,10 @@ A real npm audience spans old and new Angular majors. One codebase cannot idioma
 - Long-lived branches today: `master` and `develop`. A `develop` branch is not part of the target model; its fate is **undecided** (open question).
 - Library is at `0.3.0` with peers `>=19.0.0` — pre-plan values.
 - One tag exists (`v0.1.7`); no repository ruleset or retirement machinery exists yet.
+
+## `12.x` branch state (updated 2026-07-15)
+
+The `12.x` branch (this branch, cut from `develop`) implements the Patchable line per the [`adapt-12x-line`](../../openspec/changes/adapt-12x-line/) change: self-contained Angular `12.0.5` + TypeScript `4.2.4` workspace on Node `14.21.3`, npm-based (not pnpm). Library `version` `12.0.0`, `peerDependencies` `>=12.0.0 <20.0.0` — matches the floor rule. `core/` is dialected to TypeScript `4.2.3` (verified, see [`tsconfig.core-dialect.json`](../../projects/ngx-fast-marquee/tsconfig.core-dialect.json)). `adapter/` is decorator/`NgModule`-based (`@Input`/`@Output`/`ngOnChanges`/`@HostBinding`); `NgxFastMarqueeModule` always bundles the idle-callback guard (no `20.x`-style opt-out via standalone import — a discovered constraint of Ivy's compile-time module binding, see [`adapter/AGENTS.md`](../../projects/ngx-fast-marquee/src/adapter/AGENTS.md)). No `no-idle-guard` e2e scenario on this branch (the crash it reproduces is specific to Angular's own `@defer`, absent from Angular 12).
 
 # Citations
 
