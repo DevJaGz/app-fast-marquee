@@ -40,5 +40,5 @@
 
 ## 6. Final verification
 
-- [ ] 6.1 `check:core-dialect`, lint, unit tests, app + lib builds, and the full e2e suite all pass; no orphaned dev-server processes/ports left (convention 6)
+- [x] 6.1 `check:core-dialect`, lint, unit tests, app + lib builds, and the full e2e suite all pass; no orphaned dev-server processes/ports left (convention 6)
 - [ ] 6.2 Validate with `openspec validate adapt-12x-line` and archive this change on `12.x` via `/opsx:archive` (sync adds the three requirements to this branch's `openspec/specs/library/library.spec.md`)
