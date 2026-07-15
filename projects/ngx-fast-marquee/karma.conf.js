@@ -16,14 +16,14 @@ module.exports = function (config) {
       clearContext: false
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/app-fast-marquee'),
+      dir: require('path').join(__dirname, '../../coverage/ngx-fast-marquee'),
       subdir: '.',
       reporters: [{ type: 'html' }, { type: 'text-summary' }]
     },
     // karma-jasmine-html-reporter is interactive-only (renders a live DOM report) and interferes
     // with ChromeHeadless's minimal page — 'progress' is sufficient for CI/CLI runs.
     reporters: ['progress'],
-    port: 9876,
+    port: 9877,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,

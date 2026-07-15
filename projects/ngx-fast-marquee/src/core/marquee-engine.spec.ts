@@ -1,4 +1,3 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { NUMBER_OF_ITEMS_CSS_PROPERTY } from './animation';
 import { CLONE_MARKER_ATTRIBUTE } from './duplication';
 import { MarqueeEngine } from './marquee-engine';
@@ -38,8 +37,8 @@ function createHarness(options?: { direction?: Direction; autoFill?: boolean; an
     autoFill: options?.autoFill ?? true,
     animated: options?.animated ?? true,
   };
-  const onMeasured = vi.fn();
-  const onUpdated = vi.fn();
+  const onMeasured = jasmine.createSpy('onMeasured');
+  const onUpdated = jasmine.createSpy('onUpdated');
   const engine = new MarqueeEngine({
     host,
     inner,
@@ -50,28 +49,27 @@ function createHarness(options?: { direction?: Direction; autoFill?: boolean; an
   return { host, inner, config, engine, onMeasured, onUpdated };
 }
 
-/** Runs the engine's post-render flush scheduled via requestAnimationFrame. */
-const flushScheduledCycle = () => {
-  vi.advanceTimersToNextFrame();
-};
+/**
+ * Waits for the engine's post-render flush, scheduled via `requestAnimationFrame`. Karma runs
+ * this suite in a real Chrome instance (karma-chrome-launcher) rather than an emulated DOM, so
+ * `requestAnimationFrame` is native and cannot be fake-timer-advanced — wait for a real frame,
+ * then a macrotask, so the engine's own rAF callback has already committed.
+ */
+function flushScheduledCycle(): Promise<void> {
+  return new Promise(resolve => requestAnimationFrame(() => setTimeout(resolve, 0)));
+}
 
 /** Lets MutationObserver microtasks and any zero-delay timers settle. */
-const settleObservers = async () => {
-  vi.advanceTimersByTime(0);
-  await Promise.resolve();
-};
+function settleObservers(): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, 0));
+}
 
 describe('MarqueeEngine', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
   afterEach(() => {
-    vi.useRealTimers();
     document.body.innerHTML = '';
   });
 
-  it('schedules one initial flush that fills clones, measures, and updates once', () => {
+  it('schedules one initial flush that fills clones, measures, and updates once', async () => {
     const { host, inner, engine, onMeasured, onUpdated } = createHarness();
     inner.appendChild(document.createElement('div'));
     inner.appendChild(document.createElement('div'));
@@ -79,7 +77,7 @@ describe('MarqueeEngine', () => {
     engine.start();
 
     expect(onMeasured).not.toHaveBeenCalled();
-    flushScheduledCycle();
+    await flushScheduledCycle();
 
     expect(inner.children.length).toBeGreaterThan(2);
     for (let index = 2; index < inner.children.length; index++) {
@@ -98,7 +96,7 @@ describe('MarqueeEngine', () => {
     inner.appendChild(document.createElement('div'));
 
     engine.start();
-    flushScheduledCycle();
+    await flushScheduledCycle();
     await settleObservers();
     expect(onUpdated).toHaveBeenCalledTimes(1);
 
@@ -106,7 +104,7 @@ describe('MarqueeEngine', () => {
     await settleObservers();
 
     expect(onUpdated).toHaveBeenCalledTimes(1);
-    flushScheduledCycle();
+    await flushScheduledCycle();
     expect(onUpdated).toHaveBeenCalledTimes(2);
 
     engine.destroy();
@@ -119,10 +117,10 @@ describe('MarqueeEngine', () => {
     inner.appendChild(document.createElement('div'));
 
     engine.start();
-    flushScheduledCycle();
+    await flushScheduledCycle();
     await settleObservers();
     await settleObservers();
-    vi.advanceTimersByTime(20);
+    await new Promise(resolve => setTimeout(resolve, 20));
 
     expect(onUpdated).toHaveBeenCalledTimes(1);
 
@@ -136,14 +134,14 @@ describe('MarqueeEngine', () => {
     inner.appendChild(document.createElement('div'));
 
     engine.start();
-    flushScheduledCycle();
-    onMeasured.mockClear();
+    await flushScheduledCycle();
+    onMeasured.calls.reset();
 
     engine.requestReplan();
     engine.requestReplan();
 
     expect(onMeasured).not.toHaveBeenCalled();
-    flushScheduledCycle();
+    await flushScheduledCycle();
     expect(onMeasured).toHaveBeenCalledTimes(1);
 
     engine.destroy();
@@ -156,9 +154,9 @@ describe('MarqueeEngine', () => {
     inner.appendChild(document.createElement('div'));
 
     engine.start();
-    flushScheduledCycle();
+    await flushScheduledCycle();
     engine.requestReplan();
-    flushScheduledCycle();
+    await flushScheduledCycle();
 
     expect(onMeasured).toHaveBeenCalledTimes(2);
     expect(onUpdated).toHaveBeenCalledTimes(1);
@@ -173,9 +171,9 @@ describe('MarqueeEngine', () => {
     inner.appendChild(document.createElement('div'));
 
     engine.start();
-    flushScheduledCycle();
+    await flushScheduledCycle();
 
-    expect(inner.children).toHaveLength(2);
+    expect(inner.children.length).toBe(2);
     expect(inner.children[0].getAttribute(CLONE_MARKER_ATTRIBUTE)).toBeNull();
     expect(inner.children[1].getAttribute(CLONE_MARKER_ATTRIBUTE)).toBeNull();
     expect(inner.style.getPropertyValue(NUMBER_OF_ITEMS_CSS_PROPERTY)).toBe('0');
@@ -190,9 +188,9 @@ describe('MarqueeEngine', () => {
     inner.appendChild(document.createElement('div'));
 
     engine.start();
-    flushScheduledCycle();
+    await flushScheduledCycle();
 
-    expect(inner.children).toHaveLength(2);
+    expect(inner.children.length).toBe(2);
     expect(inner.style.getPropertyValue(NUMBER_OF_ITEMS_CSS_PROPERTY)).toBe('0');
 
     engine.destroy();
@@ -207,12 +205,12 @@ describe('MarqueeEngine', () => {
     engine.start();
     expect(onMeasured).not.toHaveBeenCalled();
     engine.destroy();
-    flushScheduledCycle();
+    await flushScheduledCycle();
     expect(onMeasured).not.toHaveBeenCalled();
 
     inner.appendChild(document.createElement('div'));
     await settleObservers();
-    flushScheduledCycle();
+    await flushScheduledCycle();
     expect(onMeasured).not.toHaveBeenCalled();
 
     host.remove();
@@ -224,7 +222,7 @@ describe('MarqueeEngine', () => {
     inner.appendChild(document.createElement('div'));
 
     engine.start();
-    flushScheduledCycle();
+    await flushScheduledCycle();
 
     expect(inner.style.getPropertyValue(NUMBER_OF_ITEMS_CSS_PROPERTY)).toBe(String(inner.children.length));
 

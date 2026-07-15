@@ -1,4 +1,3 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createReducedMotionSource, REDUCED_MOTION_MEDIA_QUERY } from './reduced-motion';
 
 describe('createReducedMotionSource', () => {
@@ -16,7 +15,7 @@ describe('createReducedMotionSource', () => {
     originalMatchMedia = window.matchMedia;
     delete (window as { matchMedia?: typeof window.matchMedia }).matchMedia;
 
-    const onChange = vi.fn();
+    const onChange = jasmine.createSpy('onChange');
     const source = createReducedMotionSource(onChange);
 
     expect(source.matches()).toBe(false);
@@ -29,14 +28,16 @@ describe('createReducedMotionSource', () => {
     let capturedListener: ((event: MediaQueryListEvent) => void) | undefined;
     const mediaQueryList = {
       matches: false,
-      addEventListener: vi.fn((type: string, listener: (event: MediaQueryListEvent) => void) => {
-        if (type === 'change') capturedListener = listener;
-      }),
-      removeEventListener: vi.fn(),
+      addEventListener: jasmine
+        .createSpy('addEventListener')
+        .and.callFake((type: string, listener: (event: MediaQueryListEvent) => void) => {
+          if (type === 'change') capturedListener = listener;
+        }),
+      removeEventListener: jasmine.createSpy('removeEventListener'),
     };
-    window.matchMedia = vi.fn().mockReturnValue(mediaQueryList);
+    window.matchMedia = jasmine.createSpy('matchMedia').and.returnValue(mediaQueryList);
 
-    const onChange = vi.fn();
+    const onChange = jasmine.createSpy('onChange');
     const source = createReducedMotionSource(onChange);
 
     expect(window.matchMedia).toHaveBeenCalledWith(REDUCED_MOTION_MEDIA_QUERY);

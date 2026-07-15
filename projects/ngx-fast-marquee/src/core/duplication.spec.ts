@@ -1,4 +1,3 @@
-import { describe, expect, it } from 'vitest';
 import { appendClones, CLONE_MARKER_ATTRIBUTE, pruneClones, resolveDuplicateCount } from './duplication';
 
 describe('resolveDuplicateCount', () => {
@@ -56,7 +55,7 @@ describe('pruneClones', () => {
 
     pruneClones(inner);
 
-    expect(inner.children).toHaveLength(1);
+    expect(inner.children.length).toBe(1);
     expect(inner.children[0]).toBe(original);
     expect(inner.children[0].textContent).toBe('original');
   });
@@ -75,7 +74,7 @@ describe('pruneClones', () => {
 
     pruneClones(inner);
 
-    expect(inner.children).toHaveLength(1);
+    expect(inner.children.length).toBe(1);
     expect(inner.children[0]).toBe(original);
     expect(original.querySelector('em')?.getAttribute(CLONE_MARKER_ATTRIBUTE)).toBe('true');
     expect(original.querySelector('em')?.textContent).toBe('nested');
@@ -97,7 +96,7 @@ describe('appendClones', () => {
 
     appendClones(inner, 2);
 
-    expect(inner.children).toHaveLength(9);
+    expect(inner.children.length).toBe(9);
     expect(inner.children[0]).toBe(childA);
     expect(inner.children[1]).toBe(childB);
     expect(inner.children[2]).toBe(childC);
@@ -113,7 +112,7 @@ describe('appendClones', () => {
 
     appendClones(inner, 0);
 
-    expect(inner.children).toHaveLength(1);
+    expect(inner.children.length).toBe(1);
     expect(inner.children[0]).toBe(child);
   });
 
@@ -122,6 +121,6 @@ describe('appendClones', () => {
 
     appendClones(inner, 2);
 
-    expect(inner.children).toHaveLength(0);
+    expect(inner.children.length).toBe(0);
   });
 });

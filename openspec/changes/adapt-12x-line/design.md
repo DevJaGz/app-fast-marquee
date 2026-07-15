@@ -37,7 +37,11 @@ Angular CLI 12 requires Node `^12.14 || ^14.15` and breaks on Node 17+ (webpack/
 
 ### D4 — Unit tests port to Jasmine/Karma
 
-`core/` specs are TestBed-free and port nearly verbatim (swap `vi.fn`/`vi.useFakeTimers` for `jasmine.createSpy`/`jasmine.clock()`); adapter specs are rewritten as Angular 12 TestBed specs. Convention 14 (no test seams in runtime code) applies unchanged.
+`core/` specs are TestBed-free and port nearly verbatim (drop the `vitest` import — Jasmine's `describe`/`it`/`expect` are ambient — and swap `vi.fn`/`vi.useFakeTimers` for `jasmine.createSpy`/real async waits). Convention 14 (no test seams in runtime code) applies unchanged.
+
+**Amendment (discovered at apply time): Karma runs a real browser, not jsdom.** `karma-chrome-launcher`'s plain `Chrome` opens an unfocused window that throttles/pauses `requestAnimationFrame`, which the engine's flush cycle depends on — use `ChromeHeadless` instead. Real layout also means an unstyled test host has real, non-zero dimensions (unlike jsdom's implicit zero-size), so `marquee-engine.spec.ts`'s harness mocks `getBoundingClientRect` and adapter-spec hosts constrain `<ngx-fast-marquee>`'s width explicitly.
+
+**Amendment (discovered at apply time): a `ComponentFixture` whose root view is itself `OnPush` doesn't reliably re-check on a second `detectChanges()` call for a plain (non-event-driven) property mutation**, in this Angular 12.0.x–12.2.x + zone.js 0.11.4 combination — confirmed in isolation against a trivial, unrelated component (verified with `autoDetectChanges()` too, and independent of the Angular 12 patch version). `NgxFastMarqueeComponent` itself stays `OnPush` (that's real, tested behavior — Angular 12 TestBed's `fixture.detectChanges()` does correctly force-check the *child's* own view when its `@Input`s change via a `Default`-strategy parent). Adapter-spec test hosts (`RawHostComponent`, `ModuleHostComponent`) are therefore `Default` change detection, not `OnPush` — a test-fixture-only choice with no bearing on production consumers, whose own root uses whatever strategy their app picks.
 
 ### D5 — Acceptance gate: the existing black-box e2e suite passes unmodified
 
