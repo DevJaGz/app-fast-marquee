@@ -1,60 +1,68 @@
-# Ngx Fast Marquee
+<div align="center">
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://your-build-url.com)
-[![License](https://img.shields.io/badge/license-MIT-orange.svg)](https://opensource.org/licenses/MIT)
+# ✨ ngx-fast-marquee
 
-## Description
+**A lightweight Angular marquee component — smooth, accessible, and dependency-free.**
 
-Want to bring your website to life with dynamic, eye-catching marquees?
+[![npm version](https://img.shields.io/npm/v/ngx-fast-marquee/v12.svg?color=dd0031&label=npm%20%40v12)](https://www.npmjs.com/package/ngx-fast-marquee/v/12.0.0)
+[![npm downloads](https://img.shields.io/npm/dm/ngx-fast-marquee.svg?color=dd0031)](https://www.npmjs.com/package/ngx-fast-marquee)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/ngx-fast-marquee?color=dd0031&label=minzipped)](https://bundlephobia.com/package/ngx-fast-marquee)
+[![Angular](https://img.shields.io/badge/Angular-12--19-dd0031?logo=angular&logoColor=white)](#angular-compatibility)
+[![License: MIT](https://img.shields.io/npm/l/ngx-fast-marquee.svg?color=blue)](./LICENSE)
 
-Look no further! The ✨ **Ngx Fast Marquee** ✨ is a lightweight component that can bring to life your Angular applications through fast and user-friendly marquee animations.
+[Live Demo](https://ngx-fast-marquee.web.app/) · [StackBlitz Playground](https://stackblitz.com/edit/stackblitz-starters-m8pkwe?file=src%2Fmain.ts) · [Report an Issue](https://github.com/DevJaGz/app-fast-marquee/issues)
 
-See the Demo section below for a live example!
+</div>
+
+---
+
+Want to bring your website to life with dynamic, eye-catching marquees? **ngx-fast-marquee** is a lightweight component that adds fast, smooth, user-friendly marquee animations to your Angular application — no external dependencies.
 
 > 📦 **This package is built from the `12.x` branch** (Maintenance line, Angular 12–19: stable, critical fixes only). For Angular 20+, install the latest `ngx-fast-marquee` instead. Both lines expose the identical template-level API documented below — see [Angular Compatibility](#angular-compatibility).
 
+## Contents
+
+- [Features](#-features)
+- [Demo](#-demo)
+- [Installation](#-installation)
+- [Angular Compatibility](#angular-compatibility)
+- [Getting Started](#-getting-started)
+- [Documentation](#-documentation)
+- [License](#-license)
+
+## ✨ Features
+
+- 🪶 **Lightweight** — no runtime dependencies beyond `tslib`.
+- 🎯 **Precise control** — direction, speed, pausing, and edge masking, all tunable per instance.
+- ♿ **Accessible by default** — honors `prefers-reduced-motion` via `useSystemReducedMotion`.
+- 🧱 **NgModule-first** — built for classic decorator-based Angular 12–19 applications.
+- 🍏 **Safari/iOS-safe** — ships a guard for a known Safari `requestIdleCallback` defect (see below).
+
 ## 🖥️ Demo
 
-See **Ngx Fast Marquee** in action!
+See **ngx-fast-marquee** in action!
 
-- 📱 <a href="https://ngx-fast-marquee.web.app/" target="_blank">Web Demo</a>
-- 🎮 <a href="https://stackblitz.com/edit/stackblitz-starters-m8pkwe?file=src%2Fmain.ts" target="_blank">StackBlitz</a>
+- 📱 [Web Demo](https://ngx-fast-marquee.web.app/)
+- 🎮 [StackBlitz](https://stackblitz.com/edit/stackblitz-starters-m8pkwe?file=src%2Fmain.ts)
 
 ## 🛠️ Installation
 
 Install the library using your favorite package manager:
 
-- npm
-
-```bash
-npm i ngx-fast-marquee
-```
-
-- pnpm
-
-```bash
-pnpm i ngx-fast-marquee
-```
-
-- yarn
-
-```bash
-yarn add ngx-fast-marquee
-```
-
-- bun
-
-```bash
-bun add ngx-fast-marquee
-```
+| Package manager | Command                        |
+| --------------- | ------------------------------ |
+| npm             | `npm i ngx-fast-marquee@12`    |
+| pnpm            | `pnpm i ngx-fast-marquee@12`   |
+| yarn            | `yarn add ngx-fast-marquee@12` |
+| bun             | `bun add ngx-fast-marquee@12`  |
 
 ### Angular Compatibility
 
-| Angular Version | Install                     | Status                                                                   |
-| --------------- | --------------------------- | ------------------------------------------------------------------------ |
-| `20 – 22`       | `npm i ngx-fast-marquee`    | **Active** (`20.x` line) — recommended, new features land here           |
-| `12 – 19`       | `npm i ngx-fast-marquee@12` | **Maintenance** (`12.x` line, this build) — stable, critical fixes only  |
-| any             | `0.x` releases              | **Deprecated** — do not use                                               |
+| Angular Version | Install                     | Status                                                                  |
+| --------------- | --------------------------- | ----------------------------------------------------------------------- |
+| `20 – 22`       | `npm i ngx-fast-marquee`    | **Active** (`20.x` line) — recommended, new features land here          |
+| `12 – 19`       | `npm i ngx-fast-marquee@12` | **Maintenance** (`12.x` line, this build) — stable, critical fixes only |
+| any             | `0.x` releases              | **Deprecated** — do not use                                             |
 
 Each line's major version equals its Angular floor. Both lines expose the identical template-level binding surface (selector, inputs, outputs, `NgxFastMarqueeModule`, `provideFastMarquee()`) — a template written against one compiles unmodified against the other. The **class instance surface is out of contract**: this build's `NgxFastMarqueeComponent` uses `@Input()`/`@Output()` decorators and zone-based change detection (Angular 12 has no standalone components or signals); the `20.x` line uses signal `input()`/`output()` and is zoneless. Code that only binds the component through its template is unaffected; code that reaches into the component instance directly (e.g. via `@ViewChild`) is not portable between lines.
 
@@ -111,28 +119,28 @@ Use the `ngx-fast-marquee` component in your templates:
 
 ## 📚 Documentation
 
-Marquee Inputs:
+#### Inputs
 
-| Name                      | Type    | Default  | Description                                                                                                      |
-| -------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------ |
-| `speed`                   | number  | `medium` | The speed of the marquee in pixels per second. Also can be qualitative, `fast`, `medium`, `slow`.                 |
-| `direction`               | string  | `left`   | The direction of the marquee (`left`, `right`, `up`, `down`).                                                     |
-| `autoFill`                | boolean | `true`   | `true` for auto filling the space.                                                                                |
-| `useSystemReducedMotion`  | boolean | `false`  | `true` for avoid animate the marquee when the system has reduced motion.                                          |
-| `maskStartPercentage`     | number  | `0`      | Start percentage of the mask. Suitable Range: 0 - 100, where 100 is the middle of the marquee.                    |
-| `maskEndPercentage`       | number  | `0`      | End percentage of the mask. Suitable Range: 0 - 100, where 100 is the middle of the marquee.                      |
-| `maskPercentage`          | number  | `0`      | Percentage of the mask. Suitable Range: 0 - 100, where 100 is the middle of the marquee (start to center and end to the center). |
-| `play`                    | boolean | `true`   | `true` for playing the marquee animation, otherwise the animation is paused.                                      |
-| `pauseOnClick`            | boolean | `false`  | `true` for pausing the marquee when the cursor is held down on the marquee.                                       |
-| `pauseOnHover`            | boolean | `false`  | `true` for Pausing the marquee when the mouse is over it.                                                         |
+| Name                     | Type                                     | Default  | Description                                                                                                 |
+| ------------------------ | ---------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------- |
+| `speed`                  | `number \| 'fast' \| 'medium' \| 'slow'` | `medium` | Speed of the marquee. Accepts pixels per second, or a qualitative value.                                    |
+| `direction`              | `'left' \| 'right' \| 'up' \| 'down'`    | `left`   | Direction the marquee scrolls.                                                                              |
+| `autoFill`               | `boolean`                                | `true`   | Automatically duplicate content to fill the available space.                                                |
+| `useSystemReducedMotion` | `boolean`                                | `false`  | Disable the marquee animation when the OS has reduced motion enabled.                                       |
+| `maskStartPercentage`    | `number`                                 | `0`      | Fade percentage at the start edge. Range: `0`–`100`, where `100` reaches the middle of the marquee.         |
+| `maskEndPercentage`      | `number`                                 | `0`      | Fade percentage at the end edge. Range: `0`–`100`, where `100` reaches the middle of the marquee.           |
+| `maskPercentage`         | `number`                                 | `0`      | Shorthand to set both edges at once. Range: `0`–`100`, where `100` reaches the middle from both directions. |
+| `play`                   | `boolean`                                | `true`   | Play or pause the marquee animation.                                                                        |
+| `pauseOnClick`           | `boolean`                                | `false`  | Pause the marquee while the mouse button is held down over it.                                              |
+| `pauseOnHover`           | `boolean`                                | `false`  | Pause the marquee while the mouse is hovering over it.                                                      |
 
-Marquee Outputs:
+#### Outputs
 
-| Name      | Description                                                |
-| --------- | ------------------------------------------------------------ |
-| `mounted` | Event emitted when the marquee is in the view. Emitted only once. |
-| `updated` | Event emitted each time the marquee is updated.               |
+| Name      | Description                                             |
+| --------- | ------------------------------------------------------- |
+| `mounted` | Emitted once, the first time the marquee is in view.    |
+| `updated` | Emitted every time the marquee re-measures and updates. |
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](./LICENSE).
