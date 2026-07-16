@@ -1,6 +1,6 @@
 {
   "name": "ngx-fast-marquee",
-  "version": "20.0.2",
+  "version": "20.0.3",
   "author": {
     "name": "Julian Andres Gomez Gomez",
     "email": "jgomezpersonal7@gmail.com",
@@ -18,8 +18,13 @@
     "marquee lib",
     "marquee component",
     "ngx-fast-marquee",
-    "ngx-fast-marquee lib",
-    "ngx fast marquee"
+    "ticker",
+    "news-ticker",
+    "scrolling-text",
+    "moving-text",
+    "text-ticker",
+    "angular-ticker",
+    "zoneless"
   ],
   "peerDependencies": {
     "@angular/common": ">=20.0.0 <23.0.0",
