@@ -28,6 +28,15 @@
       "rules": {}
     },
     {
+      "files": ["*.mjs"],
+      "env": { "node": true },
+      "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": "latest"
+      },
+      "rules": {}
+    },
+    {
       "files": ["src/core/**/*.ts"],
       "rules": {
         "no-restricted-imports": [
