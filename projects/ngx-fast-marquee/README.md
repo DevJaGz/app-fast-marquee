@@ -9,7 +9,7 @@
 [![Angular](https://img.shields.io/badge/Angular-12--19-dd0031?logo=angular&logoColor=white)](#angular-compatibility)
 [![License: MIT](https://img.shields.io/npm/l/ngx-fast-marquee.svg?color=blue)](./LICENSE)
 
-[Live Demo](https://ngx-fast-marquee.web.app/) · [StackBlitz Playground](https://stackblitz.com/edit/stackblitz-starters-m8pkwe?file=src%2Fmain.ts) · [Report an Issue](https://github.com/DevJaGz/app-fast-marquee/issues)
+[Live Demo](https://ngx-fast-marquee.web.app/) · [StackBlitz Playground](https://stackblitz.com/edit/stackblitz-starters-mybdjpva?file=src%2Fmain.ts) · [Report an Issue](https://github.com/DevJaGz/app-fast-marquee/issues)
 
 </div>
 
@@ -42,7 +42,7 @@ Want to bring your website to life with dynamic, eye-catching marquees? **ngx-fa
 See **ngx-fast-marquee** in action!
 
 - 📱 [Web Demo](https://ngx-fast-marquee.web.app/)
-- 🎮 [StackBlitz](https://stackblitz.com/edit/stackblitz-starters-m8pkwe?file=src%2Fmain.ts)
+- 🎮 [StackBlitz](https://stackblitz.com/edit/stackblitz-starters-mybdjpva?file=src%2Fmain.ts)
 
 ## 🛠️ Installation
 
