@@ -32,11 +32,12 @@ Demo application and publishable Angular library in a single monorepo.
 
 ## Branches
 
-| Branch    | Role                                                                                    |
-| --------- | --------------------------------------------------------------------------------------- |
-| `develop` | Interim trunk for the `20.x` Active line (stands in for `master` until both lines work) |
-| `12.x`    | Patchable line (self-contained Angular 12 workspace, critical fixes only)               |
-| `master`  | Frozen until the final `develop` → `master` merge (out of scope for now)                |
+| Branch   | Role                                                                       |
+| -------- | --------------------------------------------------------------------------- |
+| `master` | Active line (`20.x`) — primary development, publishes `latest`              |
+| `12.x`   | Patchable line (self-contained Angular 12 workspace, critical fixes only)   |
+
+The interim `develop` trunk (used while `master` was frozen ahead of the `20.x`/`12.x` two-line cutover) was fast-forward merged into `master` and deleted on 2026-07-16 — `master` now directly hosts the Active line.
 
 Full policy: [Branch Model and Two-Version-Line Publishing Strategy](knowledge/decisions/branch-model-version-lines.md).
 

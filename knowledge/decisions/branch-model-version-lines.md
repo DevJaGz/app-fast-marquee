@@ -1,16 +1,16 @@
 ---
 type: Decision
 title: Branch Model and Two-Version-Line Publishing Strategy
-description: Planned branch-per-version-line model (Active/Patchable/Archived) and the 20.x / 12.x npm publishing lines with the major-equals-Angular-floor rule, plus each line's own verified minimum-TypeScript dialect floor for core/.
+description: Branch-per-version-line model (Active/Patchable/Archived) and the 20.x / 12.x npm publishing lines with the major-equals-Angular-floor rule, plus each line's own verified minimum-TypeScript dialect floor for core/.
 tags:
   - release
   - branching
   - library
-status: planned
-timestamp: 2026-07-16T14:32:00Z
+status: implemented
+timestamp: 2026-07-16T16:00:00Z
 ---
 
-**Status: partially executed — branch cutover, version bumps, first publish, and release tags are done; the `develop` → `master` merge remains future work.** The `12.x` line branch exists, the branch-local OpenSpec workflow is adopted, both lines' library versions/peers are set per the floor rule, and both `20.0.0` and `12.0.0` are published on npm with immutable `vX.Y.Z` tags on their publish commits (2026-07-16, maintainer-directed, see "Current state vs plan" below). The `develop` → `master` merge remains future work requiring explicit direction.
+**Status: executed — branch cutover, version bumps, publishing, release tags, and the `develop` → `master` merge are all done.** The `12.x` line branch exists, the branch-local OpenSpec workflow is adopted, both lines' library versions/peers are set per the floor rule, and both lines are published on npm with immutable `vX.Y.Z` tags on their publish commits (2026-07-16, maintainer-directed, see "Current state vs plan" below). The interim `develop` trunk was fast-forward merged into `master` and deleted the same day — `master` now directly hosts the Active `20.x` line, as the branch model always intended.
 
 # What was decided
 
@@ -88,6 +88,8 @@ A real npm audience spans old and new Angular majors. One codebase cannot idioma
 - **Version bumps executed (2026-07-16, maintainer-confirmed)**: this branch's library is at `20.0.0` with peers `>=20.0.0 <23.0.0`; the `12.x` branch is at `12.0.0` with peers `>=12.0.0 <20.0.0` plus a `publishConfig` npm dist-tag `v12` guard (so a plain `npm publish` from the Patchable line can never take `latest`, per the invariants above). Both branches' README compatibility tables now list all three tiers — `20.x` Active, `12.x` Maintenance, `0.x` **deprecated** — with real install commands, and publish the template-level API parity contract. A `LICENSE` file (MIT) now ships in the package on both lines.
 - **First publish executed (2026-07-16, maintainer-directed)**: `ngx-fast-marquee@20.0.0` published from `develop` commit `b7ad54d` (`dist/ngx-fast-marquee` built via `pnpm build:lib` on Node `22.22.3`) — no `publishConfig.tag`, so it took the `latest` dist-tag as intended for the Active line. `ngx-fast-marquee@12.0.0` published from `12.x` commit `7494861` (`dist/ngx-fast-marquee` built via `npm run build:lib` on Node `14.21.3`, the line's own toolchain floor) — its `publishConfig.tag: "v12"` routed it to the `v12` dist-tag, leaving `latest` untouched. Registry confirmed post-publish: `latest → 20.0.0`, `v12 → 12.0.0`. The pre-existing `0.0.1`–`0.2.3` releases were deprecated in the same session (`npm deprecate "ngx-fast-marquee@<0.3.0" "..."`) pointing consumers at the two new lines.
 - Tags now exist for both publishes: `v20.0.0` (on `develop`, pushed to `origin`) and `v12.0.0` (on `12.x`, pushed to `origin`), alongside the pre-existing `v0.1.7`. No repository ruleset or retirement machinery exists yet.
+- **`develop` → `master` merge executed, `develop` deleted (2026-07-16, maintainer-directed)**: with lint and both unit-test suites verified green, `develop` was fast-forward merged into `master` and pushed (triggering the `firebase-hosting-merge.yml` docs-site deploy), then confirmed fully merged (`git merge-base --is-ancestor develop master`), confirmed not the repo's default branch (already `master`) and not branch-protected, and deleted both remotely and locally. `master` now directly hosts the Active `20.x` line — the interim-trunk role described above no longer applies.
+- **Patch releases for doc-only fixes (2026-07-16)**: the Bundlephobia bundle-size badge in both READMEs rendered broken (upstream rate-limiting on first-time package analysis, confirmed not Angular-specific by reproducing the same failure on `primeng`; Packagephobia was tried as a replacement but sits behind a Vercel bot-detection wall) and was removed. Both lines' READMEs also had a stale StackBlitz playground link, corrected per line. Each fix shipped as its own patch — `20.0.1` (badge removal) → `20.0.2` (StackBlitz link) on `master`/`develop`-then-`master`, and `12.0.1` (badge removal) → `12.0.2` (StackBlitz link) on `12.x` — since the README ships inside the published npm tarball and isn't retroactively updatable. Registry confirmed: `latest → 20.0.2`, `v12 → 12.0.2`. Tags `v20.0.1`, `v20.0.2`, `v12.0.1`, `v12.0.2` created and pushed; all four have GitHub Releases (`20.0.2` marked Latest).
 
 # Citations
 

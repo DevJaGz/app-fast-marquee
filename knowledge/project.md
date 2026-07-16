@@ -5,7 +5,7 @@ description: Monorepo hosting the publishable ngx-fast-marquee Angular library a
 tags:
   - overview
   - status
-timestamp: 2026-07-16T14:32:00Z
+timestamp: 2026-07-16T16:00:00Z
 ---
 
 # What it is
@@ -28,11 +28,11 @@ A single Angular workspace containing:
 # Current state (verified 2026-07-16)
 
 - Workspace: Angular `^20.3.25`, zoneless, signal-based APIs, OnPush enforced by ESLint (see the [Angular 20 idiom-adoption decision](decisions/angular-20-idiom-adoption.md)).
-- Package manager: **pnpm** on this line (`develop`, later `master`) — [pnpm-lock.yaml](../pnpm-lock.yaml) is the only lockfile; run all repo commands with `pnpm`, never `npm` (verified 2026-07-15).
+- Package manager: **pnpm** on the Active line (`master`) — [pnpm-lock.yaml](../pnpm-lock.yaml) is the only lockfile; run all repo commands with `pnpm`, never `npm` (verified 2026-07-15).
 - Unit tests: Vitest via the experimental `@angular/build:unit-test` builder (both projects). The app currently has zero `*.spec.ts` files, so `pnpm test:app` reports "No tests found" — known, not a regression.
 - Lint: ESLint `^8.57.0` with `@angular-eslint` `^20.7.0` and `@typescript-eslint` `^8.62.1`.
-- Library: version `20.0.0`, peers `@angular/common`/`@angular/core` `>=20.0.0 <23.0.0` — set 2026-07-16 per the [branch-model and version-line plan](decisions/branch-model-version-lines.md) with maintainer confirmation; **published to npm 2026-07-16** as the `latest` dist-tag. Any further change to version/peers still requires explicit confirmation (see [guardrails](guardrails.md)).
-- Branches: `develop` (interim trunk, `20.x` Active line), `12.x` (Maintenance/Patchable line at `12.0.0`, published to npm 2026-07-16 under the `v12` dist-tag), `master` (frozen until the final `develop` → `master` merge). Release tags: `v0.1.7`, `v20.0.0`, `v12.0.0`.
+- Library: version `20.0.2`, peers `@angular/common`/`@angular/core` `>=20.0.0 <23.0.0` — set 2026-07-16 per the [branch-model and version-line plan](decisions/branch-model-version-lines.md) with maintainer confirmation; **published to npm** as the `latest` dist-tag (`20.0.0` → `20.0.1` → `20.0.2` patch releases 2026-07-16, README fixes only). Any further change to version/peers still requires explicit confirmation (see [guardrails](guardrails.md)).
+- Branches: `master` (Active line, `20.x`, directly hosts development since the interim `develop` trunk was fast-forward merged in and deleted 2026-07-16), `12.x` (Maintenance/Patchable line at `12.0.2`, published to npm under the `v12` dist-tag). Release tags: `v0.1.7`, `v20.0.0`, `v20.0.1`, `v20.0.2`, `v12.0.0`, `v12.0.1`, `v12.0.2`.
 
 # Where to look next
 
