@@ -5,7 +5,7 @@ description: Monorepo hosting the publishable ngx-fast-marquee Angular library a
 tags:
   - overview
   - status
-timestamp: 2026-07-16T00:00:00Z
+timestamp: 2026-07-16T14:32:00Z
 ---
 
 # What it is
@@ -23,7 +23,7 @@ A single Angular workspace containing:
 3. Maximize runtime performance and efficiency.
 4. Maximize developer experience for library consumers.
 5. Keep the library resilient to host-app patterns outside its control — see the [idle-callback guard decision](decisions/idle-callback-guard.md).
-6. Serve old and new Angular consumers via two version lines — see the [branch-model and version-line plan](decisions/branch-model-version-lines.md) (planned).
+6. Serve old and new Angular consumers via two version lines — see the [branch-model and version-line plan](decisions/branch-model-version-lines.md) (first publish executed 2026-07-16).
 
 # Current state (verified 2026-07-16)
 
@@ -31,8 +31,8 @@ A single Angular workspace containing:
 - Package manager: **pnpm** on this line (`develop`, later `master`) — [pnpm-lock.yaml](../pnpm-lock.yaml) is the only lockfile; run all repo commands with `pnpm`, never `npm` (verified 2026-07-15).
 - Unit tests: Vitest via the experimental `@angular/build:unit-test` builder (both projects). The app currently has zero `*.spec.ts` files, so `pnpm test:app` reports "No tests found" — known, not a regression.
 - Lint: ESLint `^8.57.0` with `@angular-eslint` `^20.7.0` and `@typescript-eslint` `^8.62.1`.
-- Library: version `20.0.0`, peers `@angular/common`/`@angular/core` `>=20.0.0 <23.0.0` — set 2026-07-16 per the [branch-model and version-line plan](decisions/branch-model-version-lines.md) with maintainer confirmation; **not published yet**. Any further change to version/peers still requires explicit confirmation (see [guardrails](guardrails.md)).
-- Branches: `develop` (interim trunk, `20.x` Active line), `12.x` (Maintenance/Patchable line at `12.0.0`), `master` (frozen until the final `develop` → `master` merge). One release tag exists: `v0.1.7`; `v20.0.0`/`v12.0.0` tags are deferred to the actual publish commits.
+- Library: version `20.0.0`, peers `@angular/common`/`@angular/core` `>=20.0.0 <23.0.0` — set 2026-07-16 per the [branch-model and version-line plan](decisions/branch-model-version-lines.md) with maintainer confirmation; **published to npm 2026-07-16** as the `latest` dist-tag. Any further change to version/peers still requires explicit confirmation (see [guardrails](guardrails.md)).
+- Branches: `develop` (interim trunk, `20.x` Active line), `12.x` (Maintenance/Patchable line at `12.0.0`, published to npm 2026-07-16 under the `v12` dist-tag), `master` (frozen until the final `develop` → `master` merge). Release tags: `v0.1.7`, `v20.0.0`, `v12.0.0`.
 
 # Where to look next
 
