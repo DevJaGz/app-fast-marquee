@@ -8,6 +8,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/ngx-fast-marquee.svg?color=dd0031)](https://www.npmjs.com/package/ngx-fast-marquee)
 [![Angular](https://img.shields.io/badge/Angular-20--22-dd0031?logo=angular&logoColor=white)](#angular-compatibility)
 [![License: MIT](https://img.shields.io/npm/l/ngx-fast-marquee.svg?color=blue)](./LICENSE)
+[![Sponsor](https://img.shields.io/badge/sponsor-%E2%9D%A4-db61a2?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/DevJaGz)
 
 [Live Demo](https://ngx-fast-marquee.web.app/) · [StackBlitz Playground](https://stackblitz.com/edit/stackblitz-starters-5zvdjumb?file=src%2Fmain.ts) · [Report an Issue](https://github.com/DevJaGz/app-fast-marquee/issues)
 
