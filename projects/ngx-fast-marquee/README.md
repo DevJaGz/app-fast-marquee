@@ -6,7 +6,6 @@
 
 [![npm version](https://img.shields.io/npm/v/ngx-fast-marquee.svg?color=dd0031&label=npm)](https://www.npmjs.com/package/ngx-fast-marquee)
 [![npm downloads](https://img.shields.io/npm/dm/ngx-fast-marquee.svg?color=dd0031)](https://www.npmjs.com/package/ngx-fast-marquee)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/ngx-fast-marquee?color=dd0031&label=minzipped)](https://bundlephobia.com/package/ngx-fast-marquee)
 [![Angular](https://img.shields.io/badge/Angular-20--22-dd0031?logo=angular&logoColor=white)](#angular-compatibility)
 [![License: MIT](https://img.shields.io/npm/l/ngx-fast-marquee.svg?color=blue)](./LICENSE)
 
